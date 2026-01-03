@@ -8,12 +8,12 @@
         <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.nailong</groupId>
-    <artifactId>xt</artifactId>
+    <groupId>com.nailong.xt</groupId>
+    <artifactId>root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>xt</name>
-    <description>xt</description>
+    <name>root</name>
+    <description>root</description>
     <url/>
     <licenses>
         <license/>
@@ -24,6 +24,7 @@
     <modules>
         <module>gate-server</module>
         <module>game-server</module>
+        <module>common</module>
     </modules>
     <properties>
         <java.version>25</java.version>
@@ -54,18 +55,6 @@
                             <artifactId>lombok</artifactId>
                         </path>
                     </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
