@@ -21,6 +21,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>proto-xt</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>us.hebi.quickbuf</groupId>
             <artifactId>quickbuf-runtime</artifactId>
             <version>${quickbuf-runtime.version}</version>

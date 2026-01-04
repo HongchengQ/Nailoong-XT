@@ -1,67 +1,63 @@
 package com.nailong.xt.gate.controller;
 
+import com.google.protobuf.ByteString;
 import com.nailong.xt.gate.handler.CmdHandlerRegistry;
-import com.nailong.xt.gate.handler.CmdRequestContext;
+import com.nailong.xt.gate.network.PlayerSession;
+import com.nailong.xt.proto.server.Package.CmdRequestContext;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import static com.nailong.xt.gate.network.PlayerSessionMgr.findOrCreatePlayerSession;
+
 @RestController
-@RequestMapping("/gate")
+@RequestMapping("/agent-zone-global")
 public class GateController {
 
     @Autowired
     private CmdHandlerRegistry cmdHandlerRegistry;
 
     @PostMapping
-    public byte[] handleBinaryRequest(@RequestBody byte[] requestData) throws IOException {
-        if (requestData.length < 4) {
-            throw new IllegalArgumentException("Request data too short, need at least 4 bytes for cmdId");
-        }
+    public ResponseEntity<byte[]> handleBinaryRequest(
+            @Nullable @RequestHeader("X-Token") String token,
+            @RequestBody byte[] requestData) throws Exception {
+        PlayerSession playerSession = findOrCreatePlayerSession(token);
 
-        // Extract cmdId from first 4 bytes (assuming little-endian format)
-        int cmdId = ((requestData[0] & 0xFF)) |
-                   ((requestData[1] & 0xFF) << 8) |
-                   ((requestData[2] & 0xFF) << 16) |
-                   ((requestData[3] & 0xFF) << 24);
+        // Create request context
+        CmdRequestContext packageContext = playerSession.decryptMsg(token, requestData);
 
         // Get the handler method for this cmdId
-        CmdHandlerRegistry.HandlerMethod handlerMethod = cmdHandlerRegistry.getHandler(cmdId);
+        CmdHandlerRegistry.HandlerMethod handlerMethod = cmdHandlerRegistry.getHandler(packageContext.getCmdId());
         if (handlerMethod == null) {
-            throw new IllegalArgumentException("No handler found for cmdId: " + cmdId);
+            // todo: 直接转发给 game server
+            throw new IllegalArgumentException("No handler found for cmdId: " + packageContext.getCmdId());
         }
 
         // Extract the remaining data (proto data)
-        byte[] protoData = new byte[requestData.length - 4];
-        System.arraycopy(requestData, 4, protoData, 0, protoData.length);
+        ByteString protoData = packageContext.getProtoData();
 
         try {
-            // Create request context
-            CmdRequestContext context = new CmdRequestContext(cmdId, protoData);
-            
             // Check if the method accepts CmdRequestContext as parameter
             Class<?>[] paramTypes = handlerMethod.method().getParameterTypes();
             Object result;
-            
+
             if (paramTypes.length > 0 && paramTypes[0] == CmdRequestContext.class) {
-                result = handlerMethod.method().invoke(handlerMethod.handler(), context);
+                result = handlerMethod.method().invoke(handlerMethod.handler(), packageContext, playerSession);
             } else {
-                result = handlerMethod.method().invoke(handlerMethod.handler(), (Object) protoData);
+                result = handlerMethod.method().invoke(handlerMethod.handler(), protoData, playerSession);
             }
-            
-            if (result instanceof byte[]) {
-                return (byte[]) result;
+
+            if (result instanceof byte[] r) {
+                return ResponseEntity.ok().header("Server", "agent").body(playerSession.encryptPacketData(r));
             } else {
                 // If result is not byte array, return empty response
-                return new byte[0];
+                return ResponseEntity.ok(new byte[0]);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Error invoking handler for cmdId: " + cmdId, e);
+            throw new RuntimeException("Error invoking handler for cmdId: " + packageContext.getCmdId(), e);
         }
     }
 }

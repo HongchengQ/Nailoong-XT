@@ -18,6 +18,5 @@ public class CmdHandlerRegistry {
         return cmdHandlers.get(cmdId);
     }
 
-    public record HandlerMethod(Object handler, Method method) {
-    }
+    public record HandlerMethod(Object handler, Method method) {}
 }

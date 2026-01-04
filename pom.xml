@@ -25,6 +25,7 @@
         <module>gate-server</module>
         <module>game-server</module>
         <module>common</module>
+        <module>proto-xt</module>
     </modules>
     <properties>
         <java.version>25</java.version>
