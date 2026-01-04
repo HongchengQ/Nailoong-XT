@@ -119,7 +119,6 @@ public class PlayerSession {
         message = AeadHelper.decryptBasic(message, sessionKey);
         message = AeadHelper.decryptGCM(message, sessionKey);
 
-
         // cmdId
         int cmdId = (message[offset++] << 8) | (message[offset++] & 0xff);
         // data
@@ -160,6 +159,8 @@ public class PlayerSession {
 
         result = AeadHelper.encryptGCM(result, firstKey);
         result = AeadHelper.encryptBasic(result, firstKey);
+
+        this.isExchangedInternetKey = true;
 
         return result;
     }

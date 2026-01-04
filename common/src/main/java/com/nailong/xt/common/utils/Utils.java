@@ -10,10 +10,18 @@ public class Utils {
 
     /**
      * Base64 encodes a given byte array.
+     *
      * @param toEncode An array of bytes.
      * @return A base64 encoded string.
      */
     public static String base64Encode(byte[] toEncode) {
         return Base64.getEncoder().encodeToString(toEncode);
+    }
+
+    /**
+     * @return 当前服务器时间（秒数）
+     */
+    public static long getCurrentServerTime() {
+        return System.currentTimeMillis() / 1000;
     }
 }

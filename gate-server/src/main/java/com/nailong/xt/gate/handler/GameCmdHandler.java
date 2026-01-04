@@ -1,15 +1,14 @@
 package com.nailong.xt.gate.handler;
 
-import com.nailong.xt.common.aead.AeadHelper;
 import com.nailong.xt.common.proto.NetMsgId;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.annotation.CmdHandler;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;
+import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.springframework.stereotype.Component;
 import us.hebi.quickbuf.InvalidProtocolBufferException;
 
@@ -19,6 +18,7 @@ public class GameCmdHandler {
 
     @CmdHandler(NetMsgId.ike_req)
     public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws InvalidProtocolBufferException {
+        IO.println("000000000000000000000000000000000000000000000000");
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
         session.setClientPublicKey(req.getPubKey().toArray());
@@ -43,9 +43,24 @@ public class GameCmdHandler {
     }
 
     @CmdHandler(NetMsgId.player_login_req)
-    public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) {
-        IO.println("00000000000000000000000000000000000000000000000000000");
+    public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) throws InvalidProtocolBufferException {
+        IO.println("11111111111111111111111111111111111111111");
+        var req = PlayerLogin.LoginReq.parseFrom(context.getProtoData().toByteArray());
 
-        return session.encodeMsg(NetMsgId.player_login_failed_ack);
+        // OS
+        String loginToken = req.getOfficialOverseas().getToken();
+
+        // CN
+        if (loginToken.isEmpty()) {
+            loginToken = req.getOfficial().getToken();
+        }
+
+        // 分配一个新 token
+        PlayerSessionMgr.generateSessionToken(session);
+
+        // Create rsp
+        var rsp = PlayerLogin.LoginResp.newInstance().setToken(session.getSessionToken());
+
+        return session.encodeMsg(NetMsgId.player_login_succeed_ack, rsp);
     }
 }
