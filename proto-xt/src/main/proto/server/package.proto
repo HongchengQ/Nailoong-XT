@@ -2,9 +2,21 @@ syntax = "proto3";
 
 package com.nailong.xt.proto.server;
 
+service PackageService {
+  rpc SendPackage (CmdRequestContext) returns (CmdRespContext) {}
+}
+
+
 message CmdRequestContext {
   uint32 cmd_id = 1;
   bytes proto_data = 2;
   uint64 timestamp = 3;
   string token = 4;
+}
+
+message CmdRespContext {
+  uint32 cmd_id = 1001;
+  bytes proto_data = 1002;
+  uint64 timestamp = 1003;
+  string token = 1004;
 }
