@@ -1,24 +1,28 @@
 package com.nailong.xt.gate.network;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Message;
 import com.nailong.xt.common.aead.AeadHelper;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.springframework.util.ObjectUtils;
 import us.hebi.quickbuf.ProtoMessage;
 import us.hebi.quickbuf.ProtoSink;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Base64;
 
 @Getter
 @Setter
+@Slf4j
 public class PlayerSession {
     String sessionToken;
 
@@ -44,6 +48,13 @@ public class PlayerSession {
         this.encryptMethod = Utils.randomRange(0, 1);
     }
 
+    /**
+     * 一般情况下不建议使用这个方法
+     * 以为它无法与 PlayerSessionMgr 同步
+     * 所以建议使用 PlayerSessionMgr 下的方法
+     *
+     * @return token
+     */
     public String generateToken() {
         String temp = System.currentTimeMillis() + ":" + Arrays.toString(AeadHelper.generateBytes(64));
 
@@ -172,8 +183,15 @@ public class PlayerSession {
      * @param proto proto
      * @return byte[] - 对 ProtoMessage 进行第一层编码
      */
-    @SneakyThrows
-    public byte[] encodeMsg(int msgId, ProtoMessage<?> proto) {
+    public byte[] encodeMsg(int msgId, ProtoMessage<?> proto) throws IOException {
+        if (msgId == 0) {
+            log.warn("todo: msgId == 0");
+        }
+
+        if (proto == null) {
+            return encodeMsg(msgId);
+        }
+
         // Create data array
         byte[] data = new byte[proto.getCachedSize() + 2];
 
@@ -192,6 +210,13 @@ public class PlayerSession {
         return data;
     }
 
+    @SneakyThrows
+    public byte[] encodeMsg(int msgId, Message message) {
+        ProtoMessage<?> protoMessage = (ProtoMessage<?>) message;
+
+        return encodeMsg(msgId, protoMessage);
+    }
+
     /**
      * 编码 ProtoMessage
      * <p>
@@ -200,7 +225,7 @@ public class PlayerSession {
      * @param msgId cmdId
      * @return byte[] - 对 ProtoMessage 进行第一层编码
      */
-    public byte[] encodeMsg(int msgId) {
+    private byte[] encodeMsg(int msgId) {
         // Create data array
         byte[] data = new byte[2];
 

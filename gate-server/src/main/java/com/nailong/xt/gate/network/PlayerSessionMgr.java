@@ -20,9 +20,11 @@ public class PlayerSessionMgr {
         return playerSessionMap.get(token);
     }
 
-    public static PlayerSession findOrCreatePlayerSession(String token) {
+    public static synchronized PlayerSession findOrCreatePlayerSession(String token) {
         if (ObjectUtils.isEmpty(token)) {
-            return new PlayerSession();
+            PlayerSession session = new PlayerSession();
+            generateSessionToken(session);
+            return session;
         }
 
         PlayerSession session;
@@ -33,13 +35,13 @@ public class PlayerSessionMgr {
 
         if (session == null) {
             session = new PlayerSession();
-            playerSessionMap.put(token, session);
+            generateSessionToken(session);
         }
 
         return session;
     }
 
-    public static synchronized void generateSessionToken(PlayerSession session) {
+    public static synchronized String generateSessionToken(PlayerSession session) {
         String token = session.getSessionToken();
 
         if (!ObjectUtils.isEmpty(token)) {
@@ -52,6 +54,8 @@ public class PlayerSessionMgr {
 
         // Register session
         playerSessionMap.put(session.getSessionToken(), session);
+
+        return token;
     }
 
 }

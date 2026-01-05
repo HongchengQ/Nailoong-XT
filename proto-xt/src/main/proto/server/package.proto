@@ -19,4 +19,5 @@ message CmdRespContext {
   bytes proto_data = 1002;
   uint64 timestamp = 1003;
   string token = 1004;
+  bool is_failed = 1005;
 }

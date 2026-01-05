@@ -1,0 +1,8 @@
+# 程序启动端口
+server:
+  port: 1180
+
+# gRPC服务器配置
+grpc:
+  server:
+    port: 9090

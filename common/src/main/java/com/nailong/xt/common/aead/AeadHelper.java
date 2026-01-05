@@ -1,5 +1,7 @@
 package com.nailong.xt.common.aead;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bouncycastle.asn1.nist.NISTNamedCurves;
 import org.bouncycastle.asn1.sec.SECNamedCurves;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
@@ -15,6 +17,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,7 @@ import java.util.Map;
 // emu/nebula/util/AeadHelper.java
 public class AeadHelper {
     private static final ThreadLocal<SecureRandom> random = ThreadLocal.withInitial(SecureRandom::new);
+    private static final Logger log = LogManager.getLogger(AeadHelper.class);
 
     public static Map<String, byte[]> serverMetaKeyMap = new HashMap<>();
     public static Map<String, byte[]> serverGarbleKeyMap = new HashMap<>();
@@ -137,11 +141,17 @@ public class AeadHelper {
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 
-        cipher.init(
-                Cipher.DECRYPT_MODE,
-                new SecretKeySpec(key, "AES"),
-                new GCMParameterSpec(128, iv)
-        );
+        try {
+            cipher.init(
+                    Cipher.DECRYPT_MODE,
+                    new SecretKeySpec(key, "AES"),
+                    new GCMParameterSpec(128, iv)
+            );
+        } catch (Exception e) {
+            log.error("报错");
+            throw e;
+        }
+
         cipher.updateAAD(iv);
 
         return cipher.doFinal(data);

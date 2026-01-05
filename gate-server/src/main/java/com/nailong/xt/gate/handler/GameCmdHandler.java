@@ -3,21 +3,28 @@ package com.nailong.xt.gate.handler;
 import com.nailong.xt.common.proto.NetMsgId;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.annotation.CmdHandler;
+import com.nailong.xt.gate.client.GameServerGrpcClient;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;
 import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
+import com.nailong.xt.proto.server.Package.CmdRespContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import us.hebi.quickbuf.InvalidProtocolBufferException;
+
+import java.io.IOException;
 
 @Component
 @Slf4j
 public class GameCmdHandler {
 
+    @Autowired
+    private GameServerGrpcClient gameServerGrpcClient;
+
     @CmdHandler(NetMsgId.ike_req)
-    public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws InvalidProtocolBufferException {
+    public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
         IO.println("000000000000000000000000000000000000000000000000");
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
@@ -25,42 +32,55 @@ public class GameCmdHandler {
         session.generateServerKey();
         session.calculateKey();
 
-        PlayerSessionMgr.generateSessionToken(session);
-
         // Create response
         var rsp = Ike.IKEResp.newInstance()
-                .setToken(session.getSessionToken())
+                .setToken(PlayerSessionMgr.generateSessionToken(session))
                 .setCipher(session.getEncryptMethod())
                 .setServerTs(System.currentTimeMillis() / 1000)
                 .setPubKey(session.getServerPublicKey());
 
-        log.info("Client Public: {}", Utils.base64Encode(session.getClientPublicKey()));
-        log.info("Server Public: {}", Utils.base64Encode(session.getServerPublicKey()));
-        log.info("Server Private: {}", Utils.base64Encode(session.getServerPrivateKey()));
-        log.info("Key: {}", Utils.base64Encode(session.getKey()));
+        log.debug("Client Public: {}", Utils.base64Encode(session.getClientPublicKey()));
+        log.debug("Server Public: {}", Utils.base64Encode(session.getServerPublicKey()));
+        log.debug("Server Private: {}", Utils.base64Encode(session.getServerPrivateKey()));
+        log.debug("Key: {}", Utils.base64Encode(session.getKey()));
 
         return session.encodeMsg(NetMsgId.ike_succeed_ack, rsp);
     }
 
     @CmdHandler(NetMsgId.player_login_req)
-    public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) throws InvalidProtocolBufferException {
+    public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) throws IOException {
         IO.println("11111111111111111111111111111111111111111");
         var req = PlayerLogin.LoginReq.parseFrom(context.getProtoData().toByteArray());
 
         // OS
-        String loginToken = req.getOfficialOverseas().getToken();
+        String clientLoginToken = req.getOfficialOverseas().getToken();
 
         // CN
-        if (loginToken.isEmpty()) {
-            loginToken = req.getOfficial().getToken();
+        if (clientLoginToken.isEmpty()) {
+            clientLoginToken = req.getOfficial().getToken();
         }
 
-        // 分配一个新 token
-        PlayerSessionMgr.generateSessionToken(session);
+        // 通过 grpc 调用 game-server 直接返回远程获取的 cmdid 和 data
+        // 创建gRPC请求
+        CmdRequestContext grpcRequest = CmdRequestContext.newBuilder()
+                .setCmdId(NetMsgId.player_login_req)
+                .setProtoData(context.getProtoData())
+                .setTimestamp(System.currentTimeMillis())
+                .setToken(clientLoginToken)
+                .build();
 
-        // Create rsp
-        var rsp = PlayerLogin.LoginResp.newInstance().setToken(session.getSessionToken());
+        // 发送gRPC请求到game-server
+        CmdRespContext grpcResponse = gameServerGrpcClient.sendPackage(grpcRequest);
 
-        return session.encodeMsg(NetMsgId.player_login_succeed_ack, rsp);
+        // 从 gRPC 响应构建登录响应
+        int cmdId = grpcResponse.getCmdId();
+//        Message rsp = (Message) grpcResponse.getProtoData();
+        PlayerLogin.LoginResp rsp = PlayerLogin.LoginResp.parseFrom(grpcResponse.getProtoData().toByteArray());
+
+        // 重新分配 token
+        rsp.setToken(PlayerSessionMgr.generateSessionToken(session));
+
+        // 返回响应
+        return session.encodeMsg(cmdId, rsp);
     }
 }
