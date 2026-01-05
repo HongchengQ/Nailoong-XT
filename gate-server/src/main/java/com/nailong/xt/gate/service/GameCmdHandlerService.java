@@ -1,9 +1,10 @@
-package com.nailong.xt.gate.handler;
+package com.nailong.xt.gate.service;
 
+import com.google.protobuf.ByteString;
+import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
+import com.nailong.xt.common.net.GrpcClientService;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.gate.annotation.CmdHandler;
-import com.nailong.xt.gate.client.GameServerGrpcClient;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;
@@ -12,45 +13,59 @@ import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import com.nailong.xt.proto.server.Package.CmdRespContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Component
+@Service
 @Slf4j
-public class GameCmdHandler {
+public class GameCmdHandlerService {
 
     @Autowired
-    private GameServerGrpcClient gameServerGrpcClient;
+    private GrpcClientService grpcClientService;
 
-    @CmdHandler(NetMsgIdConstants.ike_req)
+    /**
+     * 这个包由网关自身响应
+     *
+     * @param context
+     * @param session
+     * @return
+     * @throws IOException
+     */
+    @CmdIdHandler(NetMsgIdConstants.ike_req)
     public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
-        IO.println("000000000000000000000000000000000000000000000000");
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
+        // 改变 session 内部状态
         session.setClientPublicKey(req.getPubKey().toArray());
         session.generateServerKey();
         session.calculateKey();
 
+        // 生成一个新 token
+        String newToken = PlayerSessionMgr.generateSessionToken(session);
+
         // Create response
         var rsp = Ike.IKEResp.newInstance()
-                .setToken(PlayerSessionMgr.generateSessionToken(session))
+                .setToken(newToken)
                 .setCipher(session.getEncryptMethod())
-                .setServerTs(System.currentTimeMillis() / 1000)
+                .setServerTs(Utils.getCurrentServerTime())
                 .setPubKey(session.getServerPublicKey());
 
+        // log
         log.debug("Client Public: {}", Utils.base64Encode(session.getClientPublicKey()));
         log.debug("Server Public: {}", Utils.base64Encode(session.getServerPublicKey()));
         log.debug("Server Private: {}", Utils.base64Encode(session.getServerPrivateKey()));
         log.debug("Key: {}", Utils.base64Encode(session.getKey()));
 
+        // 返回响应包
         return session.encodeMsg(NetMsgIdConstants.ike_succeed_ack, rsp);
     }
 
-    @CmdHandler(NetMsgIdConstants.player_login_req)
+    @CmdIdHandler(NetMsgIdConstants.player_login_req)
     public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) throws IOException {
-        IO.println("11111111111111111111111111111111111111111");
-        var req = PlayerLogin.LoginReq.parseFrom(context.getProtoData().toByteArray());
+        ByteString protoData = context.getProtoData();
+
+        var req = PlayerLogin.LoginReq.parseFrom(protoData.toByteArray());
 
         // OS
         String clientLoginToken = req.getOfficialOverseas().getToken();
@@ -64,13 +79,13 @@ public class GameCmdHandler {
         // 创建gRPC请求
         CmdRequestContext grpcRequest = CmdRequestContext.newBuilder()
                 .setCmdId(NetMsgIdConstants.player_login_req)
-                .setProtoData(context.getProtoData())
+                .setProtoData(protoData)
                 .setTimestamp(System.currentTimeMillis())
-                .setToken(clientLoginToken)
+                .setToken(session.getSessionToken())
                 .build();
 
         // 发送gRPC请求到game-server
-        CmdRespContext grpcResponse = gameServerGrpcClient.sendPackage(grpcRequest);
+        CmdRespContext grpcResponse = grpcClientService.sendPackage(grpcRequest);
 
         // 从 gRPC 响应构建登录响应
         int cmdId = grpcResponse.getCmdId();

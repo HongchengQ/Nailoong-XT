@@ -1,7 +1,7 @@
 package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
-import com.nailong.xt.gate.handler.CmdHandlerRegistry;
+import com.nailong.xt.common.config.CmdHandlerConfig;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import org.jspecify.annotations.Nullable;
@@ -18,7 +18,7 @@ import static com.nailong.xt.gate.network.PlayerSessionMgr.findOrCreatePlayerSes
 public class GateController {
 
     @Autowired
-    private CmdHandlerRegistry cmdHandlerRegistry;
+    private CmdHandlerConfig cmdHandlerConfig;
 
     @PostMapping
     public ResponseEntity<byte[]> handleBinaryRequest(
@@ -30,7 +30,7 @@ public class GateController {
         CmdRequestContext packageContext = playerSession.decryptMsg(token, requestData);
 
         // Get the handler method for this cmdId
-        CmdHandlerRegistry.HandlerMethod handlerMethod = cmdHandlerRegistry.getHandler(packageContext.getCmdId());
+        CmdHandlerConfig.HandlerMethod handlerMethod = cmdHandlerConfig.getHandler(packageContext.getCmdId());
         if (handlerMethod == null) {
             // todo: 直接转发给 game server
             throw new IllegalArgumentException("No handler found for cmdId: " + packageContext.getCmdId());

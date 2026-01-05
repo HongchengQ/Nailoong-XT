@@ -1,4 +1,4 @@
-package com.nailong.xt.gate.client;
+package com.nailong.xt.common.net;
 
 import com.nailong.xt.proto.server.PackageServiceGrpc;
 import com.nailong.xt.proto.server.Package;
@@ -9,22 +9,22 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class GameServerGrpcClient {
+public class GrpcClientService {
 
     @Autowired
-    private ManagedChannel gameServerChannel;
+    private ManagedChannel managedChannel;
 
     public CompletableFuture<Package.CmdRespContext> sendPackageAsync(Package.CmdRequestContext request) {
         return CompletableFuture.supplyAsync(() -> {
             PackageServiceGrpc.PackageServiceBlockingStub stub = 
-                PackageServiceGrpc.newBlockingStub(gameServerChannel);
+                PackageServiceGrpc.newBlockingStub(managedChannel);
             return stub.sendPackage(request);
         });
     }
 
     public Package.CmdRespContext sendPackage(Package.CmdRequestContext request) {
         PackageServiceGrpc.PackageServiceBlockingStub stub = 
-            PackageServiceGrpc.newBlockingStub(gameServerChannel);
+            PackageServiceGrpc.newBlockingStub(managedChannel);
         return stub.sendPackage(request);
     }
 }
