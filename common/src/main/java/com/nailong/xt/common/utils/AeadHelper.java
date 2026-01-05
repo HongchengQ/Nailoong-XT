@@ -1,4 +1,4 @@
-package com.nailong.xt.common.aead;
+package com.nailong.xt.common.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;

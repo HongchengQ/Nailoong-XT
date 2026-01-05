@@ -1,7 +1,7 @@
 package com.nailong.xt.game.service;
 
 import com.google.protobuf.ByteString;
-import com.nailong.xt.common.proto.NetMsgId;
+import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.server.PackageServiceGrpc;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
@@ -29,7 +29,7 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
                     .setToken(request.getToken());
 
             switch (request.getCmdId()) {
-                case NetMsgId.player_login_req:
+                case NetMsgIdConstants.player_login_req:
                     // 处理登录逻辑
                     PlayerLogin.LoginReq req = PlayerLogin.LoginReq
                             .parseFrom(request.getProtoData().toByteArray());
@@ -37,7 +37,7 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
                     // todo 验证
                     PlayerLogin.LoginResp rsp = PlayerLogin.LoginResp.newInstance();
 
-                    responseBuilder.setCmdId(NetMsgId.player_login_succeed_ack);
+                    responseBuilder.setCmdId(NetMsgIdConstants.player_login_succeed_ack);
                     responseBuilder.setProtoData(ByteString.copyFrom(rsp.toByteArray()));
                     break;
                 default:

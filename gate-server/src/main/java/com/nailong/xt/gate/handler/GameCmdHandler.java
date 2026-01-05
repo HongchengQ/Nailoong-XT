@@ -1,6 +1,6 @@
 package com.nailong.xt.gate.handler;
 
-import com.nailong.xt.common.proto.NetMsgId;
+import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.annotation.CmdHandler;
 import com.nailong.xt.gate.client.GameServerGrpcClient;
@@ -23,7 +23,7 @@ public class GameCmdHandler {
     @Autowired
     private GameServerGrpcClient gameServerGrpcClient;
 
-    @CmdHandler(NetMsgId.ike_req)
+    @CmdHandler(NetMsgIdConstants.ike_req)
     public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
         IO.println("000000000000000000000000000000000000000000000000");
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
@@ -44,10 +44,10 @@ public class GameCmdHandler {
         log.debug("Server Private: {}", Utils.base64Encode(session.getServerPrivateKey()));
         log.debug("Key: {}", Utils.base64Encode(session.getKey()));
 
-        return session.encodeMsg(NetMsgId.ike_succeed_ack, rsp);
+        return session.encodeMsg(NetMsgIdConstants.ike_succeed_ack, rsp);
     }
 
-    @CmdHandler(NetMsgId.player_login_req)
+    @CmdHandler(NetMsgIdConstants.player_login_req)
     public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) throws IOException {
         IO.println("11111111111111111111111111111111111111111");
         var req = PlayerLogin.LoginReq.parseFrom(context.getProtoData().toByteArray());
@@ -63,7 +63,7 @@ public class GameCmdHandler {
         // 通过 grpc 调用 game-server 直接返回远程获取的 cmdid 和 data
         // 创建gRPC请求
         CmdRequestContext grpcRequest = CmdRequestContext.newBuilder()
-                .setCmdId(NetMsgId.player_login_req)
+                .setCmdId(NetMsgIdConstants.player_login_req)
                 .setProtoData(context.getProtoData())
                 .setTimestamp(System.currentTimeMillis())
                 .setToken(clientLoginToken)

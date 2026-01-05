@@ -2,7 +2,7 @@ package com.nailong.xt.gate.network;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
-import com.nailong.xt.common.aead.AeadHelper;
+import com.nailong.xt.common.utils.AeadHelper;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import lombok.Getter;
