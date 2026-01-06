@@ -24,7 +24,11 @@ import java.util.Base64;
 @Setter
 @Slf4j
 public class PlayerSession {
+
     String sessionToken;
+    String accountToken;
+    long accountUid;
+    int playerUid;
 
     // 是否已经走完 ike_req 交换密钥
     boolean isExchangedInternetKey = false;
@@ -106,8 +110,11 @@ public class PlayerSession {
         return CmdRequestContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
-                .setTimestamp(System.currentTimeMillis())
                 .setToken(contextToken)
+                .setAccountUid(this.accountUid)
+                .setPlayerUid(this.playerUid)
+                .setTimestamp(System.currentTimeMillis())
+                .setRegion(4)
                 .build();
     }
 
@@ -188,7 +195,7 @@ public class PlayerSession {
             log.warn("todo: msgId == 0");
         }
 
-        if (proto == null) {
+        if (proto == null || proto.isEmpty()) {
             return encodeMsg(msgId);
         }
 
@@ -225,7 +232,7 @@ public class PlayerSession {
      * @param msgId cmdId
      * @return byte[] - 对 ProtoMessage 进行第一层编码
      */
-    private byte[] encodeMsg(int msgId) {
+    public byte[] encodeMsg(int msgId) {
         // Create data array
         byte[] data = new byte[2];
 

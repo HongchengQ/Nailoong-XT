@@ -18,13 +18,13 @@ public class GrpcClientService {
         return CompletableFuture.supplyAsync(() -> {
             PackageServiceGrpc.PackageServiceBlockingStub stub = 
                 PackageServiceGrpc.newBlockingStub(managedChannel);
-            return stub.sendPackage(request);
+            return stub.handleContextPackageRequest(request);
         });
     }
 
     public Package.CmdRespContext sendPackage(Package.CmdRequestContext request) {
         PackageServiceGrpc.PackageServiceBlockingStub stub = 
             PackageServiceGrpc.newBlockingStub(managedChannel);
-        return stub.sendPackage(request);
+        return stub.handleContextPackageRequest(request);
     }
 }

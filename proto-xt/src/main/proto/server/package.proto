@@ -3,21 +3,25 @@ syntax = "proto3";
 package com.nailong.xt.proto.server;
 
 service PackageService {
-  rpc SendPackage (CmdRequestContext) returns (CmdRespContext) {}
+  rpc HandleContextPackageRequest (CmdRequestContext) returns (CmdRespContext) {}
 }
-
 
 message CmdRequestContext {
   uint32 cmd_id = 1;
   bytes proto_data = 2;
-  uint64 timestamp = 3;
-  string token = 4;
+  string token = 101;  // 在前两个包中传的是 account token
+  int64 account_uid = 102;
+  int32 player_uid = 103;
+  uint64 timestamp = 201;
+  uint32 region = 202;
 }
 
 message CmdRespContext {
   uint32 cmd_id = 1001;
+  uint32 req_cmd_id = 1003;
   bytes proto_data = 1002;
-  uint64 timestamp = 1003;
-  string token = 1004;
-  bool is_failed = 1005;
+  string token = 1005; // 在前两个包中收到的是 account token
+  uint32 player_uid = 1007;
+  uint64 timestamp = 1004;
+  bool is_failed = 1006;  // 是否失败
 }

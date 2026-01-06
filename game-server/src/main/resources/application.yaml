@@ -1,3 +1,20 @@
+spring:
+  application:
+    name: game
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nailoong
+    username: root
+    password: root
+
+# 数据库 orm 配置
+jimmer:
+  dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect
+  show-sql: true
+  pretty-sql: true
+  database-validation-mode: ERROR
+
 # 程序启动端口
 server:
   port: 1180
