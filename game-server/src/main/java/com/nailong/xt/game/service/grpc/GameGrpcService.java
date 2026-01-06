@@ -1,8 +1,8 @@
 package com.nailong.xt.game.service.grpc;
 
-import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.common.model.po.PlayerData;
+import com.nailong.xt.common.config.CmdHandlerConfig;
+import com.nailong.xt.game.player.Player;
+import com.nailong.xt.game.player.PlayerMgr;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import com.nailong.xt.proto.server.Package.CmdRespContext;
 import com.nailong.xt.proto.server.PackageServiceGrpc;
@@ -16,31 +16,31 @@ import org.springframework.grpc.server.service.GrpcService;
 public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
 
     @Autowired
-    PlayerDataRepository playerDataRepository;
+    private CmdHandlerConfig cmdHandlerConfig;
 
     @Override
     public void handleContextPackageRequest(CmdRequestContext request, StreamObserver<CmdRespContext> responseObserver) {
         try {
             log.info("Received gRPC request with cmdId: {}", request.getCmdId());
 
-            // 根据 cmdId 处理不同的请求
+            Player player = PlayerMgr.findPlayerSession(request.getPlayerUid());
+
+            // 获取此 cmdId 注解的方法
+            CmdHandlerConfig.HandlerMethod handlerMethod = cmdHandlerConfig.getHandler(request.getCmdId());
+
+            if (handlerMethod == null) {
+                throw new RuntimeException("没有定义的 msg id " + request.getCmdId());
+            }
+
+            // 先构建 rsp 模板
             CmdRespContext.Builder responseBuilder = CmdRespContext.newBuilder()
-                    .setCmdId(request.getCmdId())
                     .setTimestamp(System.currentTimeMillis())
                     .setToken(request.getToken())
                     .setReqCmdId(request.getCmdId());
 
-            switch (request.getCmdId()) {
-                case NetMsgIdConstants.player_login_req -> {
-                    long accountUid = request.getAccountUid();
-                    String token = request.getToken();
-
-                    PlayerData createdPlayerData = playerDataRepository.queryOrCreatePlayerDataByAccountId(accountUid);
-
-                    log.info("已成功读取 player data {}", createdPlayerData.toString());
-                }
-                default -> responseBuilder.setProtoData(request.getProtoData()); // 默认处理
-            }
+            // 处理方法
+            // 将 (reqContext 预构建的rspContext player) 引用传递
+            handlerMethod.method().invoke(handlerMethod.handler(), request, responseBuilder, player);
 
             CmdRespContext response = responseBuilder.build();
             responseObserver.onNext(response);

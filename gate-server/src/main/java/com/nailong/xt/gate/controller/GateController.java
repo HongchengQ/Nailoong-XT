@@ -6,12 +6,14 @@ import com.nailong.xt.common.config.CmdHandlerConfig;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.net.GrpcClientService;
 import com.nailong.xt.gate.network.PlayerSession;
+import com.nailong.xt.proto.cmd.Public;
 import com.nailong.xt.proto.server.Package;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import us.hebi.quickbuf.ProtoMessage;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -49,9 +51,8 @@ public class GateController {
             if (handlerMethod == null) {
                 // 发送gRPC请求到 game-server
                 Package.CmdRespContext grpcResponse = grpcClientService.sendPackage(packageContext);
-
-                result = playerSession.encodeMsg
-                        (NetMsgIdConstants.player_login_succeed_ack, (Message) grpcResponse.getProtoData());
+//                result = playerSession.encodeMsg(grpcResponse.getCmdId(), (Message) grpcResponse.getProtoData());
+                result = playerSession.encodeMsg(grpcResponse.getCmdId(), grpcResponse.getProtoData());
             }
             /* 由自身 handler 处理 */
             else {

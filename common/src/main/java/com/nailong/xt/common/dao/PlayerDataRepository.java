@@ -51,7 +51,7 @@ public class PlayerDataRepository {
             return createPlayerData(accountUid);
         }
 
-        log.info("新号登录，account uid {}", data);
+        log.info("老号登录，account uid {}", data);
         return data;
     }
 

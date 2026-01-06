@@ -1,13 +1,13 @@
 package com.nailong.xt.gate.network;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
 import com.nailong.xt.common.utils.AeadHelper;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
@@ -217,11 +217,69 @@ public class PlayerSession {
         return data;
     }
 
-    @SneakyThrows
-    public byte[] encodeMsg(int msgId, Message message) {
-        ProtoMessage<?> protoMessage = (ProtoMessage<?>) message;
 
-        return encodeMsg(msgId, protoMessage);
+    /**
+     * 编码消息 - 入参为 google proto message 版本
+     *
+     * @param msgId 消息 ID
+     * @param proto proto
+     * @return 编码后的字节数组
+     */
+    public byte[] encodeMsg(int msgId, Message proto) throws IOException {
+        if (proto == null) {
+            return encodeMsg(msgId);
+        }
+
+        // 预计算大小
+        int protoSize = proto.getSerializedSize();
+        int totalSize = protoSize + 2;
+
+        // 分配数组
+        byte[] buffer = new byte[totalSize];
+
+        // 写入消息头
+        buffer[0] = (byte) ((msgId >>> 8) & 0xFF);  // 高位字节
+        buffer[1] = (byte) (msgId & 0xFF);          // 低位字节
+
+        // 使用 CodedOutputStream 高效写入
+        CodedOutputStream cos = CodedOutputStream.newInstance(buffer, 2, protoSize);
+        proto.writeTo(cos);
+        cos.flush();
+
+        return buffer;
+    }
+
+    /**
+     * 编码消息 - 入参为ByteString版本
+     *
+     * @param msgId      消息 ID
+     * @param byteString 已经序列化好的 Proto消息ByteString
+     * @return 编码后的字节数组
+     */
+    public byte[] encodeMsg(int msgId, ByteString byteString) {
+        if (msgId == 0) {
+            log.warn("todo: msgId == 0");
+        }
+
+        // 处理空消息（只有消息ID）
+        if (byteString == null || byteString.isEmpty()) {
+            return encodeMsg(msgId);
+        }
+
+        // 获取 ByteString的大小
+        int protoSize = byteString.size();
+
+        // 创建数组：消息头(2字节) + 消息体
+        byte[] data = new byte[protoSize + 2];
+
+        // 编码消息ID（大端序）
+        data[0] = (byte) (msgId >> 8);
+        data[1] = (byte) msgId;
+
+        // 将 ByteString复制到数组的偏移位置
+        byteString.copyTo(data, 2);
+
+        return data;
     }
 
     /**
