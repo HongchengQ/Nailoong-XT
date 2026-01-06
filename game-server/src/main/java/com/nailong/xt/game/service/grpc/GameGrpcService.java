@@ -2,7 +2,7 @@ package com.nailong.xt.game.service.grpc;
 
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.common.dao.PlayerUidRepository;
+import com.nailong.xt.common.model.po.PlayerData;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import com.nailong.xt.proto.server.Package.CmdRespContext;
 import com.nailong.xt.proto.server.PackageServiceGrpc;
@@ -18,9 +18,6 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
     @Autowired
     PlayerDataRepository playerDataRepository;
 
-    @Autowired
-    PlayerUidRepository playerUidRepository;
-
     @Override
     public void handleContextPackageRequest(CmdRequestContext request, StreamObserver<CmdRespContext> responseObserver) {
         try {
@@ -35,21 +32,12 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
 
             switch (request.getCmdId()) {
                 case NetMsgIdConstants.player_login_req -> {
-                    int playerUid = request.getPlayerUid();
                     long accountUid = request.getAccountUid();
                     String token = request.getToken();
 
-                    // 新号
-                    if (playerUid == 0) {
-                        // 创建账号
-                        int createdPlayerUid = playerDataRepository.createPlayerData().id();
-                        playerUidRepository.createPlayerUid(createdPlayerUid, accountUid);
+                    PlayerData createdPlayerData = playerDataRepository.queryOrCreatePlayerDataByAccountId(accountUid);
 
-                        log.info("已创建新 player data，PlayerUid: {}, accountUid: {}", createdPlayerUid, accountUid);
-                    } else {
-                        // 从数据库加载
-                        log.info("test log -> 老号登录");
-                    }
+                    log.info("已成功读取 player data {}", createdPlayerData.toString());
                 }
                 default -> responseBuilder.setProtoData(request.getProtoData()); // 默认处理
             }

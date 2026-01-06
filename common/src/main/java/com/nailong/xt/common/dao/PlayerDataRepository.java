@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,7 +20,7 @@ public class PlayerDataRepository {
 
     public PlayerData queryPlayerDataByUid(int playerUid) {
         return sqlClient.createQuery(playerDataTable)
-                .where(playerDataTable.id().eq(playerUid))
+                .where(playerDataTable.uid().eq(playerUid))
                 .select(playerDataTable)
                 .execute()
                 .stream()
@@ -29,16 +28,47 @@ public class PlayerDataRepository {
                 .orElse(null);
     }
 
-    public PlayerData createPlayerData() {
-
-        PlayerData playerData = PlayerDataDraft.$.produce(dart -> dart
-                .setDataVersion(0)
-        );
-
-        return savePlayerUidObj(playerData);
+    public PlayerData queryPlayerDataByAccountId(long accountUid) {
+        return sqlClient.createQuery(playerDataTable)
+                .where(playerDataTable.accountUid().eq(accountUid))
+                .select(playerDataTable)
+                .execute()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
-    public PlayerData savePlayerUidObj(PlayerData playerData) {
-        return (PlayerData) sqlClient.saveCommand(playerData);
+    public PlayerData queryOrCreatePlayerDataByAccountId(long accountUid) {
+        PlayerData data;
+        try {
+            data = queryPlayerDataByAccountId(accountUid);
+        } catch (Exception e) {
+            data = null;
+        }
+
+        if (data == null) {
+            log.info("新号创建，account uid {}", accountUid);
+            return createPlayerData(accountUid);
+        }
+
+        log.info("新号登录，account uid {}", data);
+        return data;
+    }
+
+    public PlayerData createPlayerData(long accountUid) {
+        PlayerData playerData = new PlayerDataDraft.Builder()
+                .accountUid(accountUid)
+                .build();
+
+        log.info("新号创建中 {}", playerData);
+
+        return savePlayerDataObj(playerData);
+    }
+
+    public PlayerData savePlayerDataObj(PlayerData playerData) {
+        return sqlClient
+                .saveCommand(playerData)
+                .execute()
+                .getModifiedEntity();
     }
 }

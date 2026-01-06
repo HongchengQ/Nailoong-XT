@@ -3,9 +3,7 @@ package com.nailong.xt.gate.service;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.common.dao.PlayerUidRepository;
 import com.nailong.xt.common.dao.UserRepository;
-import com.nailong.xt.common.model.po.PlayerUid;
 import com.nailong.xt.common.net.GrpcClientService;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.network.PlayerSession;
@@ -26,9 +24,6 @@ public class GateCmdHandler {
 
     @Autowired
     private GrpcClientService grpcClientService;
-
-    @Autowired
-    private PlayerUidRepository playerUidRepository;
 
     @Autowired
     private UserRepository user;
@@ -84,44 +79,34 @@ public class GateCmdHandler {
         try {
             ByteString protoData = context.getProtoData();
 
-            var req = PlayerLogin.LoginReq.parseFrom(protoData.toByteArray());
+            var loginReq = PlayerLogin.LoginReq.parseFrom(protoData.toByteArray());
 
-            // OS
-            String clientLoginToken = req.getOfficialOverseas().getToken();             // 这个 account token 感觉没什么用
-            long clientLoginUid = Long.parseLong(req.getOfficialOverseas().getUid());   // account uid 立大功
+            String clientLoginToken;
+            long clientLoginUid;
+            {
+                // OS
+                clientLoginToken = loginReq.getOfficialOverseas().getToken();             // 这个 account token 感觉没什么用
+                clientLoginUid = Long.parseLong(loginReq.getOfficialOverseas().getUid());   // account uid 立大功
 
-            // CN
-            if (clientLoginToken.isEmpty() && clientLoginUid == 0) {
-                clientLoginToken = req.getOfficial().getToken();
-                clientLoginUid = req.getOfficial().getUid();
+                // CN
+                if (clientLoginToken.isEmpty() && clientLoginUid == 0) {
+                    clientLoginToken = loginReq.getOfficial().getToken();
+                    clientLoginUid = loginReq.getOfficial().getUid();
+                }
             }
 
             // 构建响应数据 -> 重新分配 token
-            PlayerLogin.LoginResp rsp = PlayerLogin.LoginResp.newInstance().setToken(PlayerSessionMgr.generateSessionToken(session));
+            PlayerLogin.LoginResp loginResp = PlayerLogin.LoginResp.newInstance().setToken(PlayerSessionMgr.generateSessionToken(session));
 
             // 更新 session uid and token
             session.setAccountUid(clientLoginUid);
             session.setAccountToken(clientLoginToken);
-
-            // playerUid and accountUid 映射表
-            PlayerUid playerUidTable = playerUidRepository.queryPlayerUidByAccountId(clientLoginUid);
-
-            // 用来判断是不是需要新注册的账号
-            // 如果账号已经被注册 uid映射表会找到它的uid
-            // 0 代表是一个没有注册的账号
-            int playerUid = 0;
-
-            if (playerUidTable != null) {
-                playerUid = playerUidTable.id();
-                // todo: 封号 顶号
-            }
 
             // 基于当前信息 构建新的 proto
             // 通过rpc发给game通知加载玩家
             CmdRequestContext grpcRequest = context.toBuilder()
                     .setToken(clientLoginToken)
                     .setAccountUid(clientLoginUid)
-                    .setPlayerUid(playerUid)
                     .build();
 
             // 发送gRPC请求到 game-server
@@ -132,7 +117,7 @@ public class GateCmdHandler {
             }
 
             // 返回响应
-            return session.encodeMsg(NetMsgIdConstants.player_login_succeed_ack, rsp);
+            return session.encodeMsg(NetMsgIdConstants.player_login_succeed_ack, loginResp);
         } catch (Exception e) {
             return session.encodeMsg(NetMsgIdConstants.player_login_failed_ack);
         }
