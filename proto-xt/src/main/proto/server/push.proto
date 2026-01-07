@@ -1,0 +1,27 @@
+syntax = "proto3";
+package com.nailong.xt.proto.server;
+
+// 通用的空响应，用于不需要返回数据的场景
+import "google/protobuf/empty.proto";
+
+// Game -> Gate (用于主动推送)
+// 某些情况下玩家的一个请求需要服务端返回多个包 (不管是请求者本身还是多个目标玩家)
+// 除了直接响应的rsp 我们我还需要通过这个接口推送连锁反应产生的包
+service ServerPushService {
+  // 使用流式接口，便于Game向Gate持续推送多种消息（广播、通知等）
+  rpc CreatePushStream (google.protobuf.Empty) returns (stream PushPacketNotify);
+  // 保留一个单次推送的接口作为备选
+  rpc PushSingleNotify (PushPacketNotify) returns (google.protobuf.Empty);
+}
+
+// 推送消息容器
+message PushPacketNotify {
+  uint32 cmd_id = 1;
+  bytes proto_data = 2;
+  // 可以指定接收者列表，由Gate负责分发
+  repeated uint32 target_player_uids = 3;
+  // 元数据
+  string token = 101;
+  int64 account_uid = 102;
+  uint64 timestamp = 201;
+}
