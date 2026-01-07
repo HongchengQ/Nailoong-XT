@@ -1,30 +1,37 @@
-package com.nailong.xt.game.service.grpc;
+package com.nailong.xt.game.service.grpc.recv;
 
+import com.google.protobuf.Empty;
 import com.nailong.xt.common.config.CmdHandlerConfig;
 import com.nailong.xt.game.player.Player;
 import com.nailong.xt.game.player.PlayerMgr;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
-import com.nailong.xt.proto.server.Package.CmdRespContext;
-import com.nailong.xt.proto.server.PackageServiceGrpc;
+import com.nailong.xt.proto.server.Command.CmdReqContext;
+import com.nailong.xt.proto.server.Command.CmdRspContext;
+import com.nailong.xt.proto.server.PlayerCommandServiceGrpc;
+import com.nailong.xt.proto.server.Push;
+import com.nailong.xt.proto.server.ServerPushServiceGrpc;
+import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.util.ObjectUtils;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
- * 回复用户数据包
  * 接收 gate 传来的客户端数据包上下文
+ * 回复用户数据包
  */
 @GrpcService
 @Log4j2
-public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
+public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServiceImplBase {
 
     @Autowired
     private CmdHandlerConfig cmdHandlerConfig;
 
+
     @Override
-    public void handleContextPackageRequest(CmdRequestContext request, StreamObserver<CmdRespContext> responseObserver) {
+    public void handlePlayerRequest(CmdReqContext request, StreamObserver<CmdRspContext> responseObserver) {
         int reqContextCmdId = request.getCmdId();
         int reqContextUid = request.getPlayerUid();
         String reqContextToken = request.getToken();
@@ -50,7 +57,7 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
             }
 
             // 先构建 rsp 模板
-            CmdRespContext.Builder responseBuilder = CmdRespContext.newBuilder()
+            CmdRspContext.Builder responseBuilder = CmdRspContext.newBuilder()
                     .setTimestamp(System.currentTimeMillis())
                     .setToken(reqContextToken)
                     .setReqCmdId(reqContextCmdId);
@@ -59,7 +66,7 @@ public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {
             // 将 (reqContext + 预构建的rspContext + player) 引用传递
             handlerMethod.method().invoke(handlerMethod.handler(), request, responseBuilder, player);
 
-            CmdRespContext response = responseBuilder.build();
+            CmdRspContext response = responseBuilder.build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Exception e) {

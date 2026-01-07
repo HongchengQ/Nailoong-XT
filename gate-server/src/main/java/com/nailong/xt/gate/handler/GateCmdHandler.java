@@ -3,15 +3,15 @@ package com.nailong.xt.gate.handler;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.gate.net.GateToGameGrpcService;
 import com.nailong.xt.common.utils.Utils;
+import com.nailong.xt.gate.service.grpc.send.SendReqPackageService;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;
 import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.cmd.PlayerPing;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
-import com.nailong.xt.proto.server.Package.CmdRespContext;
+import com.nailong.xt.proto.server.Command.CmdReqContext;
+import com.nailong.xt.proto.server.Command.CmdRspContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class GateCmdHandler {
 
     @Autowired
-    private GateToGameGrpcService gateToGameGrpcService;
+    private SendReqPackageService sendReqPackageService;
 
     /**
      * 这个包由网关自身响应
@@ -35,7 +35,7 @@ public class GateCmdHandler {
      * @throws IOException
      */
     @CmdIdHandler(NetMsgIdConstants.ike_req)
-    public byte[] onIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
+    public byte[] onIkeReq(CmdReqContext context, PlayerSession session) throws IOException {
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
         // 改变 session 内部状态
@@ -73,7 +73,7 @@ public class GateCmdHandler {
      * @return
      */
     @CmdIdHandler(NetMsgIdConstants.player_login_req)
-    public byte[] onLoginReq(CmdRequestContext context, PlayerSession session) {
+    public byte[] onLoginReq(CmdReqContext context, PlayerSession session) {
         try {
             ByteString protoData = context.getProtoData();
 
@@ -101,7 +101,7 @@ public class GateCmdHandler {
             session.setAccountToken(clientLoginToken);
 
             // 发送gRPC请求到 game-server
-            CmdRespContext grpcResponse = gateToGameGrpcService.sendPackage(
+            CmdRspContext grpcResponse = sendReqPackageService.sendPackage(
                     context.toBuilder()
                             .setToken(session.getSessionToken()) // 注意：这里发送 session token 而不是 login token
                             .setAccountUid(clientLoginUid)
@@ -130,7 +130,7 @@ public class GateCmdHandler {
      * @throws IOException
      */
     @CmdIdHandler(NetMsgIdConstants.player_ping_req)
-    public byte[] onPingReq(CmdRequestContext context, PlayerSession session) throws IOException {
+    public byte[] onPingReq(CmdReqContext context, PlayerSession session) throws IOException {
         // Create response
         var rsp = PlayerPing.Pong.newInstance()
                 .setServerTs(Utils.getCurrentServerTime());

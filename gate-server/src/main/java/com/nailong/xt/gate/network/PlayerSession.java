@@ -5,7 +5,7 @@ import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
 import com.nailong.xt.common.utils.AeadHelper;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
+import com.nailong.xt.proto.server.Command;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -84,7 +84,7 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    public CmdRequestContext decryptMsg(String contextToken, byte[] bytes) throws Exception {
+    public Command.CmdReqContext decryptMsg(String contextToken, byte[] bytes) throws Exception {
         // Sanity for malformed packets
         if (bytes.length <= 12) {
             throw new IllegalArgumentException("Request data too short, need at least 4 bytes for cmdId");
@@ -109,14 +109,13 @@ public class PlayerSession {
         byte[] data = new byte[message.length - offset];
         System.arraycopy(message, offset, data, 0, data.length);
 
-        return CmdRequestContext.newBuilder()
+        return Command.CmdReqContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
                 .setToken(contextToken)
                 .setAccountUid(this.accountUid)
                 .setPlayerUid(this.playerUid)
                 .setTimestamp(System.currentTimeMillis())
-                .setRegion(4) // todo
                 .build();
     }
 
@@ -127,7 +126,7 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    private CmdRequestContext decryptFirstMsg(byte[] bytes) throws Exception {
+    private Command.CmdReqContext decryptFirstMsg(byte[] bytes) throws Exception {
         // 中间变量
         int offset = 0;
         byte[] message = bytes;
@@ -145,7 +144,7 @@ public class PlayerSession {
         byte[] data = new byte[message.length - offset];
         System.arraycopy(message, offset, data, 0, data.length);
 
-        return CmdRequestContext.newBuilder()
+        return Command.CmdReqContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
                 .setTimestamp(System.currentTimeMillis())

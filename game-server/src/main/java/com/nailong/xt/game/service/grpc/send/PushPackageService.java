@@ -1,12 +1,16 @@
-package com.nailong.xt.game.service.grpc;
+package com.nailong.xt.game.service.grpc.send;
 
 import com.google.protobuf.ByteString;
-import com.nailong.xt.game.net.GameToGateGrpcService;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
-import com.nailong.xt.proto.server.Package.CmdRespContext;
+import com.google.protobuf.Empty;
+import com.nailong.xt.proto.server.Push;
+import com.nailong.xt.proto.server.Push.PushPacketNotify;
+import com.nailong.xt.proto.server.ServerPushServiceGrpc;
+import io.grpc.ManagedChannel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Game Server to Gate Server 消息服务
@@ -14,10 +18,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class SendMessageToGateService {
+@RequiredArgsConstructor
+public class PushPackageService {
 
-    @Autowired
-    private GameToGateGrpcService gameToGateGrpcClientService;
+    /// ////////////////////////////////////////////////////////////
+    private final ManagedChannel gateServerChannel;
+
+    public CompletableFuture<Empty> sendPackageAsync(Push.PushPacketNotify request) {
+        return CompletableFuture.supplyAsync(() -> {
+            ServerPushServiceGrpc.ServerPushServiceBlockingStub stub =
+                    ServerPushServiceGrpc.newBlockingStub(gateServerChannel);
+            return stub.pushSingleNotify(request);
+        });
+    }
+
+    public Empty sendPackage(Push.PushPacketNotify request) {
+        ServerPushServiceGrpc.ServerPushServiceBlockingStub stub =
+                ServerPushServiceGrpc.newBlockingStub(gateServerChannel);
+        return stub.pushSingleNotify(request);
+    }
+    /// ////////////////////////////////////////////////////////////
 
     /**
      * 向gate server发送消息
@@ -28,13 +48,13 @@ public class SendMessageToGateService {
      * @param protoData 消息数据
      * @return 响应上下文
      */
-    public CmdRespContext sendMessageToGate(int cmdId, String token, int playerUid, ByteString protoData) {
+    public void sendMessageToGate(int cmdId, String token, int playerUid, ByteString protoData) {
         try {
             // 构建请求上下文
-            CmdRequestContext requestContext = CmdRequestContext.newBuilder()
+            PushPacketNotify notify = PushPacketNotify.newBuilder()
                     .setCmdId(cmdId)
                     .setToken(token)
-                    .setPlayerUid(playerUid)
+                    .addTargetPlayerUids(playerUid)
                     .setProtoData(protoData)
                     .setTimestamp(System.currentTimeMillis())
                     .build();
@@ -42,7 +62,7 @@ public class SendMessageToGateService {
             log.info("Sending message to gate server with cmdId: {}, playerUid: {}", cmdId, playerUid);
 
             // 发送消息到gate server
-            return gameToGateGrpcClientService.sendPackage(requestContext);
+            sendPackage(notify);
         } catch (Exception e) {
             log.error("Error sending message to gate server", e);
             throw e;
@@ -60,10 +80,10 @@ public class SendMessageToGateService {
     public void sendMessageToGateAsync(int cmdId, String token, int playerUid, ByteString protoData) {
         try {
             // 构建请求上下文
-            CmdRequestContext requestContext = CmdRequestContext.newBuilder()
+            PushPacketNotify notify = PushPacketNotify.newBuilder()
                     .setCmdId(cmdId)
                     .setToken(token)
-                    .setPlayerUid(playerUid)
+                    .addTargetPlayerUids(playerUid)
                     .setProtoData(protoData)
                     .setTimestamp(System.currentTimeMillis())
                     .build();
@@ -71,11 +91,7 @@ public class SendMessageToGateService {
             log.info("Sending message to gate server asynchronously with cmdId: {}, playerUid: {}", cmdId, playerUid);
 
             // 异步发送消息到gate server
-            gameToGateGrpcClientService.sendPackageAsync(requestContext)
-                    .thenAccept(response -> {
-                        log.info("Received response from gate server for cmdId: {}, reqCmdId: {}",
-                                response.getCmdId(), response.getReqCmdId());
-                    })
+            sendPackageAsync(notify)
                     .exceptionally(throwable -> {
                         log.error("Error sending message to gate server asynchronously", throwable);
                         return null;

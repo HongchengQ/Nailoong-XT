@@ -2,10 +2,10 @@ package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.gate.net.GateToGameGrpcService;
+import com.nailong.xt.gate.service.grpc.send.SendReqPackageService;
 import com.nailong.xt.gate.network.PlayerSession;
-import com.nailong.xt.proto.server.Package;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
+import com.nailong.xt.proto.server.Command.CmdReqContext;
+import com.nailong.xt.proto.server.Command.CmdRspContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jspecify.annotations.Nullable;
@@ -27,7 +27,7 @@ public class GateController {
     private CmdHandlerConfig cmdHandlerConfig;
 
     @Autowired
-    private GateToGameGrpcService gateToGameGrpcService;
+    private SendReqPackageService sendReqPackageService;
 
     @PostMapping
     public ResponseEntity<byte[]> handleBinaryRequest(
@@ -39,7 +39,7 @@ public class GateController {
 
         // 解码请求
         // Create request context
-        CmdRequestContext reqPackageContext = playerSession.decryptMsg(token, requestData);
+        CmdReqContext reqPackageContext = playerSession.decryptMsg(token, requestData);
 
         Object result;
         try {
@@ -55,7 +55,7 @@ public class GateController {
                 /* gate中没有注解，代表直接转发给game即可 */
 
                 // 发送gRPC请求到 game-server
-                Package.CmdRespContext grpcResponse = gateToGameGrpcService.sendPackage(reqPackageContext);
+                CmdRspContext grpcResponse = sendReqPackageService.sendPackage(reqPackageContext);
                 result = playerSession.encodeMsg(grpcResponse.getCmdId(), grpcResponse.getProtoData());
 
                 log.info("game server 响应上下文 ->\ncmdId:{}\nmessage:{}\nreq_cmd_id:{}\ntoken:{}\nplayer_uid:{}\ntimestamp:{}\nis_failed:{}",
@@ -70,7 +70,7 @@ public class GateController {
             } else {
                 /* 由自身 handler 处理 */
                 Class<?>[] paramTypes = serviceMethod.method().getParameterTypes(); // 检查方法是否接受 CmdRequestContext 作为参数
-                if (paramTypes.length > 0 && paramTypes[0] == CmdRequestContext.class) {
+                if (paramTypes.length > 0 && paramTypes[0] == CmdRspContext.class) {
                     result = serviceMethod.method().invoke(serviceMethod.handler(), reqPackageContext, playerSession);
                 } else {
                     result = serviceMethod.method().invoke(serviceMethod.handler(), reqProtoData, playerSession);
