@@ -3,13 +3,13 @@ package com.nailong.xt.gate.service;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.common.dao.UserRepository;
 import com.nailong.xt.common.net.GrpcClientService;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;
 import com.nailong.xt.proto.cmd.PlayerLogin;
+import com.nailong.xt.proto.cmd.PlayerPing;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import com.nailong.xt.proto.server.Package.CmdRespContext;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,9 @@ public class GateCmdHandler {
     @Autowired
     private GrpcClientService grpcClientService;
 
-    @Autowired
-    private UserRepository user;
-
     /**
      * 这个包由网关自身响应
+     * 不向远程发起调用
      *
      * @param context
      * @param session
@@ -37,7 +35,7 @@ public class GateCmdHandler {
      * @throws IOException
      */
     @CmdIdHandler(NetMsgIdConstants.ike_req)
-    public byte[] handlerIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
+    public byte[] onIkeReq(CmdRequestContext context, PlayerSession session) throws IOException {
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
         // 改变 session 内部状态
@@ -75,7 +73,7 @@ public class GateCmdHandler {
      * @return
      */
     @CmdIdHandler(NetMsgIdConstants.player_login_req)
-    public byte[] handlerLoginReq(CmdRequestContext context, PlayerSession session) {
+    public byte[] onLoginReq(CmdRequestContext context, PlayerSession session) {
         try {
             ByteString protoData = context.getProtoData();
 
@@ -102,24 +100,41 @@ public class GateCmdHandler {
             session.setAccountUid(clientLoginUid);
             session.setAccountToken(clientLoginToken);
 
-            // 基于当前信息 构建新的 proto
-            // 通过rpc发给game通知加载玩家
-            CmdRequestContext grpcRequest = context.toBuilder()
-                    .setToken(clientLoginToken)
-                    .setAccountUid(clientLoginUid)
-                    .build();
-
             // 发送gRPC请求到 game-server
-            CmdRespContext grpcResponse = grpcClientService.sendPackage(grpcRequest);
+            CmdRespContext grpcResponse = grpcClientService.sendPackage(
+                    context.toBuilder()
+                            .setToken(session.getSessionToken()) // 注意：这里发送 session token 而不是 login token
+                            .setAccountUid(clientLoginUid)
+                            .build()
+            );
 
             if (grpcResponse.getIsFailed()) {
                 return session.encodeMsg(NetMsgIdConstants.player_login_failed_ack);
             }
 
-            // 返回响应
+            // 返回预构建的响应
             return session.encodeMsg(NetMsgIdConstants.player_login_succeed_ack, loginResp);
         } catch (Exception e) {
             return session.encodeMsg(NetMsgIdConstants.player_login_failed_ack);
         }
+    }
+
+    /**
+     * ping
+     * 客户端 120s 请求一次
+     * 超时断线
+     *
+     * @param context
+     * @param session
+     * @return
+     * @throws IOException
+     */
+    @CmdIdHandler(NetMsgIdConstants.player_ping_req)
+    public byte[] onPingReq(CmdRequestContext context, PlayerSession session) throws IOException {
+        // Create response
+        var rsp = PlayerPing.Pong.newInstance()
+                .setServerTs(Utils.getCurrentServerTime());
+
+        return session.encodeMsg(NetMsgIdConstants.player_ping_succeed_ack, rsp);
     }
 }

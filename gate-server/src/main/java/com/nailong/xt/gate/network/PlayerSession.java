@@ -8,6 +8,7 @@ import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
@@ -23,6 +24,7 @@ import java.util.Base64;
 @Getter
 @Setter
 @Slf4j
+@ToString
 public class PlayerSession {
 
     String sessionToken;
@@ -114,7 +116,7 @@ public class PlayerSession {
                 .setAccountUid(this.accountUid)
                 .setPlayerUid(this.playerUid)
                 .setTimestamp(System.currentTimeMillis())
-                .setRegion(4)
+                .setRegion(4) // todo
                 .build();
     }
 

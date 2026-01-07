@@ -29,14 +29,14 @@ public class PlayerSessionMgr {
 
         PlayerSession session;
 
-        log.info(playerSessionMap.toString());
-
         session = findPlayerSession(token);
 
         if (session == null) {
             session = new PlayerSession();
             generateSessionToken(session);
         }
+
+        log.info("当前 playerSessionMap -> {}", playerSessionMap.toString());
 
         return session;
     }
