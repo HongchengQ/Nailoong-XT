@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * 回复用户数据包
+ * 接收 gate 传来的客户端数据包上下文
+ */
 @GrpcService
 @Log4j2
 public class GameGrpcService extends PackageServiceGrpc.PackageServiceImplBase {

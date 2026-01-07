@@ -9,12 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
         "com.nailong.xt.game",
         "com.nailong.xt.common.config",
         "com.nailong.xt.common.annotation",
-//        "com.nailong.xt.common.net",
         "com.nailong.xt.common.po",
         "com.nailong.xt.common.dao"
 })
 public class GameServerApplication {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(GameServerApplication.class, args);
     }
 }

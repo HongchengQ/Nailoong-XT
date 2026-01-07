@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {
         "com.nailong.xt.gate",
         "com.nailong.xt.common.config",
-        "com.nailong.xt.common.net",
+        "com.nailong.xt.common.annotation",
         "com.nailong.xt.common.po",
         "com.nailong.xt.common.dao"
 })

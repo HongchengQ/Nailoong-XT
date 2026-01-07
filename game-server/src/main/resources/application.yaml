@@ -7,6 +7,10 @@ spring:
     url: jdbc:mysql://localhost:3306/nailoong
     username: root
     password: root
+  # gRPC服务器配置
+  grpc:
+    server:
+      port: 1145
 
 # 数据库 orm 配置
 jimmer:
@@ -19,7 +23,10 @@ jimmer:
 server:
   port: 1180
 
-# gRPC服务器配置
-grpc:
-  server:
-    port: 9090
+
+# gRPC客户端配置 - 连接到gate server
+gate:
+  grpc:
+    server:
+      host: 127.0.0.1
+      port: 1146

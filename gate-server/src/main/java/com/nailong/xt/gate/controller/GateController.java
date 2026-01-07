@@ -2,7 +2,7 @@ package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.common.net.GrpcClientService;
+import com.nailong.xt.gate.net.GateToGameGrpcService;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.proto.server.Package;
 import com.nailong.xt.proto.server.Package.CmdRequestContext;
@@ -27,7 +27,7 @@ public class GateController {
     private CmdHandlerConfig cmdHandlerConfig;
 
     @Autowired
-    private GrpcClientService grpcClientService;
+    private GateToGameGrpcService gateToGameGrpcService;
 
     @PostMapping
     public ResponseEntity<byte[]> handleBinaryRequest(
@@ -55,7 +55,7 @@ public class GateController {
                 /* gate中没有注解，代表直接转发给game即可 */
 
                 // 发送gRPC请求到 game-server
-                Package.CmdRespContext grpcResponse = grpcClientService.sendPackage(reqPackageContext);
+                Package.CmdRespContext grpcResponse = gateToGameGrpcService.sendPackage(reqPackageContext);
                 result = playerSession.encodeMsg(grpcResponse.getCmdId(), grpcResponse.getProtoData());
 
                 log.info("game server 响应上下文 ->\ncmdId:{}\nmessage:{}\nreq_cmd_id:{}\ntoken:{}\nplayer_uid:{}\ntimestamp:{}\nis_failed:{}",

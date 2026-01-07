@@ -3,7 +3,10 @@ syntax = "proto3";
 package com.nailong.xt.proto.server;
 
 service PackageService {
+  // Gate server -> Game server
   rpc HandleContextPackageRequest (CmdRequestContext) returns (CmdRespContext) {}
+  // Game server -> Gate server (新增)
+  rpc HandleGameToGatePackageRequest (CmdRequestContext) returns (CmdRespContext) {}
 }
 
 message CmdRequestContext {

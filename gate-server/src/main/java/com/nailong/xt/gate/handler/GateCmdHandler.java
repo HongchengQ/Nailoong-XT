@@ -1,9 +1,9 @@
-package com.nailong.xt.gate.service;
+package com.nailong.xt.gate.handler;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.common.net.GrpcClientService;
+import com.nailong.xt.gate.net.GateToGameGrpcService;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class GateCmdHandler {
 
     @Autowired
-    private GrpcClientService grpcClientService;
+    private GateToGameGrpcService gateToGameGrpcService;
 
     /**
      * 这个包由网关自身响应
@@ -101,7 +101,7 @@ public class GateCmdHandler {
             session.setAccountToken(clientLoginToken);
 
             // 发送gRPC请求到 game-server
-            CmdRespContext grpcResponse = grpcClientService.sendPackage(
+            CmdRespContext grpcResponse = gateToGameGrpcService.sendPackage(
                     context.toBuilder()
                             .setToken(session.getSessionToken()) // 注意：这里发送 session token 而不是 login token
                             .setAccountUid(clientLoginUid)

@@ -2,24 +2,27 @@ package com.nailong.xt.gate.config;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.grpc.client.GrpcChannelFactory;
 
 @Configuration
-public class GrpcConfig {
+@ConfigurationProperties(prefix = "game.grpc.server")
+@Getter
+@Setter
+public class FindGameGrpcConfig {
 
-    @Value("${game.grpc.server.host:localhost}")
-    private String gameServerHost;
+    private String host;
 
-    @Value("${game.grpc.server.port:9090}")
-    private int gameServerPort;
+    private int port;
 
     @Bean
     public ManagedChannel gameServerChannel() {
         return ManagedChannelBuilder
-                .forAddress(gameServerHost, gameServerPort)
+                .forAddress(host, port)
                 .usePlaintext() // For development, use TLS in production
                 .build();
     }
