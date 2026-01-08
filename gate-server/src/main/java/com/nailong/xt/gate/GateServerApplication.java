@@ -1,10 +1,11 @@
 package com.nailong.xt.gate;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+
 @ComponentScan(basePackages = {
         "com.nailong.xt.gate",
         "com.nailong.xt.common.config",
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
         "com.nailong.xt.common.po",
         "com.nailong.xt.common.dao"
 })
+@SpringBootApplication
+@EnableDubbo
 public class GateServerApplication {
     static void main(String[] args) {
         SpringApplication.run(GateServerApplication.class, args);

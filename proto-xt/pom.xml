@@ -17,12 +17,20 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bcprov-jdk18on.version>1.83</bcprov-jdk18on.version>
         <quickbuf-runtime.version>1.4</quickbuf-runtime.version>
-        <grpc.version>1.77.0</grpc.version>
-        <protobuf-java.version>4.33.1</protobuf-java.version>
-        <spring-grpc.version>1.0.0</spring-grpc.version>
+        <dubbo.version>3.3.6</dubbo.version>
     </properties>
 
     <dependencies>
+        <!-- google protobuf -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+        </dependency>
+        <!-- quickbuf protobuf -->
         <dependency>
             <groupId>us.hebi.quickbuf</groupId>
             <artifactId>quickbuf-runtime</artifactId>
@@ -35,29 +43,23 @@
             <version>${bcprov-jdk18on.version}</version>
         </dependency>
 
-        <!--grpc-->
+        <!-- dubbo -->
         <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-services</artifactId>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.grpc</groupId>
-            <artifactId>spring-grpc-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.grpc</groupId>
-            <artifactId>spring-grpc-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-nacos-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.grpc</groupId>
-                <artifactId>spring-grpc-dependencies</artifactId>
-                <version>${spring-grpc.version}</version>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-bom</artifactId>
+                <version>${dubbo.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -67,32 +69,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>io.github.ascopes</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>4.0.3</version>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-maven-plugin</artifactId>
+                <version>${dubbo.version}</version>
                 <configuration>
-                    <protoc>${protobuf-java.version}</protoc>
-                    <binaryMavenPlugins>
-                        <binaryMavenPlugin>
-                            <groupId>io.grpc</groupId>
-                            <artifactId>protoc-gen-grpc-java</artifactId>
-                            <version>${grpc.version}</version>
-                            <options>@generated=omit</options>
-                        </binaryMavenPlugin>
-                    </binaryMavenPlugins>
-                    <sourceDirectories>
-                        <!-- Keep the default path -->
-                        <sourceDirectory>${project.basedir}/src/main/proto</sourceDirectory>
-                    </sourceDirectories>
+                    <protoSourceDir>${project.basedir}/src/main/proto/server</protoSourceDir>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>generate</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
