@@ -1,6 +1,6 @@
 package com.nailong.xt.gate.service.dubbo;
 
-import com.nailong.xt.common.service.PlayerCommandService;
+import com.nailong.xt.proto.server.PlayerCommandService;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public class SendReqPackageService {
-
     @DubboReference
-    private PlayerCommandService playerCommandService;
+    PlayerCommandService playerCommandService;
 
     public CompletableFuture<CmdRspContext> sendPackageAsync(CmdReqContext request) {
         return CompletableFuture.supplyAsync(() -> playerCommandService.handlePlayerRequest(request));

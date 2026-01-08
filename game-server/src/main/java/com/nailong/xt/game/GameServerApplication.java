@@ -11,7 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
         "com.nailong.xt.common.config",
         "com.nailong.xt.common.annotation",
         "com.nailong.xt.common.po",
-        "com.nailong.xt.common.dao"
+        "com.nailong.xt.common.dao",
+        "com.nailong.xt.common.proto"
 })
 @SpringBootApplication
 @EnableDubbo

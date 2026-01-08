@@ -1,7 +1,8 @@
 package com.nailong.xt.game.service.dubbo;
 
-import com.nailong.xt.common.service.ServerPushService;
+
 import com.nailong.xt.proto.server.Push;
+import com.nailong.xt.proto.server.ServerPushService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;

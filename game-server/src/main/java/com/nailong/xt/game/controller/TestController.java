@@ -18,7 +18,7 @@ public class TestController {
 
     @RequestMapping(path = "/send")
     public String test() {
-        IO.println("11111111111");
+        System.out.println("11111111111");
         // 示例：向gate server发送通知
         ByteString notificationData = ByteString.copyFromUtf8("Tower defense reward received");
         sendServerPushService.pushPackage(

@@ -1,7 +1,6 @@
 package com.nailong.xt.gate.service.dubbo;
 
-import com.google.protobuf.Empty;
-import com.nailong.xt.common.service.ServerPushService;
+import com.nailong.xt.proto.server.DubboServerPushServiceTriple;
 import com.nailong.xt.proto.server.Push;
 import lombok.extern.log4j.Log4j2;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -11,7 +10,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  */
 @DubboService
 @Log4j2
-public class ServerPushDubboServiceImpl implements ServerPushService {
+public class ServerPushDubboServiceImpl extends DubboServerPushServiceTriple.ServerPushServiceImplBase {
 
     @Override
     public Push.NoneMessage pushSingleNotify(Push.PushPacketNotify notify) {

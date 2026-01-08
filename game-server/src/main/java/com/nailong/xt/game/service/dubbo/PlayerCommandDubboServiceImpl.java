@@ -1,11 +1,11 @@
 package com.nailong.xt.game.service.dubbo;
 
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.common.service.PlayerCommandService;
 import com.nailong.xt.game.player.Player;
 import com.nailong.xt.game.player.PlayerMgr;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
+import com.nailong.xt.proto.server.DubboPlayerCommandServiceTriple;
 import lombok.extern.log4j.Log4j2;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @DubboService
 @Log4j2
-public class PlayerCommandDubboServiceImpl implements PlayerCommandService {
+public class PlayerCommandDubboServiceImpl extends DubboPlayerCommandServiceTriple.PlayerCommandServiceImplBase {
 
     @Autowired
     private CmdHandlerConfig cmdHandlerConfig;
