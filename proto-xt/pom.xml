@@ -73,7 +73,8 @@
                 <artifactId>dubbo-maven-plugin</artifactId>
                 <version>${dubbo.version}</version>
                 <configuration>
-                    <protoSourceDir>${project.basedir}/src/main/proto/server</protoSourceDir>
+                    <protoSourceDir>${project.basedir}/src/main/proto</protoSourceDir>
+                    <outputDir>src/main/java</outputDir>
                 </configuration>
             </plugin>
         </plugins>

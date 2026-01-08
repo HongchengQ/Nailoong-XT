@@ -4,7 +4,7 @@ import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.gate.service.grpc.send.SendReqPackageService;
+import com.nailong.xt.gate.service.dubbo.SendReqPackageService;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
 import com.nailong.xt.proto.cmd.Ike;

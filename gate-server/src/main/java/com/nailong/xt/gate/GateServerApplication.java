@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDubbo
 public class GateServerApplication {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(GateServerApplication.class, args);
     }
 }

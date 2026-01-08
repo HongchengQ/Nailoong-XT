@@ -7,10 +7,6 @@ spring:
     url: jdbc:mysql://localhost:3306/nailoong
     username: root
     password: root
-  # gRPC服务器配置
-  grpc:
-    server:
-      port: 1145
 
 # 数据库 orm 配置
 jimmer:
@@ -23,10 +19,15 @@ jimmer:
 server:
   port: 1180
 
-
-# gRPC客户端配置 - 连接到gate server
-gate:
-  grpc:
-    server:
-      host: 127.0.0.1
-      port: 1146
+# Dubbo 配置
+dubbo:
+  application:
+    name: game-server
+  registry:
+    address: nacos://127.0.0.1:8848
+    register-mode: instance
+  protocol:
+    name: dubbo
+    port: 20881
+  provider:
+    timeout: 10000

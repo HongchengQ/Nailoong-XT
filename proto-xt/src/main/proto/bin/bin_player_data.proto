@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.nailong.xt.proto.server;
+package com.nailong.xt.proto.bin;
 
 // 玩家数据的二进制字段结构，序列化到PlayerData的bin字段
 

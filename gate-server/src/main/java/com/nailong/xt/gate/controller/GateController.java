@@ -2,7 +2,7 @@ package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.gate.service.grpc.send.SendReqPackageService;
+import com.nailong.xt.gate.service.dubbo.SendReqPackageService;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
@@ -54,7 +54,7 @@ public class GateController {
             if (serviceMethod == null) {
                 /* gate中没有注解，代表直接转发给game即可 */
 
-                // 发送gRPC请求到 game-server
+                // 发送Dubbo请求到 game-server
                 CmdRspContext grpcResponse = sendReqPackageService.sendPackage(reqPackageContext);
                 result = playerSession.encodeMsg(grpcResponse.getCmdId(), grpcResponse.getProtoData());
 

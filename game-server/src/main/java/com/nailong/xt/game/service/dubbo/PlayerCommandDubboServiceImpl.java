@@ -1,42 +1,36 @@
-package com.nailong.xt.game.service.grpc.recv;
+package com.nailong.xt.game.service.dubbo;
 
-import com.google.protobuf.Empty;
 import com.nailong.xt.common.config.CmdHandlerConfig;
+import com.nailong.xt.common.service.PlayerCommandService;
 import com.nailong.xt.game.player.Player;
 import com.nailong.xt.game.player.PlayerMgr;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
-import com.nailong.xt.proto.server.PlayerCommandServiceGrpc;
-import com.nailong.xt.proto.server.Push;
-import com.nailong.xt.proto.server.ServerPushServiceGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.stub.StreamObserver;
 import lombok.extern.log4j.Log4j2;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.util.ObjectUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 接收 gate 传来的客户端数据包上下文
- * 回复用户数据包
+ * Dubbo服务实现，用于处理来自Gate的玩家请求
  */
-@GrpcService
+@DubboService
 @Log4j2
-public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServiceImplBase {
+public class PlayerCommandDubboServiceImpl implements PlayerCommandService {
 
     @Autowired
     private CmdHandlerConfig cmdHandlerConfig;
 
-
     @Override
-    public void handlePlayerRequest(CmdReqContext request, StreamObserver<CmdRspContext> responseObserver) {
+    public CmdRspContext handlePlayerRequest(CmdReqContext request) {
         int reqContextCmdId = request.getCmdId();
         int reqContextUid = request.getPlayerUid();
         String reqContextToken = request.getToken();
 
-        log.info("Received gRPC request with cmdId: {}", reqContextCmdId);
+        log.info("Received Dubbo request with cmdId: {}", reqContextCmdId);
 
         try {
             // 获取此 cmdId 注解的方法
@@ -66,12 +60,15 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
             // 将 (reqContext + 预构建的rspContext + player) 引用传递
             handlerMethod.method().invoke(handlerMethod.handler(), request, responseBuilder, player);
 
-            CmdRspContext response = responseBuilder.build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
+            return responseBuilder.build();
         } catch (Exception e) {
-            log.error("Error processing gRPC request", e);
-            responseObserver.onError(e);
+            log.error("Error processing Dubbo request", e);
+            throw new RuntimeException("Error processing request", e);
         }
+    }
+
+    @Override
+    public CompletableFuture<CmdRspContext> handlePlayerRequestAsync(CmdReqContext request) {
+        return CompletableFuture.supplyAsync(() -> handlePlayerRequest(request));
     }
 }
