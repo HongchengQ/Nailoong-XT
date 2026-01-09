@@ -4,17 +4,17 @@ import com.google.protobuf.ByteString;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.game.service.grpc.send.SendPackageToGate;
 import com.nailong.xt.proto.server.Push;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
+@RequiredArgsConstructor
 public class TestController {
 
-    @Autowired
-    private SendPackageToGate sendPackageToGate;
+    private final SendPackageToGate sendPackageToGate;
 
     @RequestMapping(path = "/send")
     public String test() {

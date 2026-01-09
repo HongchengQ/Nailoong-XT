@@ -4,26 +4,26 @@ import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.gate.service.grpc.send.SendPackageToGame;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
+import com.nailong.xt.gate.service.grpc.send.SendPackageToGame;
 import com.nailong.xt.proto.cmd.Ike;
 import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.cmd.PlayerPing;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class GateCmdHandler {
 
-    @Autowired
-    private SendPackageToGame sendPackageToGame;
+    private final SendPackageToGame sendPackageToGame;
 
     /**
      * 这个包由网关自身响应

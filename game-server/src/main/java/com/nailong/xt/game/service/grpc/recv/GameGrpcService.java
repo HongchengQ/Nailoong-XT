@@ -7,8 +7,8 @@ import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
 import com.nailong.xt.proto.server.PlayerCommandServiceGrpc;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.util.ObjectUtils;
 
@@ -18,10 +18,10 @@ import org.springframework.util.ObjectUtils;
  */
 @GrpcService
 @Log4j2
+@RequiredArgsConstructor
 public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServiceImplBase {
 
-    @Autowired
-    private CmdHandlerConfig cmdHandlerConfig;
+    private final CmdHandlerConfig cmdHandlerConfig;
 
 
     @Override

@@ -1,7 +1,7 @@
 package com.nailong.xt.common.config;
 
 import com.nailong.xt.common.annotation.CmdIdHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -9,10 +9,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import java.lang.reflect.Method;
 
 @Configuration
+@RequiredArgsConstructor
 public class CmdHandlerRegistrar implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
-    private CmdHandlerConfig cmdHandlerConfig;
+    private final CmdHandlerConfig cmdHandlerConfig;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

@@ -7,16 +7,16 @@ import com.nailong.xt.common.dao.PlayerDataRepository;
 import com.nailong.xt.common.model.po.PlayerData;
 import com.nailong.xt.game.player.Player;
 import com.nailong.xt.proto.server.Command;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PlayerHandler {
 
-    @Autowired
-    PlayerDataRepository playerDataRepository;
+    private final PlayerDataRepository playerDataRepository;
 
     @CmdIdHandler(NetMsgIdConstants.player_login_req)
     public void onPlayerLoginReq(Command.CmdReqContext reqContext, Command.CmdReqContext.Builder responseContext, Player player) {

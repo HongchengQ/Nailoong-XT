@@ -1,9 +1,7 @@
 package com.nailong.xt.game.service.grpc.send;
 
-import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import com.nailong.xt.proto.server.Push;
-import com.nailong.xt.proto.server.Push.PushPacketNotify;
 import com.nailong.xt.proto.server.ServerPushServiceGrpc;
 import io.grpc.ManagedChannel;
 import lombok.RequiredArgsConstructor;

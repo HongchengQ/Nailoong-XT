@@ -2,14 +2,13 @@ package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.gate.service.grpc.send.SendPackageToGame;
 import com.nailong.xt.gate.network.PlayerSession;
+import com.nailong.xt.gate.service.grpc.send.SendPackageToGame;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +19,13 @@ import static com.nailong.xt.gate.network.PlayerSessionMgr.findOrCreatePlayerSes
 
 @RestController
 @RequestMapping("/agent-zone-global")
+@RequiredArgsConstructor
+@Slf4j
 public class GateController {
 
-    private static final Logger log = LogManager.getLogger(GateController.class);
-    @Autowired
-    private CmdHandlerConfig cmdHandlerConfig;
+    private final CmdHandlerConfig cmdHandlerConfig;
 
-    @Autowired
-    private SendPackageToGame sendPackageToGame;
+    private final SendPackageToGame sendPackageToGame;
 
     @PostMapping
     public ResponseEntity<byte[]> handleBinaryRequest(
