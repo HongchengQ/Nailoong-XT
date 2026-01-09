@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class SendPackageToGame {
+public class GateGrpcClient {
 
     private final ManagedChannel gameServerChannel;
 

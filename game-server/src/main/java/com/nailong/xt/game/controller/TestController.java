@@ -2,7 +2,7 @@ package com.nailong.xt.game.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.game.service.grpc.send.SendPackageToGate;
+import com.nailong.xt.game.service.grpc.send.GameGrpcClient;
 import com.nailong.xt.proto.server.Push;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final SendPackageToGate sendPackageToGate;
+    private final GameGrpcClient gameGrpcClient;
 
     @RequestMapping(path = "/send")
     public String test() {
         IO.println("11111111111");
         // 示例：向gate server发送通知
         ByteString notificationData = ByteString.copyFromUtf8("Tower defense reward received");
-        sendPackageToGate.sendPackage(
+        System.out.println(gameGrpcClient.sendPackage(
                 Push.PushPacketNotify.newBuilder()
                         .setCmdId(NetMsgIdConstants.player_new_notify)
-//                        .setProtoData(notificationData)
+                        //                        .setProtoData(notificationData)
                         .addTargetPlayerUids(10001)
-//                        .setToken("111")
+                        //                        .setToken("111")
                         .build()
 
-        );
+        ));
         return "ok";
     }
 }

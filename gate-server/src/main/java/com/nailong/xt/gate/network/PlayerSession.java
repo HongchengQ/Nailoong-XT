@@ -42,6 +42,10 @@ public class PlayerSession {
     private byte[] serverPrivateKey;
     private byte[] key;
 
+    // 有状态 game-sever appid
+    // todo
+    private int gamePid;
+
     public void generateServerKey() {
         var pair = AeadHelper.generateECDHKEyPair();
 

@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SendPackageToGate {
+public class GameGrpcClient {
     private final ManagedChannel gateServerChannel;
 
     public CompletableFuture<Empty> sendPackageAsync(Push.PushPacketNotify request) {

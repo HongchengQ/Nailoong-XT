@@ -11,6 +11,11 @@ spring:
   grpc:
     server:
       port: 1146
+    client:
+      channels:
+        test:
+          a
+
 
 # 数据库 orm 配置
 jimmer:
