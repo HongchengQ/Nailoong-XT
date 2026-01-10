@@ -1,7 +1,5 @@
 package com.nailong.xt.gate.network;
 
-import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
-import com.nailong.xt.common.utils.RpcHelper;
 import com.nailong.xt.gate.balancer.ConsulGameServerLoadBalancer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
