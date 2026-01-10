@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 // emu/nebula/util/AeadHelper.java
-public class AeadHelper {
+public class AeadUtils {
     private static final ThreadLocal<SecureRandom> random = ThreadLocal.withInitial(SecureRandom::new);
-    private static final Logger log = LogManager.getLogger(AeadHelper.class);
+    private static final Logger log = LogManager.getLogger(AeadUtils.class);
 
     public static Map<String, byte[]> serverMetaKeyMap = new HashMap<>();
     public static Map<String, byte[]> serverGarbleKeyMap = new HashMap<>();

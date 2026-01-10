@@ -28,8 +28,8 @@ spring:
         ip-address: localhost
         metadata:
           appid: ${spring.application.appid}
-          grpc-server: ${spring.grpc.server.address}
-          max-players: 1000
+          grpcServer: ${spring.grpc.server.address}
+          maxPlayers: 1000
           region: cn
 
 # 数据库 orm 配置

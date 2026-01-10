@@ -11,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         "com.nailong.xt.common.config",
         "com.nailong.xt.common.annotation",
         "com.nailong.xt.common.model.po",
-        "com.nailong.xt.common.dao"
+        "com.nailong.xt.common.dao",
+        "com.nailong.xt.common.utils",
 })
 @EnableScheduling
 @SpringBootApplication

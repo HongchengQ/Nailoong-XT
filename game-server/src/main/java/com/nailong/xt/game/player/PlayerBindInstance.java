@@ -1,12 +1,15 @@
 package com.nailong.xt.game.player;
 
 import com.google.protobuf.Empty;
-import com.nailong.xt.common.utils.GrpcClientUtils;
+import com.nailong.xt.common.utils.RpcHelper;
+import com.nailong.xt.common.utils.RpcUtils;
 import com.nailong.xt.proto.server.Push;
 import com.nailong.xt.proto.server.ServerPushServiceGrpc;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,13 +19,15 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class PlayerBindInstance {
+    RpcHelper rpcHelper;
+
     ManagedChannel gateServerChannel;
 
     // 提供通道的服务器实例 - 从注册中心拿
     ServiceInstance instance;
 
     public PlayerBindInstance(String gateServerAddress) {
-        gateServerChannel = GrpcClientUtils.generateGrpcManagedChannel(gateServerAddress);
+        gateServerChannel = RpcUtils.generateGrpcManagedChannel(gateServerAddress);
     }
 
     public CompletableFuture<Empty> sendPackageAsync(Push.PushPacketNotify request) {

@@ -1,4 +1,4 @@
-package com.nailong.xt.gate.service.grpc.recv;
+package com.nailong.xt.gate.service.grpc;
 
 import com.google.protobuf.Empty;
 import com.nailong.xt.proto.server.Push;

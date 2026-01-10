@@ -1,30 +1,29 @@
 package com.nailong.xt.gate.balancer;
 
-import com.google.gson.Gson;
 import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
+import com.nailong.xt.common.utils.RpcHelper;
 import com.nailong.xt.proto.server.Common;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.consul.ConsulClient;
-import org.springframework.cloud.consul.model.http.kv.GetValue;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-
-import static com.nailong.xt.common.constants.KVPathPrefix.GAME_KV_PATH_PREFIX;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
 public class ConsulGameServerLoadBalancer {
-    private final ConsulClient consulClient;
+    private final RpcHelper rpcHelper;
     private final DiscoveryClient discoveryClient;
 
+    /**
+     * 获取负载最低的 game 实例
+     * @return game
+     */
     public ServiceInstance getLowestLoadInstance() {
         // 1. 通过Spring Cloud Commons获取服务实例列表
         List<ServiceInstance> instances = discoveryClient.getInstances(Common.ServerType.GameServer.name());
@@ -36,7 +35,7 @@ public class ConsulGameServerLoadBalancer {
         // 2. 为每个实例查询其Consul KV负载数据，并封装成选择对象
         List<ServerWithLoad> serversWithLoad = instances.stream()
                 .map(instance -> {
-                    GameServiceKVLoadData load = fetchLoadDataFromConsulKV(instance.getInstanceId());
+                    GameServiceKVLoadData load = rpcHelper.fetchLoadDataFromConsulKV(instance.getInstanceId());
                     return new ServerWithLoad(instance, load);
                 })
                 .filter(server -> server.load != null && server.load.isHealthy()) // 过滤掉无数据或不健康的
@@ -55,21 +54,7 @@ public class ConsulGameServerLoadBalancer {
         return bestServer.instance;
     }
 
-    private GameServiceKVLoadData fetchLoadDataFromConsulKV(String instanceId) {
-        try {
-            String key = GAME_KV_PATH_PREFIX + instanceId;
-            GetValue kvResponse = Objects.requireNonNull(consulClient.getKVValue(key, null).getBody()).getFirst();
 
-            if (kvResponse.getDecodedValue() != null) {
-                String json = kvResponse.getDecodedValue();
-                // 解析JSON，返回负载对象
-                return new Gson().fromJson(json, GameServiceKVLoadData.class);
-            }
-        } catch (Exception e) {
-            log.warn("Failed to fetch load data from Consul for instance: {}", instanceId, e);
-        }
-        return null;
-    }
 //    private KVLoadData fetchLoadDataFromConsulKV(String instanceId) {
 //        try {
 //            String KV_PATH_PREFIX = "load/GameServer/";
