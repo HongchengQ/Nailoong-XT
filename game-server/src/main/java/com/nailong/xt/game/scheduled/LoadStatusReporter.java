@@ -40,7 +40,7 @@ public class LoadStatusReporter {
         String region = "";
         Map<String, String> metadata = serviceInstance.getMetadata();
         if (metadata != null) {
-            maxPlayers = Integer.parseInt(metadata.get("max-players"));
+            maxPlayers = Integer.parseInt(metadata.get("maxPlayers"));
             appid = metadata.get("appid");
             grpcServer = metadata.get("grpcServer");
             region = metadata.get("grpcServer");

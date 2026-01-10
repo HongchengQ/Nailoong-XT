@@ -1,11 +1,10 @@
 package com.nailong.xt.gate.controller;
 
+import com.nailong.xt.common.enums.ServerTypeEnum;
 import com.nailong.xt.gate.balancer.ConsulGameServerLoadBalancer;
-import com.nailong.xt.proto.server.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +30,7 @@ public class TestController {
     ConsulGameServerLoadBalancer consulGameServerLoadBalancer;
 
     public String serviceUrl() {
-        List<ServiceInstance> list = discoveryClient.getInstances(Common.ServerType.GameServer.name());
+        List<ServiceInstance> list = discoveryClient.getInstances(ServerTypeEnum.GameServer.name());
 
         if (!list.isEmpty()) {
             System.out.println(list.getFirst().getServiceId());

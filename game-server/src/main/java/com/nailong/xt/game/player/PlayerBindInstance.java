@@ -1,15 +1,13 @@
 package com.nailong.xt.game.player;
 
 import com.google.protobuf.Empty;
-import com.nailong.xt.common.utils.RpcHelper;
 import com.nailong.xt.common.utils.RpcUtils;
 import com.nailong.xt.proto.server.Push;
 import com.nailong.xt.proto.server.ServerPushServiceGrpc;
 import io.grpc.ManagedChannel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,15 +16,22 @@ import java.util.concurrent.CompletableFuture;
  * 提供game server向gate server主动发送消息的功能
  */
 @Slf4j
+@Getter
+@Setter
 public class PlayerBindInstance {
-    RpcHelper rpcHelper;
 
     ManagedChannel gateServerChannel;
 
-    // 提供通道的服务器实例 - 从注册中心拿
-    ServiceInstance instance;
+    String gateServerAddress;
+
 
     public PlayerBindInstance(String gateServerAddress) {
+        setBindInstance(gateServerAddress);
+    }
+
+    public void setBindInstance(String gateServerAddress) {
+        this.gateServerAddress = gateServerAddress;
+
         gateServerChannel = RpcUtils.generateGrpcManagedChannel(gateServerAddress);
     }
 

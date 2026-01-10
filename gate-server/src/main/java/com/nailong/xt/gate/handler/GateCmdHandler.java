@@ -23,8 +23,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class GateCmdHandler {
 
-    private PlayerBindInstance playerBindInstance = null;
-
     /**
      * 这个包由网关自身响应
      * 不向远程发起调用
@@ -101,7 +99,7 @@ public class GateCmdHandler {
             session.setAccountToken(clientLoginToken);
 
             // 发送gRPC请求到 game-server
-            CmdRspContext grpcResponse = playerBindInstance.sendPackage(
+            CmdRspContext grpcResponse = session.getPlayerBindInstance().sendPackage(
                     context.toBuilder()
                             .setToken(session.getSessionToken()) // 注意：这里发送 session token 而不是 login token
                             .setAccountUid(clientLoginUid)

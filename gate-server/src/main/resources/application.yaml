@@ -12,7 +12,7 @@ spring:
   # gRPC服务器配置 - gate server作为gRPC服务器接收game server的消息
   grpc:
     server:
-      port: 1146
+      address: 127.0.0.1:1146
   cloud:
     consul:
       host: localhost

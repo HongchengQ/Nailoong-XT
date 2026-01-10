@@ -1,12 +1,23 @@
 package com.nailong.xt.game.player;
 
+import com.nailong.xt.common.dao.PlayerDataRepository;
+import com.nailong.xt.common.model.po.PlayerData;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
+@Slf4j
+@RequiredArgsConstructor
 public class PlayerMgr {
     // key:     uid
     // value:   Player
     public static Map<Integer, Player> playerMap = new ConcurrentHashMap<>(1000);
+
+    private final PlayerDataRepository playerDataRepository;
 
     public static Player findPlayerByUid(Integer uid) {
         return playerMap.get(uid);
@@ -14,5 +25,52 @@ public class PlayerMgr {
 
     public static int getAllPlayers() {
         return playerMap.size();
+    }
+
+    /**
+     * 这里应该专注于 playeruid
+     *
+     * @param uid
+     * @return
+     */
+    public Player findAndLoadDBPlayerByUid(Integer uid) {
+        if (uid == 0) return null;
+
+        Player player = PlayerMgr.findPlayerByUid(uid);
+
+        // 当前节点未缓存 player 要从数据库找
+        if (player == null) {
+            // 读数据库
+            PlayerData playerData = playerDataRepository.queryPlayerDataByUid(uid);
+
+            // 数据库没数据
+            if (playerData == null) {
+                log.warn("未在数据库找到玩家数据, uid:{}", uid);
+                return null;
+            }
+
+            // 从数据库加载玩家
+            player = getPlayerFromDb(playerData);
+        }
+
+        playerMap.put(uid, player);
+        return player;
+    }
+
+    public static Player getPlayerFromDb(PlayerData playerData) {
+        Player player = new Player();
+        player.setPlayerData(playerData);
+        // todo 解包数据
+
+        return player;
+    }
+
+    public Player createPlayerData(long accountUid) {
+        Player player = new Player();
+        PlayerData playerData = playerDataRepository.queryPlayerDataByAccountId(accountUid);
+        player.setPlayerData(playerData);
+
+        playerMap.put(player.getPlayerData().uid(), player);
+        return player;
     }
 }

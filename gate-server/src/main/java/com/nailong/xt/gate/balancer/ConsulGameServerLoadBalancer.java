@@ -1,8 +1,8 @@
 package com.nailong.xt.gate.balancer;
 
+import com.nailong.xt.common.enums.ServerTypeEnum;
 import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
 import com.nailong.xt.common.utils.RpcHelper;
-import com.nailong.xt.proto.server.Common;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,14 @@ public class ConsulGameServerLoadBalancer {
 
     /**
      * 获取负载最低的 game 实例
+     *
      * @return game
      */
     public ServiceInstance getLowestLoadInstance() {
         // 1. 通过Spring Cloud Commons获取服务实例列表
-        List<ServiceInstance> instances = discoveryClient.getInstances(Common.ServerType.GameServer.name());
+        List<ServiceInstance> instances = discoveryClient.getInstances(ServerTypeEnum.GameServer.name());
         if (instances.isEmpty()) {
-            log.warn("{} 实例列表为空", Common.ServerType.GameServer.name());
+            log.warn("{} 实例列表为空", ServerTypeEnum.GameServer.name());
             return null;
         }
 
@@ -42,7 +43,7 @@ public class ConsulGameServerLoadBalancer {
                 .toList();
 
         if (serversWithLoad.isEmpty()) {
-            log.warn("{}中serversWithLoad 为空", Common.ServerType.GameServer.name());
+            log.warn("{}中serversWithLoad 为空", ServerTypeEnum.GameServer.name());
             return null;
         }
 

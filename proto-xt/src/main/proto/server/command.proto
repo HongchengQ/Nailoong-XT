@@ -16,6 +16,7 @@ message CmdReqContext {
   int64 account_uid = 102;
   int32 player_uid = 103;
   uint64 timestamp = 201;
+  string gateServerAddress = 202;
 }
 
 

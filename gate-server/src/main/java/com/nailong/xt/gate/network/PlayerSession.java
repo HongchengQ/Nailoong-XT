@@ -95,7 +95,7 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    public Command.CmdReqContext decryptMsg(String contextToken, byte[] bytes) throws Exception {
+    public Command.CmdReqContext.Builder decryptMsg(String contextToken, byte[] bytes) throws Exception {
         // Sanity for malformed packets
         if (bytes.length <= 12) {
             throw new IllegalArgumentException("Request data too short, need at least 4 bytes for cmdId");
@@ -126,8 +126,7 @@ public class PlayerSession {
                 .setToken(contextToken)
                 .setAccountUid(this.accountUid)
                 .setPlayerUid(this.playerUid)
-                .setTimestamp(System.currentTimeMillis())
-                .build();
+                .setTimestamp(System.currentTimeMillis());
     }
 
     /**
@@ -137,7 +136,7 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    private Command.CmdReqContext decryptFirstMsg(byte[] bytes) throws Exception {
+    private Command.CmdReqContext.Builder decryptFirstMsg(byte[] bytes) throws Exception {
         // 中间变量
         int offset = 0;
         byte[] message = bytes;
@@ -158,8 +157,7 @@ public class PlayerSession {
         return Command.CmdReqContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
-                .setTimestamp(System.currentTimeMillis())
-                .build();
+                .setTimestamp(System.currentTimeMillis());
     }
 
     /**

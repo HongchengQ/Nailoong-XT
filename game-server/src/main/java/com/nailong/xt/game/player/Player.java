@@ -3,9 +3,11 @@ package com.nailong.xt.game.player;
 import com.nailong.xt.common.model.po.PlayerData;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Player {
     // 验证用
     String token;
@@ -15,8 +17,15 @@ public class Player {
 
     PlayerData playerData;
 
+    public Player() {}
+
+    public Player(PlayerBindInstance playerBindInstance) {
+        this.playerBindInstance = playerBindInstance;
+    }
+
     /**
      * 测试用
+     *
      * @param gateServerAddress
      */
     public Player(String gateServerAddress) {
