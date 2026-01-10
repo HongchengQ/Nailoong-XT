@@ -8,7 +8,11 @@ public class PlayerMgr {
     // value:   Player
     public static Map<Integer, Player> playerMap = new ConcurrentHashMap<>(1000);
 
-    public static Player findPlayerSession(Integer uid) {
+    public static Player findPlayerByUid(Integer uid) {
         return playerMap.get(uid);
+    }
+
+    public static int getAllPlayers() {
+        return playerMap.size();
     }
 }

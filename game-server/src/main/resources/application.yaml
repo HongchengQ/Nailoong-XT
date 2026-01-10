@@ -10,7 +10,7 @@ spring:
     password: root
   config:
     import: "consul:"
-  # gRPC服务器配置
+  # gRPC 服务器配置
   grpc:
     server:
       address: 127.0.0.1:1145
@@ -27,6 +27,7 @@ spring:
         prefer-ip-address: true
         ip-address: localhost
         metadata:
+          appid: ${spring.application.appid}
           grpc-server: ${spring.grpc.server.address}
           max-players: 1000
           region: cn
@@ -41,10 +42,3 @@ jimmer:
 # 程序启动端口
 server:
   port: 1180
-
-# gRPC客户端配置 - 连接到gate server
-gate:
-  grpc:
-    server:
-      host: 127.0.0.1
-      port: 1146

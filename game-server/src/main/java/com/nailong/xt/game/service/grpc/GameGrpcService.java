@@ -1,4 +1,4 @@
-package com.nailong.xt.game.service.grpc.recv;
+package com.nailong.xt.game.service.grpc;
 
 import com.nailong.xt.common.config.CmdHandlerConfig;
 import com.nailong.xt.game.player.Player;
@@ -23,7 +23,6 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
 
     private final CmdHandlerConfig cmdHandlerConfig;
 
-
     @Override
     public void handlePlayerRequest(CmdReqContext request, StreamObserver<CmdRspContext> responseObserver) {
         int reqContextCmdId = request.getCmdId();
@@ -40,7 +39,7 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
                 throw new RuntimeException("没有定义的 msg id " + reqContextCmdId);
             }
 
-            Player player = PlayerMgr.findPlayerSession(reqContextUid);
+            Player player = PlayerMgr.findPlayerByUid(reqContextUid);
 
             if (player != null) {
                 // 初始化 token

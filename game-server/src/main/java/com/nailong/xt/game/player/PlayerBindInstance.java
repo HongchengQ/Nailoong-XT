@@ -1,12 +1,12 @@
-package com.nailong.xt.game.service.grpc.send;
+package com.nailong.xt.game.player;
 
 import com.google.protobuf.Empty;
+import com.nailong.xt.common.utils.GrpcClientUtils;
 import com.nailong.xt.proto.server.Push;
 import com.nailong.xt.proto.server.ServerPushServiceGrpc;
 import io.grpc.ManagedChannel;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.cloud.client.ServiceInstance;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -14,11 +14,16 @@ import java.util.concurrent.CompletableFuture;
  * Game Server to Gate Server 消息服务
  * 提供game server向gate server主动发送消息的功能
  */
-@Service
 @Slf4j
-@RequiredArgsConstructor
-public class GameGrpcClient {
-    private final ManagedChannel gateServerChannel;
+public class PlayerBindInstance {
+    ManagedChannel gateServerChannel;
+
+    // 提供通道的服务器实例 - 从注册中心拿
+    ServiceInstance instance;
+
+    public PlayerBindInstance(String gateServerAddress) {
+        gateServerChannel = GrpcClientUtils.generateGrpcManagedChannel(gateServerAddress);
+    }
 
     public CompletableFuture<Empty> sendPackageAsync(Push.PushPacketNotify request) {
         return CompletableFuture.supplyAsync(() -> {

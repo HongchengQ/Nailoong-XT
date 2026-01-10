@@ -45,10 +45,3 @@ jimmer:
 # 程序启动端口
 server:
   port: 1179
-
-# gRPC 客户端配置 - 连接到game server
-game:
-  grpc:
-    server:
-      host: 127.0.0.1
-      port: 1145
