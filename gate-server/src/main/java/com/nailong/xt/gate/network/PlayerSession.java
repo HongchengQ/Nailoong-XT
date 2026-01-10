@@ -3,15 +3,19 @@ package com.nailong.xt.gate.network;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
-import com.nailong.xt.common.utils.AeadHelper;
+import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
+import com.nailong.xt.common.utils.AeadUtils;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
+import com.nailong.xt.proto.server.Command;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import us.hebi.quickbuf.ProtoMessage;
 import us.hebi.quickbuf.ProtoSink;
@@ -42,15 +46,22 @@ public class PlayerSession {
     private byte[] serverPrivateKey;
     private byte[] key;
 
+    private PlayerBindInstance playerBindInstance;
+
+    public PlayerSession(ServiceInstance instance) {
+        // 随机获取一个 game实例
+        this.playerBindInstance = new PlayerBindInstance(instance);
+    }
+
     public void generateServerKey() {
-        var pair = AeadHelper.generateECDHKEyPair();
+        var pair = AeadUtils.generateECDHKEyPair();
 
         this.serverPrivateKey = ((ECPrivateKeyParameters) pair.getPrivate()).getD().toByteArray();
         this.serverPublicKey = ((ECPublicKeyParameters) pair.getPublic()).getQ().getEncoded(false);
     }
 
     public void calculateKey() {
-        this.key = AeadHelper.generateKey(clientPublicKey, serverPublicKey, serverPrivateKey);
+        this.key = AeadUtils.generateKey(clientPublicKey, serverPublicKey, serverPrivateKey);
         this.encryptMethod = Utils.randomRange(0, 1);
     }
 
@@ -62,7 +73,7 @@ public class PlayerSession {
      * @return token
      */
     public String generateToken() {
-        String temp = System.currentTimeMillis() + ":" + Arrays.toString(AeadHelper.generateBytes(64));
+        String temp = System.currentTimeMillis() + ":" + Arrays.toString(AeadUtils.generateBytes(64));
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-512");
@@ -84,7 +95,7 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    public CmdRequestContext decryptMsg(String contextToken, byte[] bytes) throws Exception {
+    public Command.CmdReqContext.Builder decryptMsg(String contextToken, byte[] bytes) throws Exception {
         // Sanity for malformed packets
         if (bytes.length <= 12) {
             throw new IllegalArgumentException("Request data too short, need at least 4 bytes for cmdId");
@@ -99,7 +110,7 @@ public class PlayerSession {
         byte[] message = bytes;
 
         // Decrypt message
-        message = AeadHelper.decrypt(message, key, encryptMethod);
+        message = AeadUtils.decrypt(message, key, encryptMethod);
 
         // Get message id
         int offset = 10;
@@ -109,15 +120,13 @@ public class PlayerSession {
         byte[] data = new byte[message.length - offset];
         System.arraycopy(message, offset, data, 0, data.length);
 
-        return CmdRequestContext.newBuilder()
+        return Command.CmdReqContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
                 .setToken(contextToken)
                 .setAccountUid(this.accountUid)
                 .setPlayerUid(this.playerUid)
-                .setTimestamp(System.currentTimeMillis())
-                .setRegion(4) // todo
-                .build();
+                .setTimestamp(System.currentTimeMillis());
     }
 
     /**
@@ -127,17 +136,17 @@ public class PlayerSession {
      * @return
      * @throws Exception
      */
-    private CmdRequestContext decryptFirstMsg(byte[] bytes) throws Exception {
+    private Command.CmdReqContext.Builder decryptFirstMsg(byte[] bytes) throws Exception {
         // 中间变量
         int offset = 0;
         byte[] message = bytes;
 
         // 初始 key
-        byte[] sessionKey = AeadHelper.serverGarbleKeyMap.get("global");
+        byte[] sessionKey = AeadUtils.serverGarbleKeyMap.get("global");
 
         // Decrypt message
-        message = AeadHelper.decryptBasic(message, sessionKey);
-        message = AeadHelper.decryptGCM(message, sessionKey);
+        message = AeadUtils.decryptBasic(message, sessionKey);
+        message = AeadUtils.decryptGCM(message, sessionKey);
 
         // cmdId
         int cmdId = (message[offset++] << 8) | (message[offset++] & 0xff);
@@ -145,11 +154,10 @@ public class PlayerSession {
         byte[] data = new byte[message.length - offset];
         System.arraycopy(message, offset, data, 0, data.length);
 
-        return CmdRequestContext.newBuilder()
+        return Command.CmdReqContext.newBuilder()
                 .setCmdId(cmdId)
                 .setProtoData(ByteString.copyFrom(data))
-                .setTimestamp(System.currentTimeMillis())
-                .build();
+                .setTimestamp(System.currentTimeMillis());
     }
 
     /**
@@ -164,7 +172,7 @@ public class PlayerSession {
         }
 
         // 非密钥交换包 - 除第一个包以外的包
-        return AeadHelper.encrypt(data, this.key, this.encryptMethod);
+        return AeadUtils.encrypt(data, this.key, this.encryptMethod);
     }
 
     /**
@@ -175,10 +183,10 @@ public class PlayerSession {
     private byte[] encryptFirstPacketData(byte[] data) throws Exception {
         byte[] result = data;
 
-        byte[] firstKey = AeadHelper.serverGarbleKeyMap.get("global");
+        byte[] firstKey = AeadUtils.serverGarbleKeyMap.get("global");
 
-        result = AeadHelper.encryptGCM(result, firstKey);
-        result = AeadHelper.encryptBasic(result, firstKey);
+        result = AeadUtils.encryptGCM(result, firstKey);
+        result = AeadUtils.encryptBasic(result, firstKey);
 
         this.isExchangedInternetKey = true;
 

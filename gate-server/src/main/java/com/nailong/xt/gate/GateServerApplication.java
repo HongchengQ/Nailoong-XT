@@ -9,8 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
         "com.nailong.xt.gate",
         "com.nailong.xt.common.config",
         "com.nailong.xt.common.annotation",
-        "com.nailong.xt.common.po",
-        "com.nailong.xt.common.dao"
+        "com.nailong.xt.common.model.po",
+        "com.nailong.xt.common.dao",
+        "com.nailong.xt.common.utils"
 })
 public class GateServerApplication {
     static void main(String[] args) {

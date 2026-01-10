@@ -1,16 +1,36 @@
 spring:
   application:
-    name: game
+    name: GameServer
+    appid: 4-0-0-1
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/nailoong
     username: root
     password: root
-  # gRPC服务器配置
+  config:
+    import: "consul:"
+  # gRPC 服务器配置
   grpc:
     server:
-      port: 1145
+      address: 127.0.0.1:1145
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        # game 注册服务
+        register: true
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}-${spring.application.appid}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: localhost
+        metadata:
+          appid: ${spring.application.appid}
+          grpcServer: ${spring.grpc.server.address}
+          maxPlayers: 1000
+          region: cn
 
 # 数据库 orm 配置
 jimmer:
@@ -22,11 +42,3 @@ jimmer:
 # 程序启动端口
 server:
   port: 1180
-
-
-# gRPC客户端配置 - 连接到gate server
-gate:
-  grpc:
-    server:
-      host: 127.0.0.1
-      port: 1146

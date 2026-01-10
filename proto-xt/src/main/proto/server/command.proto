@@ -1,0 +1,33 @@
+syntax = "proto3";
+package com.nailong.xt.proto.server;
+
+// Gate -> Game
+// 转发玩家请求与直接响应
+service PlayerCommandService {
+  rpc HandlePlayerRequest (CmdReqContext) returns (CmdRspContext);
+}
+
+// 请求与响应容器（维持你的核心结构）
+message CmdReqContext {
+  uint32 cmd_id = 1;
+  bytes proto_data = 2;
+  // 元数据
+  string token = 101;
+  int64 account_uid = 102;
+  int32 player_uid = 103;
+  uint64 timestamp = 201;
+  string gateServerAddress = 202;
+}
+
+
+message CmdRspContext {
+  uint32 cmd_id = 1001; // 响应对应的命令ID
+  uint32 req_cmd_id = 1003; // 对应的请求命令ID，用于关联
+  bytes proto_data = 1002;
+  // 元数据
+  string token = 1005;
+  uint32 player_uid = 1007;
+  uint64 timestamp = 1004;
+  // todo 以后用专属类型
+  bool is_failed = 1008;
+}

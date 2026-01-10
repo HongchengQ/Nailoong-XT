@@ -2,8 +2,8 @@ package com.nailong.xt.game.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.game.service.grpc.SendMessageToGateService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nailong.xt.game.player.PlayerBindInstance;
+import com.nailong.xt.proto.server.Push;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,20 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
 public class TestController {
 
-    @Autowired
-    private SendMessageToGateService sendMessageToGateService;
+    PlayerBindInstance playerBindInstance = new PlayerBindInstance("127.0.0.1:1146");
 
     @RequestMapping(path = "/send")
     public String test() {
         IO.println("11111111111");
         // 示例：向gate server发送通知
         ByteString notificationData = ByteString.copyFromUtf8("Tower defense reward received");
-        sendMessageToGateService.sendPlayerNotification(
-                NetMsgIdConstants.player_new_notify,
-                "111",
-                123,
-                notificationData
-        );
+        System.out.println(playerBindInstance.sendPackage(
+                Push.PushPacketNotify.newBuilder()
+                        .setCmdId(NetMsgIdConstants.player_new_notify)
+                        .setProtoData(notificationData)
+                        .addTargetPlayerUids(10001)
+                        .setToken("111")
+                        .build()
+
+        ));
         return "ok";
     }
 }

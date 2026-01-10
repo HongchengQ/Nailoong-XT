@@ -2,32 +2,33 @@ package com.nailong.xt.gate.controller;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.gate.net.GateToGameGrpcService;
+import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.network.PlayerSession;
-import com.nailong.xt.proto.server.Package;
-import com.nailong.xt.proto.server.Package.CmdRequestContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.nailong.xt.gate.network.PlayerSessionMgr;
+import com.nailong.xt.proto.server.Command.CmdReqContext;
+import com.nailong.xt.proto.server.Command.CmdRspContext;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 
 import static com.nailong.xt.common.utils.Utils.bytesToHex;
-import static com.nailong.xt.gate.network.PlayerSessionMgr.findOrCreatePlayerSession;
 
 @RestController
 @RequestMapping("/agent-zone-global")
+@RequiredArgsConstructor
+@Slf4j
 public class GateController {
 
-    private static final Logger log = LogManager.getLogger(GateController.class);
-    @Autowired
-    private CmdHandlerConfig cmdHandlerConfig;
+    private final CmdHandlerConfig cmdHandlerConfig;
 
-    @Autowired
-    private GateToGameGrpcService gateToGameGrpcService;
+    private final PlayerSessionMgr playerSessionMgr;
+
+    private final Environment environment;
 
     @PostMapping
     public ResponseEntity<byte[]> handleBinaryRequest(
@@ -35,11 +36,13 @@ public class GateController {
             @RequestBody byte[] requestData)
             throws Exception {
         // session
-        PlayerSession playerSession = findOrCreatePlayerSession(token);
+        PlayerSession playerSession = playerSessionMgr.findOrCreatePlayerSession(token);
 
         // 解码请求
         // Create request context
-        CmdRequestContext reqPackageContext = playerSession.decryptMsg(token, requestData);
+        CmdReqContext reqPackageContext = playerSession.decryptMsg(token, requestData)
+                .setGateServerAddress(environment.getProperty("spring.grpc.server.address")) // 附加 gate 的 grpc 地址
+                .build();
 
         Object result;
         try {
@@ -55,7 +58,7 @@ public class GateController {
                 /* gate中没有注解，代表直接转发给game即可 */
 
                 // 发送gRPC请求到 game-server
-                Package.CmdRespContext grpcResponse = gateToGameGrpcService.sendPackage(reqPackageContext);
+                CmdRspContext grpcResponse = playerSession.getPlayerBindInstance().sendPackage(reqPackageContext);
                 result = playerSession.encodeMsg(grpcResponse.getCmdId(), grpcResponse.getProtoData());
 
                 log.info("game server 响应上下文 ->\ncmdId:{}\nmessage:{}\nreq_cmd_id:{}\ntoken:{}\nplayer_uid:{}\ntimestamp:{}\nis_failed:{}",
@@ -70,11 +73,13 @@ public class GateController {
             } else {
                 /* 由自身 handler 处理 */
                 Class<?>[] paramTypes = serviceMethod.method().getParameterTypes(); // 检查方法是否接受 CmdRequestContext 作为参数
-                if (paramTypes.length > 0 && paramTypes[0] == CmdRequestContext.class) {
+                if (paramTypes.length > 0 && paramTypes[0] == CmdReqContext.class) {
                     result = serviceMethod.method().invoke(serviceMethod.handler(), reqPackageContext, playerSession);
                 } else {
                     result = serviceMethod.method().invoke(serviceMethod.handler(), reqProtoData, playerSession);
                 }
+
+                log.info("gate server 已响应 ->\nmessage:{}", Utils.bytesToHex((byte[]) result));
             }
 
             if (result instanceof byte[] bytesResult) {
