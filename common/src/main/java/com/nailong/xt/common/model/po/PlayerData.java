@@ -1,5 +1,6 @@
 package com.nailong.xt.common.model.po;
 
+import com.nailong.xt.proto.server.BinPlayerData.PlayerDataBin;
 import org.babyfish.jimmer.sql.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ CREATE TABLE `player_data` (
   `level` int(10) unsigned DEFAULT NULL,
   `exp` int(10) unsigned DEFAULT NULL,
   `json_data` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `bin_data` mediumblob,
+  `bin_data` mediumblob NOT NULL,
   `before_login_bin_data` blob COMMENT 'login前用的数据',
   `data_version` int(10) unsigned DEFAULT NULL,
   `create_time` timestamp  DEFAULT current_timestamp(),
@@ -47,7 +48,7 @@ public interface PlayerData {
     String jsonData();
 
     // bin_player_data.proto - PlayerDataBin
-    byte @Nullable [] binData();
+    PlayerDataBin binData();
 
     // 不知道能存什么 先备着
     byte @Nullable [] beforeLoginBinData();
