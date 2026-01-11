@@ -24,9 +24,12 @@ public class Player {
     long accountUid;
 
     /* 只有存库时才能修改或获取它们，正常情况下应该使用 playerBasicComp */
-    @Deprecated Short level;
-    @Deprecated String nickname;
-    @Deprecated Integer exp;
+    @Deprecated
+    Short level;
+    @Deprecated
+    String nickname;
+    @Deprecated
+    Integer exp;
 
     String jsonData;
 
@@ -38,6 +41,7 @@ public class Player {
 
     // 是否被弃用
     Boolean delete;
+
     /// ////////////////////////////////
     ///
     /// 数据库映射 上面

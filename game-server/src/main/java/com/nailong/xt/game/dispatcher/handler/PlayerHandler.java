@@ -21,18 +21,16 @@ public class PlayerHandler {
     public void onPlayerLoginReq(Command.CmdReqContext reqContext, Command.CmdRspContext.Builder responseContext, Player player) {
         long accountUid = reqContext.getAccountUid();
 
-        Player player666 = player;
-
         // 在上层已经检查过 player的合法性了，在这里我们只需要专心处理新号注册即可
         if (player == null) {
-            player666 = playerMgr.createPlayer(accountUid);
+            player = playerMgr.createPlayer(accountUid);
         }
 
-        Player findPlayer = playerMgr.findAndLoadDBPlayerByUid(player666.getUid());
-
+        // test
+        Player findPlayer = playerMgr.findAndLoadDBPlayerByUid(player.getUid());
         log.info("player_login_req 已成功读取 player data {}", findPlayer);
 
-        responseContext.setPlayerUid(findPlayer.getUid());
+        responseContext.setPlayerUid(player.getUid());
     }
 
     @CmdIdHandler(NetMsgIdConstants.player_data_req)

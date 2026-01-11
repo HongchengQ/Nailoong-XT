@@ -30,10 +30,10 @@ public class PlayerMgr {
     private final PlayerDataRepository playerDataRepository;
 
     /**
-     * 这里应该专注于 playeruid
+     * 只查找不创建
      *
-     * @param uid
-     * @return
+     * @param uid playerUid
+     * @return 未找到时返回 null
      */
     public Player findAndLoadDBPlayerByUid(Integer uid) {
         if (uid == 0) return null;
@@ -68,7 +68,8 @@ public class PlayerMgr {
 
     public Player createPlayer(long accountUid) {
         Player player = new Player();
-        PlayerDataPo playerDataPo = playerDataRepository.queryPlayerDataByAccountId(accountUid);
+
+        PlayerDataPo playerDataPo = playerDataRepository.queryOrCreatePlayerDataByAccountId(accountUid);
         player.initFromPo(playerDataPo);
 
         playerMap.put(player.getUid(), player);
