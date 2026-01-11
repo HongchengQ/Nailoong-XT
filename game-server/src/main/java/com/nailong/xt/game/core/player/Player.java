@@ -1,4 +1,4 @@
-package com.nailong.xt.game.player;
+package com.nailong.xt.game.core.player;
 
 import com.nailong.xt.common.model.po.PlayerData;
 import lombok.Getter;

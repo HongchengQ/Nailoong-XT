@@ -3,7 +3,7 @@ package com.nailong.xt.game.scheduled;
 import com.google.gson.Gson;
 import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.game.player.PlayerMgr;
+import com.nailong.xt.game.core.player.PlayerMgr;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;

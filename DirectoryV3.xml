@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <trees>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/dispatcher" title="消息路由"/>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/dispatcher/grpc"
+           title="接收来自gate转发的玩家消息，导向handler处理"/>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/dispatcher/grpc/GameGrpcService.java"
+           title="todo: 拆分为rpc和CmdDispatcher"/>
+    <tree path="/game-server/src/main/java/com/nailong/xt/game/scheduled" title="定时任务"/>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/core" title="对外仅暴露mgr和service"/>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/core/null" title="占位"/>
+     <tree path="/game-server/src/main/java/com/nailong/xt/game/dispatcher/handler" title="这可能才是真正的controller层"
+           extension="" presentableText="" tooltipTitle="" icon="" textColor="" backgroundColor=""/>
+ </trees>

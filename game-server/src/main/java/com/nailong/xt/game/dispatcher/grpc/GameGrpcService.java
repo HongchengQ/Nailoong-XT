@@ -1,8 +1,8 @@
-package com.nailong.xt.game.service.grpc;
+package com.nailong.xt.game.dispatcher.grpc;
 
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.game.player.Player;
-import com.nailong.xt.game.player.PlayerMgr;
+import com.nailong.xt.game.core.player.Player;
+import com.nailong.xt.game.core.player.PlayerMgr;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
 import com.nailong.xt.proto.server.PlayerCommandServiceGrpc;

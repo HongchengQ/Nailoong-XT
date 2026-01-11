@@ -4,7 +4,7 @@ import com.google.protobuf.ByteString;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.dao.PlayerDataRepository;
 import com.nailong.xt.common.model.po.PlayerDataDraft;
-import com.nailong.xt.game.player.PlayerBindInstance;
+import com.nailong.xt.game.core.player.PlayerBindInstance;
 import com.nailong.xt.proto.server.BinPlayerData;
 import com.nailong.xt.proto.server.Push;
 import org.springframework.beans.factory.annotation.Autowired;

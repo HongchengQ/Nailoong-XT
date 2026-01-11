@@ -1,11 +1,10 @@
-package com.nailong.xt.game.handler;
+package com.nailong.xt.game.dispatcher.handler;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.game.player.Player;
-import com.nailong.xt.game.player.PlayerMgr;
+import com.nailong.xt.game.core.player.Player;
+import com.nailong.xt.game.core.player.PlayerMgr;
 import com.nailong.xt.proto.server.Command;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

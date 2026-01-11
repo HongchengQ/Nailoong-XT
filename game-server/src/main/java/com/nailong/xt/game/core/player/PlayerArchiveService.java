@@ -1,4 +1,4 @@
-package com.nailong.xt.game.service.archive;
+package com.nailong.xt.game.core.player;
 
 import com.nailong.xt.proto.server.BinPlayerData;
 import org.springframework.stereotype.Service;

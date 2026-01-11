@@ -1,4 +1,4 @@
-package com.nailong.xt.game.player;
+package com.nailong.xt.game.core.player;
 
 import com.nailong.xt.common.dao.PlayerDataRepository;
 import com.nailong.xt.common.model.po.PlayerData;
@@ -17,8 +17,6 @@ public class PlayerMgr {
     // value:   Player
     public static Map<Integer, Player> playerMap = new ConcurrentHashMap<>(1000);
 
-    private final PlayerDataRepository playerDataRepository;
-
     public static Player findPlayerByUid(Integer uid) {
         return playerMap.get(uid);
     }
@@ -26,6 +24,9 @@ public class PlayerMgr {
     public static int getAllPlayers() {
         return playerMap.size();
     }
+
+    // 构造器注入
+    private final PlayerDataRepository playerDataRepository;
 
     /**
      * 这里应该专注于 playeruid
@@ -57,7 +58,7 @@ public class PlayerMgr {
         return player;
     }
 
-    public static Player getPlayerFromDb(PlayerData playerData) {
+    public Player getPlayerFromDb(PlayerData playerData) {
         Player player = new Player();
         player.setPlayerData(playerData);
         // todo 解包数据

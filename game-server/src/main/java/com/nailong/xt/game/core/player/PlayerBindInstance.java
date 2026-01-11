@@ -1,4 +1,4 @@
-package com.nailong.xt.game.player;
+package com.nailong.xt.game.core.player;
 
 import com.google.protobuf.Empty;
 import com.nailong.xt.common.utils.RpcUtils;
