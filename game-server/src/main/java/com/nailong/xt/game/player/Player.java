@@ -19,16 +19,4 @@ public class Player {
 
     public Player() {}
 
-    public Player(PlayerBindInstance playerBindInstance) {
-        this.playerBindInstance = playerBindInstance;
-    }
-
-    /**
-     * 测试用
-     *
-     * @param gateServerAddress
-     */
-    public Player(String gateServerAddress) {
-        playerBindInstance = new PlayerBindInstance(gateServerAddress);
-    }
 }

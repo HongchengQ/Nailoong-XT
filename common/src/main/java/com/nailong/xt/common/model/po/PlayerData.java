@@ -24,6 +24,7 @@ CREATE TABLE `player_data` (
 
  */
 @Entity
+@Table(name = "player_data")
 public interface PlayerData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
