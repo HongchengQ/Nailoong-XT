@@ -1,7 +1,8 @@
 package com.nailong.xt.game.core.player;
 
 import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.common.model.po.PlayerData;
+import com.nailong.xt.common.model.po.PlayerDataPo;
+import com.nailong.xt.game.core.player.model.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,36 +43,35 @@ public class PlayerMgr {
         // 当前节点未缓存 player 要从数据库找
         if (player == null) {
             // 读数据库
-            PlayerData playerData = playerDataRepository.queryPlayerDataByUid(uid);
+            PlayerDataPo playerDataPo = playerDataRepository.queryPlayerDataByUid(uid);
 
             // 数据库没数据
-            if (playerData == null) {
+            if (playerDataPo == null) {
                 log.warn("未在数据库找到玩家数据, uid:{}", uid);
                 return null;
             }
 
             // 从数据库加载玩家
-            player = getPlayerFromDb(playerData);
+            player = loadPlayerFromDb(playerDataPo);
         }
 
         playerMap.put(uid, player);
         return player;
     }
 
-    public Player getPlayerFromDb(PlayerData playerData) {
+    public Player loadPlayerFromDb(PlayerDataPo playerDataPo) {
         Player player = new Player();
-        player.setPlayerData(playerData);
-        // todo 解包数据
+        player.initFromPo(playerDataPo);
 
         return player;
     }
 
-    public Player createPlayerData(long accountUid) {
+    public Player createPlayer(long accountUid) {
         Player player = new Player();
-        PlayerData playerData = playerDataRepository.queryPlayerDataByAccountId(accountUid);
-        player.setPlayerData(playerData);
+        PlayerDataPo playerDataPo = playerDataRepository.queryPlayerDataByAccountId(accountUid);
+        player.initFromPo(playerDataPo);
 
-        playerMap.put(player.getPlayerData().uid(), player);
+        playerMap.put(player.getUid(), player);
         return player;
     }
 }

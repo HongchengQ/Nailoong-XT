@@ -3,7 +3,7 @@ package com.nailong.xt.game.dispatcher.handler;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.game.core.player.Player;
+import com.nailong.xt.game.core.player.model.Player;
 import com.nailong.xt.proto.cmd.ActivityDetail;
 import com.nailong.xt.proto.server.Command;
 import lombok.extern.slf4j.Slf4j;

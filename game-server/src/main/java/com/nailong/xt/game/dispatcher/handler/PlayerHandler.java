@@ -3,7 +3,7 @@ package com.nailong.xt.game.dispatcher.handler;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
-import com.nailong.xt.game.core.player.Player;
+import com.nailong.xt.game.core.player.model.Player;
 import com.nailong.xt.game.core.player.PlayerMgr;
 import com.nailong.xt.proto.server.Command;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,14 @@ public class PlayerHandler {
 
         // 在上层已经检查过 player的合法性了，在这里我们只需要专心处理新号注册即可
         if (player == null) {
-            player666 = playerMgr.createPlayerData(accountUid);
+            player666 = playerMgr.createPlayer(accountUid);
         }
 
-        Player findPlayer = playerMgr.findAndLoadDBPlayerByUid(player666.getPlayerData().uid());
+        Player findPlayer = playerMgr.findAndLoadDBPlayerByUid(player666.getUid());
 
         log.info("player_login_req 已成功读取 player data {}", findPlayer);
 
-        responseContext.setPlayerUid(findPlayer.getPlayerData().uid());
+        responseContext.setPlayerUid(findPlayer.getUid());
     }
 
     @CmdIdHandler(NetMsgIdConstants.player_data_req)

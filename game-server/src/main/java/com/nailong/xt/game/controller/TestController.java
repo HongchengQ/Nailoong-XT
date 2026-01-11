@@ -3,8 +3,8 @@ package com.nailong.xt.game.controller;
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.constants.NetMsgIdConstants;
 import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.common.model.po.PlayerDataDraft;
-import com.nailong.xt.game.core.player.PlayerBindInstance;
+import com.nailong.xt.common.model.po.PlayerDataPoDraft;
+import com.nailong.xt.game.core.player.model.PlayerBindInstance;
 import com.nailong.xt.proto.server.BinPlayerData;
 import com.nailong.xt.proto.server.Push;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +42,11 @@ public class TestController {
     public String db() {
         IO.println("22222222222222");
         playerDataRepository.savePlayerDataObj(
-                new PlayerDataDraft.Builder()
+                new PlayerDataPoDraft.Builder()
                         .uid(999)
                         .accountUid(999L)
                         .binData(BinPlayerData.PlayerDataBin.newBuilder()
                                 .setUid(999)
-                                .setItemBin(BinPlayerData.PlayerItemCompBin.newBuilder()
-                                        .setHcoin(999999)
-                                        .build())
                                 .setBasicBin(
                                         BinPlayerData.PlayerBasicCompBin.newBuilder()
                                                 .setTotalGameTime(9999)

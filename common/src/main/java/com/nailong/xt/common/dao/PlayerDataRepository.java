@@ -1,9 +1,8 @@
 package com.nailong.xt.common.dao;
 
-import com.nailong.xt.common.model.po.PlayerData;
-import com.nailong.xt.common.model.po.PlayerDataDraft;
-import com.nailong.xt.common.model.po.PlayerDataTable;
-import com.nailong.xt.common.model.po.Tables;
+import com.nailong.xt.common.model.po.*;
+import com.nailong.xt.common.model.po.PlayerDataPoDraft;
+import com.nailong.xt.common.model.po.PlayerDataPo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.babyfish.jimmer.sql.JSqlClient;
@@ -16,9 +15,9 @@ public class PlayerDataRepository {
 
     private final JSqlClient sqlClient;
 
-    PlayerDataTable playerDataTable = Tables.PLAYER_DATA_TABLE;
+    PlayerDataPoTable playerDataTable = Tables.PLAYER_DATA_PO_TABLE;
 
-    public PlayerData queryPlayerDataByUid(int playerUid) {
+    public PlayerDataPo queryPlayerDataByUid(int playerUid) {
         return sqlClient.createQuery(playerDataTable)
                 .where(playerDataTable.uid().eq(playerUid))
                 .select(playerDataTable)
@@ -28,7 +27,7 @@ public class PlayerDataRepository {
                 .orElse(null);
     }
 
-    public PlayerData queryPlayerDataByAccountId(long accountUid) {
+    public PlayerDataPo queryPlayerDataByAccountId(long accountUid) {
         return sqlClient.createQuery(playerDataTable)
                 .where(playerDataTable.accountUid().eq(accountUid))
                 .select(playerDataTable)
@@ -38,8 +37,8 @@ public class PlayerDataRepository {
                 .orElse(null);
     }
 
-    public PlayerData queryOrCreatePlayerDataByAccountId(long accountUid) {
-        PlayerData data;
+    public PlayerDataPo queryOrCreatePlayerDataByAccountId(long accountUid) {
+        PlayerDataPo data;
         try {
             data = queryPlayerDataByAccountId(accountUid);
         } catch (Exception e) {
@@ -55,19 +54,19 @@ public class PlayerDataRepository {
         return data;
     }
 
-    public PlayerData createPlayerData(long accountUid) {
-        PlayerData playerData = new PlayerDataDraft.Builder()
+    public PlayerDataPo createPlayerData(long accountUid) {
+        PlayerDataPo playerDataPo = new PlayerDataPoDraft.Builder()
                 .accountUid(accountUid)
                 .build();
 
-        log.info("新号创建中 {}", playerData);
+        log.info("新号创建中 {}", playerDataPo);
 
-        return savePlayerDataObj(playerData);
+        return savePlayerDataObj(playerDataPo);
     }
 
-    public PlayerData savePlayerDataObj(PlayerData playerData) {
+    public PlayerDataPo savePlayerDataObj(PlayerDataPo playerDataPo) {
         return sqlClient
-                .saveCommand(playerData)
+                .saveCommand(playerDataPo)
                 .execute()
                 .getModifiedEntity();
     }

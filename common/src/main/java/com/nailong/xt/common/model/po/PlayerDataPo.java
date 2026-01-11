@@ -26,7 +26,7 @@ CREATE TABLE `player_data` (
  */
 @Entity
 @Table(name = "player_data")
-public interface PlayerData {
+public interface PlayerDataPo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int uid();

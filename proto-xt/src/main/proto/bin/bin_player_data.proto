@@ -9,8 +9,6 @@ message PlayerDataBin
 {
   uint32 uid = 10;
   PlayerBasicCompBin basic_bin = 1; // 存储等级、经验等基本数据的组件
-  PlayerAvatarCompBin avatar_bin = 2; // 角色组件
-  PlayerItemCompBin item_bin = 7; // 道具组件
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,58 +27,6 @@ message PlayerBasicCompBin
   uint32 update_login_days_time = 16;   // 上次更新登入天数的时间
   string client_app_version = 20;       // 客户端版本
   string client_device_info = 21;       // 客户端设备信息
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 玩家角色数据
-message PlayerAvatarCompBin
-{
-  repeated AvatarBin avatar_list = 1; // 角色列表
-}
-
-// 角色数据
-message AvatarBin
-{
-  uint32 avatar_id = 1;
-  uint64 guid = 2;                // 唯一ID
-  uint32 level = 3;               // 等级
-  uint32 promote_level = 10;      // 突破等级
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 玩家道具数据
-message PlayerItemCompBin
-{
-  ItemStoreBin depot_store = 2;                                           // 仓库物品
-  uint32 hcoin = 4;                                                       // 水晶
-  uint32 scoin = 5;                                                       // 朵拉
-  AutoRecoverItemBin world_resin_record = 8;                              // 大世界体力
-}
-
-// 道具容器
-message ItemStoreBin
-{
-  // 基类字段
-  map<uint64, ItemBin> item_map = 1;  // 所有道具
-  // 道具
-  message ItemBin
-  {
-    uint32 item_type = 1;           // 道具类型
-    uint32 item_id = 2;             // 道具ID
-    uint64 guid = 3;                // 唯一ID
-    uint32 count = 4;               // 数量
-  }
-}
-
-// 大世界体力
-message AutoRecoverItemBin
-{
-  uint32 value = 1;
-  uint32 next_refresh_time = 5; // 下一次免费刷新时间
-  uint32 bought_num = 3;        // 已经购买的数量
-  uint32 last_bought_time = 4;  // 最后购买时间
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
