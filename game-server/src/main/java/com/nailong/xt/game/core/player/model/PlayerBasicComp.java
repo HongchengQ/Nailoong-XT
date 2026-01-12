@@ -2,7 +2,6 @@ package com.nailong.xt.game.core.player.model;
 
 import com.nailong.xt.proto.server.BinPlayerData;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -10,9 +9,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@NoArgsConstructor
 public class PlayerBasicComp {
-    Short level;                     // 等级
+    short level;                     // 等级
     int exp;                       // 经验
     String nickname;                  // 昵称
     int totalGameTime;           // 总共的游戏时间
@@ -23,6 +21,12 @@ public class PlayerBasicComp {
     int updateLoginDaysTime;   // 上次更新登入天数的时间
     String clientAppVersion;       // 客户端版本
     String clientDeviceInfo;       // 客户端设备信息
+
+    public PlayerBasicComp() {
+        this.nickname = "";
+        this.clientAppVersion = "";
+        this.clientDeviceInfo = "";
+    }
 
     public BinPlayerData.PlayerBasicCompBin toProto() {
         return BinPlayerData.PlayerBasicCompBin.newBuilder()

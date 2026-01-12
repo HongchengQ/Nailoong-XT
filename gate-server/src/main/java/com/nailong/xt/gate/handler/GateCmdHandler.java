@@ -2,11 +2,10 @@ package com.nailong.xt.gate.handler;
 
 import com.google.protobuf.ByteString;
 import com.nailong.xt.common.annotation.CmdIdHandler;
-import com.nailong.xt.common.constants.NetMsgIdConstants;
+import com.nailong.xt.common.constants.GamePlayerCmdIdConstants;
 import com.nailong.xt.common.utils.Utils;
 import com.nailong.xt.gate.network.PlayerSession;
 import com.nailong.xt.gate.network.PlayerSessionMgr;
-import com.nailong.xt.gate.network.PlayerBindInstance;
 import com.nailong.xt.proto.cmd.Ike;
 import com.nailong.xt.proto.cmd.PlayerLogin;
 import com.nailong.xt.proto.cmd.PlayerPing;
@@ -32,7 +31,7 @@ public class GateCmdHandler {
      * @return
      * @throws IOException
      */
-    @CmdIdHandler(NetMsgIdConstants.ike_req)
+    @CmdIdHandler(GamePlayerCmdIdConstants.ike_req)
     public byte[] onIkeReq(CmdReqContext context, PlayerSession session) throws IOException {
         var req = Ike.IKEReq.parseFrom(context.getProtoData().toByteArray());
 
@@ -58,7 +57,7 @@ public class GateCmdHandler {
         log.debug("Key: {}", Utils.base64Encode(session.getKey()));
 
         // 返回响应包
-        return session.encodeMsg(NetMsgIdConstants.ike_succeed_ack, rsp);
+        return session.encodeMsg(GamePlayerCmdIdConstants.ike_succeed_ack, rsp);
     }
 
     /**
@@ -70,7 +69,7 @@ public class GateCmdHandler {
      * @param session
      * @return
      */
-    @CmdIdHandler(NetMsgIdConstants.player_login_req)
+    @CmdIdHandler(GamePlayerCmdIdConstants.player_login_req)
     public byte[] onLoginReq(CmdReqContext context, PlayerSession session) {
         try {
             ByteString protoData = context.getProtoData();
@@ -107,13 +106,13 @@ public class GateCmdHandler {
             );
 
             if (grpcResponse.getIsFailed()) {
-                return session.encodeMsg(NetMsgIdConstants.player_login_failed_ack);
+                return session.encodeMsg(GamePlayerCmdIdConstants.player_login_failed_ack);
             }
 
             // 返回预构建的响应
-            return session.encodeMsg(NetMsgIdConstants.player_login_succeed_ack, loginResp);
+            return session.encodeMsg(GamePlayerCmdIdConstants.player_login_succeed_ack, loginResp);
         } catch (Exception e) {
-            return session.encodeMsg(NetMsgIdConstants.player_login_failed_ack);
+            return session.encodeMsg(GamePlayerCmdIdConstants.player_login_failed_ack);
         }
     }
 
@@ -127,12 +126,12 @@ public class GateCmdHandler {
      * @return
      * @throws IOException
      */
-    @CmdIdHandler(NetMsgIdConstants.player_ping_req)
+    @CmdIdHandler(GamePlayerCmdIdConstants.player_ping_req)
     public byte[] onPingReq(CmdReqContext context, PlayerSession session) throws IOException {
         // Create response
         var rsp = PlayerPing.Pong.newInstance()
                 .setServerTs(Utils.getCurrentServerTime());
 
-        return session.encodeMsg(NetMsgIdConstants.player_ping_succeed_ack, rsp);
+        return session.encodeMsg(GamePlayerCmdIdConstants.player_ping_succeed_ack, rsp);
     }
 }

@@ -3,7 +3,7 @@ package com.nailong.xt.game.scheduled;
 import com.google.gson.Gson;
 import com.nailong.xt.common.model.bo.GameServiceKVLoadData;
 import com.nailong.xt.common.utils.Utils;
-import com.nailong.xt.game.core.player.PlayerMgr;
+import com.nailong.xt.game.core.session.PlayerSessionMgr;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
@@ -31,7 +31,7 @@ public class LoadStatusReporter {
         String instanceId = serviceInstance.getInstanceId();
         String key = GAME_KV_PATH_PREFIX + instanceId;
 
-        int currentPlayers = PlayerMgr.getAllPlayers();
+        int currentPlayers = PlayerSessionMgr.getAllPlayers();
 
         // 程序固定属性 从metadata获取
         int maxPlayers = 0;

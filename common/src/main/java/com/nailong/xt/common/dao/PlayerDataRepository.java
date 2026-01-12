@@ -4,6 +4,7 @@ import com.nailong.xt.common.model.po.PlayerDataPo;
 import com.nailong.xt.common.model.po.PlayerDataPoDraft;
 import com.nailong.xt.common.model.po.PlayerDataPoTable;
 import com.nailong.xt.common.model.po.Tables;
+import com.nailong.xt.proto.server.BinPlayerData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.babyfish.jimmer.sql.JSqlClient;
@@ -59,6 +60,7 @@ public class PlayerDataRepository {
         PlayerDataPo playerDataPo = new PlayerDataPoDraft.Builder()
                 .accountUid(accountUid)
                 .dataVersion(0)
+                .binData(BinPlayerData.PlayerDataBin.newBuilder().build())
                 .build();
 
         log.info("新号创建中 {}", playerDataPo);

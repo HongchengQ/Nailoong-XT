@@ -1,6 +1,6 @@
 package com.nailong.xt.common.constants;
 
-public class NetMsgIdConstants {
+public class GamePlayerCmdIdConstants {
     public static final int none = 0;
 
     public static final int assist_add_build_notify = -10047;

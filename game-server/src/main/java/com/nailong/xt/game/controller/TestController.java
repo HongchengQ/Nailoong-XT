@@ -1,11 +1,9 @@
 package com.nailong.xt.game.controller;
 
 import com.google.protobuf.ByteString;
-import com.nailong.xt.common.constants.NetMsgIdConstants;
+import com.nailong.xt.common.constants.GamePlayerCmdIdConstants;
 import com.nailong.xt.common.dao.PlayerDataRepository;
-import com.nailong.xt.common.model.po.PlayerDataPoDraft;
 import com.nailong.xt.game.core.player.model.PlayerBindInstance;
-import com.nailong.xt.proto.server.BinPlayerData;
 import com.nailong.xt.proto.server.Push;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,7 @@ public class TestController {
         ByteString notificationData = ByteString.copyFromUtf8("Tower defense reward received");
         System.out.println(playerBindInstance.sendPackage(
                 Push.PushPacketNotify.newBuilder()
-                        .setCmdId(NetMsgIdConstants.player_new_notify)
+                        .setCmdId(GamePlayerCmdIdConstants.player_new_notify)
                         .setProtoData(notificationData)
                         .addTargetPlayerUids(10001)
                         .setToken("111")
@@ -41,26 +39,32 @@ public class TestController {
     @RequestMapping(path = "/db")
     public String db() {
         IO.println("22222222222222");
-        playerDataRepository.savePlayerDataObj(
-                new PlayerDataPoDraft.Builder()
-                        .uid(999)
-                        .accountUid(999L)
-                        .binData(BinPlayerData.PlayerDataBin.newBuilder()
-                                .setUid(999)
-                                .setBasicBin(
-                                        BinPlayerData.PlayerBasicCompBin.newBuilder()
-                                                .setTotalGameTime(9999)
-                                                .setNickname("qwdqbdad暗示大家打压Uu7qdw8777d渡鸦的gay的公")
-                                                .build()
-                                )
-                                .build())
-                        .build());
+
+        int dataVersion = playerDataRepository.queryPlayerDataByUid(999).dataVersion();
+
+//        playerDataRepository.savePlayerDataObj(
+//                new PlayerDataPoDraft.Builder()
+////                        .dataVersion(dataVersion)
+//                        .uid(999)
+//                        .accountUid(999L)
+//                        .binData(BinPlayerData.PlayerDataBin.newBuilder()
+//                                .setUid(999)
+//                                .setBasicBin(
+//                                        BinPlayerData.PlayerBasicCompBin.newBuilder()
+//                                                .setTotalGameTime(9999)
+//                                                .setNickname("qwdqbdad暗示大家打压Uu7qdw8777d渡鸦的gay的公啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦发个哈哈")
+//                                                .build()
+//                                )
+//                                .build())
+//                        .build());
+
+        playerDataRepository.savePlayerDataObj(playerDataRepository.queryPlayerDataByUid(999));
         return "ok";
     }
 
     @RequestMapping(path = "/db1")
     public String db1() {
-        System.out.println(playerDataRepository.queryPlayerDataByUid(999).binData());
+        System.out.println(playerDataRepository.queryPlayerDataByUid(999).binData().getBasicBin().getNickname());
         return "ok";
     }
 }

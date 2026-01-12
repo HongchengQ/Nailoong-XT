@@ -1,11 +1,16 @@
 package com.nailong.xt.gate.service.grpc;
 
 import com.google.protobuf.Empty;
+import com.nailong.xt.common.constants.ServerCmdIdConstants;
 import com.nailong.xt.proto.server.Push;
 import com.nailong.xt.proto.server.ServerPushServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.grpc.server.service.GrpcService;
+
+import java.util.List;
+
+import static com.nailong.xt.gate.network.PlayerSessionMgr.playerSessionMap;
 
 /**
  * 内部通信
@@ -18,14 +23,19 @@ public class GateGrpcService extends ServerPushServiceGrpc.ServerPushServiceImpl
     // 处理来自game server的请求
     @Override
     public void pushSingleNotify(Push.PushPacketNotify notify, StreamObserver<Empty> responseObserver) {
-        int reqContextCmdId = notify.getCmdId();
-        String reqContextToken = notify.getToken();
-        int reqContextUid = notify.getTargetPlayerUidsCount();
+        int notifyCmdId = notify.getCmdId();
+        List<Integer> uids = notify.getTargetPlayerUidsList();
 
-        log.info("Received gRPC notify from game server with cmdId: {}", reqContextCmdId);
+        log.info("Received gRPC notify from game server with cmdId: {}", notifyCmdId);
 
         try {
-            log.warn("99999999999999999999999999999999\nreqContextCmdId:{}", reqContextCmdId);
+            // 先简单实现逻辑 后期优化
+            if (notifyCmdId == ServerCmdIdConstants.PLAYER_FORCE_LOGOUT) {
+//                for (int uid : uids) {
+//                    playerSessionMap.remove(uid);
+//                }
+                IO.println("未实现的逻辑");
+            }
 
             Empty response = Empty.newBuilder().build();
             responseObserver.onNext(response);

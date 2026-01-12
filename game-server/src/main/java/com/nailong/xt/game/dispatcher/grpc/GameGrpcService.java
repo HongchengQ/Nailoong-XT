@@ -1,8 +1,8 @@
 package com.nailong.xt.game.dispatcher.grpc;
 
 import com.nailong.xt.common.config.CmdHandlerConfig;
-import com.nailong.xt.game.core.player.model.Player;
-import com.nailong.xt.game.core.player.PlayerMgr;
+import com.nailong.xt.game.core.session.model.PlayerSession;
+import com.nailong.xt.game.core.session.PlayerSessionMgr;
 import com.nailong.xt.proto.server.Command.CmdReqContext;
 import com.nailong.xt.proto.server.Command.CmdRspContext;
 import com.nailong.xt.proto.server.PlayerCommandServiceGrpc;
@@ -25,7 +25,7 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
 
     private final CmdHandlerConfig cmdHandlerConfig;
 
-    private final PlayerMgr playerMgr;
+    private final PlayerSessionMgr playerSessionMgr;
 
     @Override
     public void handlePlayerRequest(CmdReqContext request, StreamObserver<CmdRspContext> responseObserver) {
@@ -44,21 +44,23 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
                 throw new RuntimeException("没有定义的 msg id " + reqContextCmdId);
             }
 
-            Player player = playerMgr.findAndLoadDBPlayerByUid(reqContextUid);
+            PlayerSession playerSession = playerSessionMgr.findAndLoadDBPlayerByUid(reqContextUid);
 
-            if (player != null) {
+            if (playerSession != null) {
                 // 初始化 token
                 // token 由 gate 填充
-                if (!ObjectUtils.isEmpty(reqContextToken) && player.getToken() == null) {
-                    player.setToken(reqContextToken);
+                if (!ObjectUtils.isEmpty(reqContextToken) && playerSession.getToken() == null) {
+                    playerSession.setToken(reqContextToken);
                 }
 
                 // 检查并更新 gate地址
-                if (player.getPlayerBindInstance() != null) {
-                    if (!ObjectUtils.isEmpty(gateServerAddress) && !Objects.equals(player.getPlayerBindInstance().getGateServerAddress(), gateServerAddress)) {
-                        player.getPlayerBindInstance().setBindInstance(gateServerAddress);
+                if (playerSession.getPlayerBindInstance() != null) {
+                    if (!ObjectUtils.isEmpty(gateServerAddress) && !Objects.equals(playerSession.getPlayerBindInstance().getGateServerAddress(), gateServerAddress)) {
+                        playerSession.getPlayerBindInstance().setBindInstance(gateServerAddress);
                     }
                 }
+
+                playerSession.updateActiveTime();
             }
 
             // 先构建 rsp 模板
@@ -69,7 +71,7 @@ public class GameGrpcService extends PlayerCommandServiceGrpc.PlayerCommandServi
 
             // 处理方法
             // 将 (reqContext + 预构建的rspContext + player) 引用传递
-            handlerMethod.method().invoke(handlerMethod.handler(), request, responseBuilder, player);
+            handlerMethod.method().invoke(handlerMethod.handler(), request, responseBuilder, playerSession);
 
             CmdRspContext response = responseBuilder.build();
             responseObserver.onNext(response);
