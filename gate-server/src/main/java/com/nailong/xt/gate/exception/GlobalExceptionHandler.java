@@ -1,30 +1,21 @@
 package com.nailong.xt.gate.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(CmdHandlerException.class)
-    public Map<String, Object> handleCmdHandlerException(CmdHandlerException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("error", "CMD_HANDLER_ERROR");
-        response.put("cmdId", ex.getCmdId());
-        response.put("message", ex.getMessage());
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Map<String, Object> handleIllegalArgumentException(IllegalArgumentException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("error", "ILLEGAL_ARGUMENT");
-        response.put("message", ex.getMessage());
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
+    /**
+     * gate 处的全局异常只能返回空的未知异常
+     *
+     * @param ex Exception
+     * @return 空的未知异常
+     */
+    @ExceptionHandler(Exception.class)
+    public byte[] handleException(Exception ex) {
+        log.error(String.valueOf(ex));
+        return new byte[0];
     }
 }
