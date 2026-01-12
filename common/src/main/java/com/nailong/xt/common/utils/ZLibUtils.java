@@ -10,7 +10,7 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 @Slf4j
-public class ZLibUtils {
+public final class ZLibUtils {
 
     // 定义不同的缓冲区大小阈值
     private static final int SMALL_DATA_THRESHOLD = 1024;          // 1KB

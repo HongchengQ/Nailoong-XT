@@ -17,7 +17,7 @@ import static com.nailong.xt.common.constants.KVPathPrefix.GAME_KV_PATH_PREFIX;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RpcHelper {
+public final class RpcHelper {
 
     private final ConsulClient consulClient;
 

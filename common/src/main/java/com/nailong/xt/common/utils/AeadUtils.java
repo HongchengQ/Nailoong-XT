@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // emu/nebula/util/AeadHelper.java
-public class AeadUtils {
+public final class AeadUtils {
     private static final ThreadLocal<SecureRandom> random = ThreadLocal.withInitial(SecureRandom::new);
     private static final Logger log = LogManager.getLogger(AeadUtils.class);
 
