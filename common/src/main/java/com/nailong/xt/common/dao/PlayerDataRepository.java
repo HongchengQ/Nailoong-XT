@@ -1,8 +1,9 @@
 package com.nailong.xt.common.dao;
 
-import com.nailong.xt.common.model.po.*;
-import com.nailong.xt.common.model.po.PlayerDataPoDraft;
 import com.nailong.xt.common.model.po.PlayerDataPo;
+import com.nailong.xt.common.model.po.PlayerDataPoDraft;
+import com.nailong.xt.common.model.po.PlayerDataPoTable;
+import com.nailong.xt.common.model.po.Tables;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.babyfish.jimmer.sql.JSqlClient;
@@ -57,6 +58,7 @@ public class PlayerDataRepository {
     public PlayerDataPo createPlayerData(long accountUid) {
         PlayerDataPo playerDataPo = new PlayerDataPoDraft.Builder()
                 .accountUid(accountUid)
+                .dataVersion(0)
                 .build();
 
         log.info("新号创建中 {}", playerDataPo);
@@ -64,6 +66,12 @@ public class PlayerDataRepository {
         return savePlayerDataObj(playerDataPo);
     }
 
+    /**
+     * 保存 PlayerData 对象到数据库
+     *
+     * @param playerDataPo 如果是凭空创建需要指定 DataVersion
+     * @return ModifiedEntity
+     */
     public PlayerDataPo savePlayerDataObj(PlayerDataPo playerDataPo) {
         return sqlClient
                 .saveCommand(playerDataPo)

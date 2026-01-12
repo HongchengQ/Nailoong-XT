@@ -16,7 +16,7 @@ CREATE TABLE `player_data` (
   `json_data` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `bin_data` mediumblob NOT NULL,
   `before_login_bin_data` blob COMMENT 'login前用的数据',
-  `data_version` int(10) unsigned DEFAULT NULL,
+  `data_version` int(10) unsigned NOT NULL,
   `create_time` timestamp  DEFAULT current_timestamp(),
   `last_save_time` timestamp  DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_delete` tinyint(1) DEFAULT '0' COMMENT '是否为废弃数据',
@@ -54,8 +54,9 @@ public interface PlayerDataPo {
     byte @Nullable [] beforeLoginBinData();
 
     // 数据版本号，每次回写自动+1, 用来防止因回写顺序引起的回档
-    @Nullable
-    Integer dataVersion();
+    @Version
+    @Default("0")
+    int dataVersion();
 
     @Column(name = "is_delete")
     @Nullable
