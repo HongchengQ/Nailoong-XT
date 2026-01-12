@@ -33,6 +33,8 @@ public class PlayerSession {
     long accountUid;
     int playerUid;
 
+    String region;
+
     // 是否已经走完 ike_req 交换密钥
     boolean isExchangedInternetKey = false;
 
@@ -45,8 +47,8 @@ public class PlayerSession {
 
     private PlayerBindInstance playerBindInstance;
 
-    public PlayerSession(ServiceInstance instance) {
-        // 随机获取一个 game实例
+    public PlayerSession(ServiceInstance instance, String region) {
+        this.region = region;
         this.playerBindInstance = new PlayerBindInstance(instance);
     }
 
@@ -139,7 +141,7 @@ public class PlayerSession {
         byte[] message = bytes;
 
         // 初始 key
-        byte[] sessionKey = AeadUtils.serverGarbleKeyMap.get("global");
+        byte[] sessionKey = AeadUtils.serverGarbleKeyMap.get(region);
 
         // Decrypt message
         message = AeadUtils.decryptBasic(message, sessionKey);
@@ -180,7 +182,7 @@ public class PlayerSession {
     private byte[] encryptFirstPacketData(byte[] data) throws Exception {
         byte[] result = data;
 
-        byte[] firstKey = AeadUtils.serverGarbleKeyMap.get("global");
+        byte[] firstKey = AeadUtils.serverGarbleKeyMap.get(region);
 
         result = AeadUtils.encryptGCM(result, firstKey);
         result = AeadUtils.encryptBasic(result, firstKey);

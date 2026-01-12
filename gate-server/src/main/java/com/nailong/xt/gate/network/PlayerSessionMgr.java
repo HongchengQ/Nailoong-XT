@@ -28,9 +28,9 @@ public class PlayerSessionMgr {
         return playerSessionMap.get(token);
     }
 
-    public PlayerSession findOrCreatePlayerSession(String token) {
+    public PlayerSession findOrCreatePlayerSession(String token, String region) {
         if (ObjectUtils.isEmpty(token)) {
-            return generatePlayerSession();
+            return generatePlayerSession(region);
         }
 
         PlayerSession session;
@@ -38,7 +38,7 @@ public class PlayerSessionMgr {
         session = findPlayerSession(token);
 
         if (session == null) {
-            session = generatePlayerSession();
+            session = generatePlayerSession(region);
         }
 
         log.info("当前 playerSessionMap -> {}", playerSessionMap.toString());
@@ -63,12 +63,12 @@ public class PlayerSessionMgr {
         return token;
     }
 
-    public PlayerSession generatePlayerSession() {
+    public PlayerSession generatePlayerSession(String region) {
         PlayerSession session;
 
         ServiceInstance instance = consulGameServerLoadBalancer.getLowestLoadInstance();
 
-        session = new PlayerSession(instance);
+        session = new PlayerSession(instance, region);
         generateSessionToken(session);
 
         return session;

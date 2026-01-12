@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import static com.nailong.xt.common.utils.Utils.bytesToHex;
 
 @RestController
-@RequestMapping("/agent-zone-global")
 @RequiredArgsConstructor
 @Slf4j
 public class GateController {
@@ -30,13 +30,27 @@ public class GateController {
 
     private final Environment environment;
 
-    @PostMapping
+    @PostMapping("/agent-zone-{region}")
     public ResponseEntity<byte[]> handleBinaryRequest(
+            @PathVariable String region,
             @Nullable @RequestHeader("X-Token") String token,
             @RequestBody byte[] requestData)
             throws Exception {
+
+        if (ObjectUtils.isEmpty(region)) {
+            return null;
+        }
+
+        if (!region.equals("cn") && !region.equals("tw") && !region.equals("global") && !region.equals("jp") && !region.equals("kr")) {
+            return null;
+        }
+
         // session
-        PlayerSession playerSession = playerSessionMgr.findOrCreatePlayerSession(token);
+        PlayerSession playerSession = playerSessionMgr.findOrCreatePlayerSession(token, region);
+
+        if (ObjectUtils.isEmpty(playerSession.getRegion()) || !playerSession.getRegion().equals(region)) {
+            playerSession.setRegion(region);
+        }
 
         // 解码请求
         // Create request context
@@ -49,7 +63,15 @@ public class GateController {
             // 提取 proto 数据
             ByteString reqProtoData = reqPackageContext.getProtoData();
 
-            log.info("客户端请求上下文 ->\n{}", reqPackageContext);
+            log.info("客户端请求上下文 ->\ncmdId:{}\nmessage:{}\ntoken:{}\naccount_uid:{}\nplayer_uid:{}\ntimestamp:{}\ngateServerAddress:{}",
+                    reqPackageContext.getCmdId(),
+                    reqPackageContext.getProtoData(),
+                    reqPackageContext.getToken(),
+                    reqPackageContext.getAccountUid(),
+                    reqPackageContext.getPlayerUid(),
+                    reqPackageContext.getTimestamp(),
+                    reqPackageContext.getGateServerAddress()
+            );
 
             // 获取此 cmdId 注解的方法
             CmdHandlerConfig.HandlerMethod serviceMethod = cmdHandlerConfig.getHandler(reqPackageContext.getCmdId());
@@ -79,7 +101,7 @@ public class GateController {
                     result = serviceMethod.method().invoke(serviceMethod.handler(), reqProtoData, playerSession);
                 }
 
-                log.info("gate server 已响应 ->\nmessage:{}", Utils.bytesToHex((byte[]) result));
+                log.info("gate server 已响应(包含CmdId) ->\nmessage:{}", Utils.bytesToHex((byte[]) result));
             }
 
             if (result instanceof byte[] bytesResult) {
