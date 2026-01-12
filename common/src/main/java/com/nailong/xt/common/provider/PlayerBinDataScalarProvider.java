@@ -28,19 +28,14 @@ public class PlayerBinDataScalarProvider extends AbstractScalarProvider<PlayerDa
         byte[] byteBin = playerDataBin.toByteArray();
         int beforeLength = byteBin.length;
 
-//        // 对于大数据 使用zlib压缩
-//        if (byteBin.length > 1024) {
-//            byteBin = compressZlib(byteBin);
-//        }
-
         // 也是直接无脑压缩好吧
         byteBin = compressZlib(byteBin);
-        int after_length = byteBin.length;
+        int afterLength = byteBin.length;
 
         long timeEnd = System.currentTimeMillis();
 
         log.info("uid={} PlayerDataBin compress before={} after={}, time_cost={}ms.",
-                uid, beforeLength, after_length, timeEnd - timeStart);
+                uid, beforeLength, afterLength, timeEnd - timeStart);
 
         return byteBin;
     }
