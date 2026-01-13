@@ -12,11 +12,13 @@ public class Player {
     private int uid;
     private long accountUid;
 
-    /* 只有存库时才能修改或获取它们，正常情况下应该使用 playerBasicComp */
+    // 只有存库时才能修改或获取它，正常情况下应该使用 playerBasicComp
     @Deprecated
     private Short level;
+    // 只有存库时才能修改或获取它，正常情况下应该使用 playerBasicComp
     @Deprecated
     private String nickname;
+    // 只有存库时才能修改或获取它，正常情况下应该使用 playerBasicComp
     @Deprecated
     private Integer exp;
 
@@ -61,7 +63,7 @@ public class Player {
         // 转 binProto
         BinPlayerData.PlayerDataBin playerDataBinProto = BinPlayerData.PlayerDataBin.newBuilder()
                 .setUid(uid)
-                .setBasicBin(playerBasicComp.toProto())
+                .setBasicBin(playerBasicComp.toBinProto())
                 .build();
 
         // 填充 binProto
@@ -80,7 +82,7 @@ public class Player {
         player.dataVersion = po.dataVersion();
 
         /* bin data */
-        player.playerBasicComp = PlayerBasicComp.fromProto(po.binData().getBasicBin());
+        player.playerBasicComp = PlayerBasicComp.fromBinProto(po.binData().getBasicBin());
 
         return player;
     }

@@ -19,6 +19,7 @@ message PlayerBasicCompBin
   uint32 level = 1;                     // 等级
   uint32 exp = 2;                       // 经验
   string nickname = 3;                  // 昵称
+  string signature = 22;                // 签名
   uint32 total_game_time = 4;           // 总共的游戏时间
   uint32 online_time = 24;              // 玩家累计在线时间秒，用于埋点日志
   uint32 last_login_time = 13;          // 最后登录时间

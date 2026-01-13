@@ -10,25 +10,27 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class PlayerBasicComp {
-    short level;                     // 等级
-    int exp;                       // 经验
-    String nickname;                  // 昵称
-    int totalGameTime;           // 总共的游戏时间
-    int onlineTime;              // 玩家累计在线时间秒，用于埋点日志
-    int lastLoginTime;          // 最后登录时间
-    int registerTime;            // 账号注册时间即第一次登入时间
-    int totalLoginDays;         // 累积登入天数
-    int updateLoginDaysTime;   // 上次更新登入天数的时间
-    String clientAppVersion;       // 客户端版本
-    String clientDeviceInfo;       // 客户端设备信息
+    short level;                                // 等级
+    int exp;                                    // 经验
+    String nickname;                            // 昵称
+    String signature;                           // 签名
+    int totalGameTime;                          // 总共的游戏时间
+    int onlineTime;                             // 玩家累计在线时间秒，用于埋点日志
+    int lastLoginTime;                          // 最后登录时间
+    int registerTime;                           // 账号注册时间即第一次登入时间
+    int totalLoginDays;                         // 累积登入天数
+    int updateLoginDaysTime;                    // 上次更新登入天数的时间
+    String clientAppVersion;                    // 客户端版本
+    String clientDeviceInfo;                    // 客户端设备信息
 
     public PlayerBasicComp() {
         this.nickname = "";
         this.clientAppVersion = "";
         this.clientDeviceInfo = "";
+        this.signature = "";
     }
 
-    public BinPlayerData.PlayerBasicCompBin toProto() {
+    public BinPlayerData.PlayerBasicCompBin toBinProto() {
         return BinPlayerData.PlayerBasicCompBin.newBuilder()
                 .setLevel(this.getLevel())
                 .setExp(this.getExp())
@@ -40,16 +42,11 @@ public class PlayerBasicComp {
                 .setUpdateLoginDaysTime(this.getUpdateLoginDaysTime())
                 .setClientAppVersion(this.getClientAppVersion())
                 .setClientDeviceInfo(this.getClientDeviceInfo())
+                .setSignature(this.signature)
                 .build();
     }
 
-    // todo
-    @Deprecated
-    public void initFromProto(BinPlayerData.PlayerBasicCompBin bin) {
-        this.level = (short) bin.getLevel();
-    }
-
-    public static PlayerBasicComp fromProto(BinPlayerData.PlayerBasicCompBin playerBasicCompBin) {
+    public static PlayerBasicComp fromBinProto(BinPlayerData.PlayerBasicCompBin playerBasicCompBin) {
         return new PlayerBasicComp()
                 .setLevel((short) playerBasicCompBin.getLevel())
                 .setExp(playerBasicCompBin.getExp())
@@ -61,6 +58,7 @@ public class PlayerBasicComp {
                 .setUpdateLoginDaysTime(playerBasicCompBin.getUpdateLoginDaysTime())
                 .setClientAppVersion(playerBasicCompBin.getClientAppVersion())
                 .setClientDeviceInfo(playerBasicCompBin.getClientDeviceInfo())
+                .setSignature(playerBasicCompBin.getSignature())
                 ;
     }
 }
