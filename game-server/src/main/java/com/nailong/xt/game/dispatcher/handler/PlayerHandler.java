@@ -29,11 +29,11 @@ public class PlayerHandler {
             playerSession = playerSessionMgr.createPlayer(accountUid);
         }
 
-        // test
-        PlayerSession findPlayerSession = playerSessionMgr.findAndLoadDBPlayerByUid(playerSession.getPlayer().getUid());
-        log.info("player_login_req 已成功读取 player data {}", findPlayerSession);
+        log.info("player_login_req 已成功获取 player {}", playerSession.getPlayer().getUid());
 
         responseContext.setPlayerUid(playerSession.getPlayer().getUid());
+        // message 内容由gate填充
+        responseContext.setCmdId(GamePlayerCmdIdConstants.player_login_succeed_ack);
     }
 
     @CmdIdHandler(GamePlayerCmdIdConstants.player_data_req)

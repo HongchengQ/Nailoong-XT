@@ -16,7 +16,7 @@ service ServerPushService {
 
 // 推送消息容器
 message PushPacketNotify {
-  uint32 cmd_id = 1;
+  int32 cmd_id = 1;
   bytes proto_data = 2;
   // 可以指定接收者列表，由Gate负责分发
   repeated uint32 target_player_uids = 3;

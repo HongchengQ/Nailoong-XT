@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,8 +42,6 @@ public class PlayerSessionMgr {
             session = generatePlayerSession(region);
         }
 
-        log.info("当前 playerSessionMap -> {}", playerSessionMap.toString());
-
         return session;
     }
 
@@ -70,6 +69,8 @@ public class PlayerSessionMgr {
 
         session = new PlayerSession(instance, region);
         generateSessionToken(session);
+
+        log.info("创建了一个新的session:{}, 当前存活session:{}", session, playerSessionMap.size());
 
         return session;
     }

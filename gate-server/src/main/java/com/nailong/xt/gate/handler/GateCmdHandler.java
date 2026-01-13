@@ -25,11 +25,6 @@ public class GateCmdHandler {
     /**
      * 这个包由网关自身响应
      * 不向远程发起调用
-     *
-     * @param context
-     * @param session
-     * @return
-     * @throws IOException
      */
     @CmdIdHandler(GamePlayerCmdIdConstants.ike_req)
     public byte[] onIkeReq(CmdReqContext context, PlayerSession session) throws IOException {
@@ -64,10 +59,6 @@ public class GateCmdHandler {
      * 客户端的 token 和 uid 由 sdk 填充
      * 这里先做用户的校验
      * 然后向 game 构建一个更适合的请求 加载 player 数据
-     *
-     * @param context
-     * @param session
-     * @return
      */
     @CmdIdHandler(GamePlayerCmdIdConstants.player_login_req)
     public byte[] onLoginReq(CmdReqContext context, PlayerSession session) {
@@ -109,6 +100,11 @@ public class GateCmdHandler {
                 return session.encodeMsg(GamePlayerCmdIdConstants.player_login_failed_ack);
             }
 
+            int playerUid = grpcResponse.getPlayerUid();
+            if (playerUid != 0) {
+                session.setPlayerUid(grpcResponse.getPlayerUid());
+            }
+
             // 返回预构建的响应
             return session.encodeMsg(GamePlayerCmdIdConstants.player_login_succeed_ack, loginResp);
         } catch (Exception e) {
@@ -120,11 +116,6 @@ public class GateCmdHandler {
      * ping
      * 客户端 120s 请求一次
      * 超时断线
-     *
-     * @param context
-     * @param session
-     * @return
-     * @throws IOException
      */
     @CmdIdHandler(GamePlayerCmdIdConstants.player_ping_req)
     public byte[] onPingReq(CmdReqContext context, PlayerSession session) throws IOException {
@@ -133,5 +124,13 @@ public class GateCmdHandler {
                 .setServerTs(Utils.getCurrentServerTime());
 
         return session.encodeMsg(GamePlayerCmdIdConstants.player_ping_succeed_ack, rsp);
+    }
+
+    /**
+     * 客户端事件上报
+     */
+    @CmdIdHandler(GamePlayerCmdIdConstants.client_event_report_req)
+    public byte[] onClientEventReportReq(CmdReqContext context, PlayerSession session) {
+        return session.encodeMsg(GamePlayerCmdIdConstants.client_event_report_succeed_ack);
     }
 }

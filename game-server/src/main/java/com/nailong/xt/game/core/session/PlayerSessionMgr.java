@@ -128,7 +128,10 @@ public class PlayerSessionMgr implements ISessionCleanupCallback {
             return playerSessionMap.get(po.uid());
         }
 
-        return loadPlayerFromDb(po);
+        PlayerSession session = loadPlayerFromDb(po);
+        playerSessionMap.put(po.binData().getUid(), session);
+
+        return session;
     }
 
     public PlayerSession loadPlayerFromDb(PlayerDataPo playerDataPo) {

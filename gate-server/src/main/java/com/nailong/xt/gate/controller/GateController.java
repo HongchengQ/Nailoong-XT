@@ -65,7 +65,7 @@ public class GateController {
 
             log.info("客户端请求上下文 ->\ncmdId:{}\nmessage:{}\ntoken:{}\naccount_uid:{}\nplayer_uid:{}\ntimestamp:{}\ngateServerAddress:{}",
                     reqPackageContext.getCmdId(),
-                    reqPackageContext.getProtoData(),
+                    bytesToHex(reqPackageContext.getProtoData().toByteArray()),
                     reqPackageContext.getToken(),
                     reqPackageContext.getAccountUid(),
                     reqPackageContext.getPlayerUid(),

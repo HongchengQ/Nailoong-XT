@@ -9,7 +9,7 @@ service PlayerCommandService {
 
 // 请求与响应容器（维持你的核心结构）
 message CmdReqContext {
-  uint32 cmd_id = 1;
+  int32 cmd_id = 1;
   bytes proto_data = 2;
   // 元数据
   string token = 101;
@@ -21,8 +21,8 @@ message CmdReqContext {
 
 
 message CmdRspContext {
-  uint32 cmd_id = 1001; // 响应对应的命令ID
-  uint32 req_cmd_id = 1003; // 对应的请求命令ID，用于关联
+  int32 cmd_id = 1001; // 响应对应的命令ID
+  int32 req_cmd_id = 1003; // 对应的请求命令ID，用于关联
   bytes proto_data = 1002;
   // 元数据
   string token = 1005;
