@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
         "com.nailong.xt.common.annotation",
         "com.nailong.xt.common.model.po",
         "com.nailong.xt.common.dao",
+        "com.nailong.xt.common.consul",
         "com.nailong.xt.common.utils"
 })
 public class GateServerApplication {

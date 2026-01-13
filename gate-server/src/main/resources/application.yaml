@@ -1,6 +1,7 @@
 spring:
   application:
     name: GateServer
+    appid: 3-0-0-1
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,7 +20,16 @@ spring:
       port: 8500
       discovery:
         # gate 应该去发现 game
-        register: false
+        register: true
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}-${spring.application.appid}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: localhost
+        metadata:
+          appid: ${spring.application.appid}
+          maxPlayers: 1000
+          region: cn
 
 # 数据库 orm 配置
 jimmer:
