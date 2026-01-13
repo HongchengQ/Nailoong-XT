@@ -32,10 +32,8 @@ public class PlayerBinDataScalarProvider extends AbstractScalarProvider<PlayerDa
         byteBin = compressZlib(byteBin);
         int afterLength = byteBin.length;
 
-        long timeEnd = System.currentTimeMillis();
-
         log.info("uid={} PlayerDataBin compress before={} after={}, time_cost={}ms.",
-                uid, beforeLength, afterLength, timeEnd - timeStart);
+                uid, beforeLength, afterLength, System.currentTimeMillis() - timeStart);
 
         return byteBin;
     }
