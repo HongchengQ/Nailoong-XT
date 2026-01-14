@@ -9,7 +9,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.CompletableFuture;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,14 +31,13 @@ public class GameDataRegistrar implements ApplicationListener<ContextRefreshedEv
                     GameDataName methodAnnotation = method.getAnnotation(GameDataName.class);
                     String gameDataName = methodAnnotation.name();
 
-                    CompletableFuture.runAsync(() -> {
-                        log.info("正在加载 Game Data -> {}", gameDataName);
-                        try {
-                            method.invoke(bean);
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+
+                    log.info("正在加载 Game Data -> {}", gameDataName);
+                    try {
+                        method.invoke(bean);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
