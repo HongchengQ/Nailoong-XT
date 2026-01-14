@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class EventResultDataService {
@@ -15,5 +17,9 @@ public class EventResultDataService {
     }
     public EventResultConfig getEventResultData(String id) {
         return gameDataMgr.getEventResultConfigMap().get(id);
+    }
+
+    public ArrayList<EventResultConfig> getAllEventResultData() {
+        return new ArrayList<>(gameDataMgr.getEventResultConfigMap().values());
     }
 }

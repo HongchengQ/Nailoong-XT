@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MonsterManualDataService {
@@ -15,5 +17,9 @@ public class MonsterManualDataService {
     }
     public MonsterManualConfig getMonsterManualData(String id) {
         return gameDataMgr.getMonsterManualConfigMap().get(id);
+    }
+
+    public ArrayList<MonsterManualConfig> getAllMonsterManualData() {
+        return new ArrayList<>(gameDataMgr.getMonsterManualConfigMap().values());
     }
 }

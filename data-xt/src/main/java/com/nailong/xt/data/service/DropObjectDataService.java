@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DropObjectDataService {
@@ -15,5 +17,9 @@ public class DropObjectDataService {
     }
     public DropObjectConfig getDropObjectData(String id) {
         return gameDataMgr.getDropObjectConfigMap().get(id);
+    }
+
+    public ArrayList<DropObjectConfig> getAllDropObjectData() {
+        return new ArrayList<>(gameDataMgr.getDropObjectConfigMap().values());
     }
 }

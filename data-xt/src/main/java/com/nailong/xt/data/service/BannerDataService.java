@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BannerDataService {
@@ -15,5 +17,9 @@ public class BannerDataService {
     }
     public BannerConfig getBannerData(String id) {
         return gameDataMgr.getBannerConfigMap().get(id);
+    }
+
+    public ArrayList<BannerConfig> getAllBannerData() {
+        return new ArrayList<>(gameDataMgr.getBannerConfigMap().values());
     }
 }

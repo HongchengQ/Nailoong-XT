@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VampireEnemySpAttrDataService {
@@ -15,5 +17,9 @@ public class VampireEnemySpAttrDataService {
     }
     public VampireEnemySpAttrConfig getVampireEnemySpAttrData(String id) {
         return gameDataMgr.getVampireEnemySpAttrConfigMap().get(id);
+    }
+
+    public ArrayList<VampireEnemySpAttrConfig> getAllVampireEnemySpAttrData() {
+        return new ArrayList<>(gameDataMgr.getVampireEnemySpAttrConfigMap().values());
     }
 }

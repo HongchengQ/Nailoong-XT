@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class WorldClassDataService {
@@ -15,5 +17,9 @@ public class WorldClassDataService {
     }
     public WorldClassConfig getWorldClassData(String id) {
         return gameDataMgr.getWorldClassConfigMap().get(id);
+    }
+
+    public ArrayList<WorldClassConfig> getAllWorldClassData() {
+        return new ArrayList<>(gameDataMgr.getWorldClassConfigMap().values());
     }
 }

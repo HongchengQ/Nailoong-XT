@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CookieLevelDataService {
@@ -15,5 +17,9 @@ public class CookieLevelDataService {
     }
     public CookieLevelConfig getCookieLevelData(String id) {
         return gameDataMgr.getCookieLevelConfigMap().get(id);
+    }
+
+    public ArrayList<CookieLevelConfig> getAllCookieLevelData() {
+        return new ArrayList<>(gameDataMgr.getCookieLevelConfigMap().values());
     }
 }

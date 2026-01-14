@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DatingCharTagDataService {
@@ -15,5 +17,9 @@ public class DatingCharTagDataService {
     }
     public DatingCharTagConfig getDatingCharTagData(String id) {
         return gameDataMgr.getDatingCharTagConfigMap().get(id);
+    }
+
+    public ArrayList<DatingCharTagConfig> getAllDatingCharTagData() {
+        return new ArrayList<>(gameDataMgr.getDatingCharTagConfigMap().values());
     }
 }

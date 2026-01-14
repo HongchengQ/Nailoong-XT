@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GachaStorageDataService {
@@ -15,5 +17,9 @@ public class GachaStorageDataService {
     }
     public GachaStorageConfig getGachaStorageData(String id) {
         return gameDataMgr.getGachaStorageConfigMap().get(id);
+    }
+
+    public ArrayList<GachaStorageConfig> getAllGachaStorageData() {
+        return new ArrayList<>(gameDataMgr.getGachaStorageConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TrialPotentialDataService {
@@ -15,5 +17,9 @@ public class TrialPotentialDataService {
     }
     public TrialPotentialConfig getTrialPotentialData(String id) {
         return gameDataMgr.getTrialPotentialConfigMap().get(id);
+    }
+
+    public ArrayList<TrialPotentialConfig> getAllTrialPotentialData() {
+        return new ArrayList<>(gameDataMgr.getTrialPotentialConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class SkillInstanceTypeDataService {
@@ -15,5 +17,9 @@ public class SkillInstanceTypeDataService {
     }
     public SkillInstanceTypeConfig getSkillInstanceTypeData(String id) {
         return gameDataMgr.getSkillInstanceTypeConfigMap().get(id);
+    }
+
+    public ArrayList<SkillInstanceTypeConfig> getAllSkillInstanceTypeData() {
+        return new ArrayList<>(gameDataMgr.getSkillInstanceTypeConfigMap().values());
     }
 }

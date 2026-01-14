@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class RegionBossAffixDataService {
@@ -15,5 +17,9 @@ public class RegionBossAffixDataService {
     }
     public RegionBossAffixConfig getRegionBossAffixData(String id) {
         return gameDataMgr.getRegionBossAffixConfigMap().get(id);
+    }
+
+    public ArrayList<RegionBossAffixConfig> getAllRegionBossAffixData() {
+        return new ArrayList<>(gameDataMgr.getRegionBossAffixConfigMap().values());
     }
 }

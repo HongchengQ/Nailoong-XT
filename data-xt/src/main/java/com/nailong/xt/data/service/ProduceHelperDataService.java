@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ProduceHelperDataService {
@@ -15,5 +17,9 @@ public class ProduceHelperDataService {
     }
     public ProduceHelperConfig getProduceHelperData(String id) {
         return gameDataMgr.getProduceHelperConfigMap().get(id);
+    }
+
+    public ArrayList<ProduceHelperConfig> getAllProduceHelperData() {
+        return new ArrayList<>(gameDataMgr.getProduceHelperConfigMap().values());
     }
 }

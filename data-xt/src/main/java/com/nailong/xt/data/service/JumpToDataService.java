@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JumpToDataService {
@@ -15,5 +17,9 @@ public class JumpToDataService {
     }
     public JumpToConfig getJumpToData(String id) {
         return gameDataMgr.getJumpToConfigMap().get(id);
+    }
+
+    public ArrayList<JumpToConfig> getAllJumpToData() {
+        return new ArrayList<>(gameDataMgr.getJumpToConfigMap().values());
     }
 }

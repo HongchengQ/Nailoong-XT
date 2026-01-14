@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerBookEventRewardDataService {
@@ -15,5 +17,9 @@ public class StarTowerBookEventRewardDataService {
     }
     public StarTowerBookEventRewardConfig getStarTowerBookEventRewardData(String id) {
         return gameDataMgr.getStarTowerBookEventRewardConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerBookEventRewardConfig> getAllStarTowerBookEventRewardData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerBookEventRewardConfigMap().values());
     }
 }

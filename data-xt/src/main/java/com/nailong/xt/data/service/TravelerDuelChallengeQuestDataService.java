@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TravelerDuelChallengeQuestDataService {
@@ -15,5 +17,9 @@ public class TravelerDuelChallengeQuestDataService {
     }
     public TravelerDuelChallengeQuestConfig getTravelerDuelChallengeQuestData(String id) {
         return gameDataMgr.getTravelerDuelChallengeQuestConfigMap().get(id);
+    }
+
+    public ArrayList<TravelerDuelChallengeQuestConfig> getAllTravelerDuelChallengeQuestData() {
+        return new ArrayList<>(gameDataMgr.getTravelerDuelChallengeQuestConfigMap().values());
     }
 }

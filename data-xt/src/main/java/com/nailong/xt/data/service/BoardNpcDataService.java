@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BoardNpcDataService {
@@ -15,5 +17,9 @@ public class BoardNpcDataService {
     }
     public BoardNpcConfig getBoardNpcData(String id) {
         return gameDataMgr.getBoardNpcConfigMap().get(id);
+    }
+
+    public ArrayList<BoardNpcConfig> getAllBoardNpcData() {
+        return new ArrayList<>(gameDataMgr.getBoardNpcConfigMap().values());
     }
 }

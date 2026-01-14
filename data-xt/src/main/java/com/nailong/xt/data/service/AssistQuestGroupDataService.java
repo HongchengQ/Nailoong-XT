@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AssistQuestGroupDataService {
@@ -15,5 +17,9 @@ public class AssistQuestGroupDataService {
     }
     public AssistQuestGroupConfig getAssistQuestGroupData(String id) {
         return gameDataMgr.getAssistQuestGroupConfigMap().get(id);
+    }
+
+    public ArrayList<AssistQuestGroupConfig> getAllAssistQuestGroupData() {
+        return new ArrayList<>(gameDataMgr.getAssistQuestGroupConfigMap().values());
     }
 }

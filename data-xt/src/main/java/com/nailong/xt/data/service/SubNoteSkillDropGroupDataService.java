@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class SubNoteSkillDropGroupDataService {
@@ -15,5 +17,9 @@ public class SubNoteSkillDropGroupDataService {
     }
     public SubNoteSkillDropGroupConfig getSubNoteSkillDropGroupData(String id) {
         return gameDataMgr.getSubNoteSkillDropGroupConfigMap().get(id);
+    }
+
+    public ArrayList<SubNoteSkillDropGroupConfig> getAllSubNoteSkillDropGroupData() {
+        return new ArrayList<>(gameDataMgr.getSubNoteSkillDropGroupConfigMap().values());
     }
 }

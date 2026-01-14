@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class HonorCharacterDataService {
@@ -15,5 +17,9 @@ public class HonorCharacterDataService {
     }
     public HonorCharacterConfig getHonorCharacterData(String id) {
         return gameDataMgr.getHonorCharacterConfigMap().get(id);
+    }
+
+    public ArrayList<HonorCharacterConfig> getAllHonorCharacterData() {
+        return new ArrayList<>(gameDataMgr.getHonorCharacterConfigMap().values());
     }
 }

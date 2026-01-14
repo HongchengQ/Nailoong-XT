@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class WeightParameterDataService {
@@ -15,5 +17,9 @@ public class WeightParameterDataService {
     }
     public WeightParameterConfig getWeightParameterData(String id) {
         return gameDataMgr.getWeightParameterConfigMap().get(id);
+    }
+
+    public ArrayList<WeightParameterConfig> getAllWeightParameterData() {
+        return new ArrayList<>(gameDataMgr.getWeightParameterConfigMap().values());
     }
 }

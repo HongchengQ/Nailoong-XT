@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class WordDataService {
@@ -15,5 +17,9 @@ public class WordDataService {
     }
     public WordConfig getWordData(String id) {
         return gameDataMgr.getWordConfigMap().get(id);
+    }
+
+    public ArrayList<WordConfig> getAllWordData() {
+        return new ArrayList<>(gameDataMgr.getWordConfigMap().values());
     }
 }

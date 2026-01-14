@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TowerDefenseQuestGroupDataService {
@@ -15,5 +17,9 @@ public class TowerDefenseQuestGroupDataService {
     }
     public TowerDefenseQuestGroupConfig getTowerDefenseQuestGroupData(String id) {
         return gameDataMgr.getTowerDefenseQuestGroupConfigMap().get(id);
+    }
+
+    public ArrayList<TowerDefenseQuestGroupConfig> getAllTowerDefenseQuestGroupData() {
+        return new ArrayList<>(gameDataMgr.getTowerDefenseQuestGroupConfigMap().values());
     }
 }

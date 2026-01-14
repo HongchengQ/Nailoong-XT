@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ScoreBossLevelDataService {
@@ -15,5 +17,9 @@ public class ScoreBossLevelDataService {
     }
     public ScoreBossLevelConfig getScoreBossLevelData(String id) {
         return gameDataMgr.getScoreBossLevelConfigMap().get(id);
+    }
+
+    public ArrayList<ScoreBossLevelConfig> getAllScoreBossLevelData() {
+        return new ArrayList<>(gameDataMgr.getScoreBossLevelConfigMap().values());
     }
 }

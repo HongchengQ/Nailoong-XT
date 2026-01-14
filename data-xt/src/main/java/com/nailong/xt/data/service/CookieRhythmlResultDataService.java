@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CookieRhythmlResultDataService {
@@ -15,5 +17,9 @@ public class CookieRhythmlResultDataService {
     }
     public CookieRhythmlResultConfig getCookieRhythmlResultData(String id) {
         return gameDataMgr.getCookieRhythmlResultConfigMap().get(id);
+    }
+
+    public ArrayList<CookieRhythmlResultConfig> getAllCookieRhythmlResultData() {
+        return new ArrayList<>(gameDataMgr.getCookieRhythmlResultConfigMap().values());
     }
 }

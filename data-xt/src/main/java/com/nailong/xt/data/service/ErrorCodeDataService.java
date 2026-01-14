@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ErrorCodeDataService {
@@ -15,5 +17,9 @@ public class ErrorCodeDataService {
     }
     public ErrorCodeConfig getErrorCodeData(String id) {
         return gameDataMgr.getErrorCodeConfigMap().get(id);
+    }
+
+    public ArrayList<ErrorCodeConfig> getAllErrorCodeData() {
+        return new ArrayList<>(gameDataMgr.getErrorCodeConfigMap().values());
     }
 }

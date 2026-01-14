@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class FormationSceneDataService {
@@ -15,5 +17,9 @@ public class FormationSceneDataService {
     }
     public FormationSceneConfig getFormationSceneData(String id) {
         return gameDataMgr.getFormationSceneConfigMap().get(id);
+    }
+
+    public ArrayList<FormationSceneConfig> getAllFormationSceneData() {
+        return new ArrayList<>(gameDataMgr.getFormationSceneConfigMap().values());
     }
 }

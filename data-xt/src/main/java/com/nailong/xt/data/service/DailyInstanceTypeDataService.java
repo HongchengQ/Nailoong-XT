@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DailyInstanceTypeDataService {
@@ -15,5 +17,9 @@ public class DailyInstanceTypeDataService {
     }
     public DailyInstanceTypeConfig getDailyInstanceTypeData(String id) {
         return gameDataMgr.getDailyInstanceTypeConfigMap().get(id);
+    }
+
+    public ArrayList<DailyInstanceTypeConfig> getAllDailyInstanceTypeData() {
+        return new ArrayList<>(gameDataMgr.getDailyInstanceTypeConfigMap().values());
     }
 }

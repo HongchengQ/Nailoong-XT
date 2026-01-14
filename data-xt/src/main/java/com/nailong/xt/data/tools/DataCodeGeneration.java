@@ -306,6 +306,8 @@ public class DataCodeGeneration {
                     import lombok.RequiredArgsConstructor;
                     import org.springframework.stereotype.Service;
                     
+                    import java.util.ArrayList;
+                    
                     @Service
                     @RequiredArgsConstructor
                     """);
@@ -320,8 +322,12 @@ public class DataCodeGeneration {
                         public %sConfig get%sData(String id) {
                             return gameDataMgr.get%sConfigMap().get(id);
                         }
+                    
+                        public ArrayList<%sConfig> getAll%sData() {
+                            return new ArrayList<>(gameDataMgr.get%sConfigMap().values());
+                        }
                     }
-                    """, name, name, name, name, name, name, name);
+                    """, name, name, name, name, name, name, name, name, name, name);
 
             writer.write(s);
         }

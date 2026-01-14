@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ActivityTaskDataService {
@@ -15,5 +17,9 @@ public class ActivityTaskDataService {
     }
     public ActivityTaskConfig getActivityTaskData(String id) {
         return gameDataMgr.getActivityTaskConfigMap().get(id);
+    }
+
+    public ArrayList<ActivityTaskConfig> getAllActivityTaskData() {
+        return new ArrayList<>(gameDataMgr.getActivityTaskConfigMap().values());
     }
 }

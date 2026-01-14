@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharacterUpgradeDataService {
@@ -15,5 +17,9 @@ public class CharacterUpgradeDataService {
     }
     public CharacterUpgradeConfig getCharacterUpgradeData(String id) {
         return gameDataMgr.getCharacterUpgradeConfigMap().get(id);
+    }
+
+    public ArrayList<CharacterUpgradeConfig> getAllCharacterUpgradeData() {
+        return new ArrayList<>(gameDataMgr.getCharacterUpgradeConfigMap().values());
     }
 }

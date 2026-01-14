@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VoDirectoryDataService {
@@ -15,5 +17,9 @@ public class VoDirectoryDataService {
     }
     public VoDirectoryConfig getVoDirectoryData(String id) {
         return gameDataMgr.getVoDirectoryConfigMap().get(id);
+    }
+
+    public ArrayList<VoDirectoryConfig> getAllVoDirectoryData() {
+        return new ArrayList<>(gameDataMgr.getVoDirectoryConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StorySetChapterDataService {
@@ -15,5 +17,9 @@ public class StorySetChapterDataService {
     }
     public StorySetChapterConfig getStorySetChapterData(String id) {
         return gameDataMgr.getStorySetChapterConfigMap().get(id);
+    }
+
+    public ArrayList<StorySetChapterConfig> getAllStorySetChapterData() {
+        return new ArrayList<>(gameDataMgr.getStorySetChapterConfigMap().values());
     }
 }

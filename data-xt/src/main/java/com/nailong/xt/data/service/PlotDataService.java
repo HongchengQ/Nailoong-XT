@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PlotDataService {
@@ -15,5 +17,9 @@ public class PlotDataService {
     }
     public PlotConfig getPlotData(String id) {
         return gameDataMgr.getPlotConfigMap().get(id);
+    }
+
+    public ArrayList<PlotConfig> getAllPlotData() {
+        return new ArrayList<>(gameDataMgr.getPlotConfigMap().values());
     }
 }

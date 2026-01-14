@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class SkillInstanceFloorDataService {
@@ -15,5 +17,9 @@ public class SkillInstanceFloorDataService {
     }
     public SkillInstanceFloorConfig getSkillInstanceFloorData(String id) {
         return gameDataMgr.getSkillInstanceFloorConfigMap().get(id);
+    }
+
+    public ArrayList<SkillInstanceFloorConfig> getAllSkillInstanceFloorData() {
+        return new ArrayList<>(gameDataMgr.getSkillInstanceFloorConfigMap().values());
     }
 }

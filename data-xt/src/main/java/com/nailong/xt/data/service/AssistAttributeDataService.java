@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AssistAttributeDataService {
@@ -15,5 +17,9 @@ public class AssistAttributeDataService {
     }
     public AssistAttributeConfig getAssistAttributeData(String id) {
         return gameDataMgr.getAssistAttributeConfigMap().get(id);
+    }
+
+    public ArrayList<AssistAttributeConfig> getAllAssistAttributeData() {
+        return new ArrayList<>(gameDataMgr.getAssistAttributeConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MonsterValueTempleteModifyDataService {
@@ -15,5 +17,9 @@ public class MonsterValueTempleteModifyDataService {
     }
     public MonsterValueTempleteModifyConfig getMonsterValueTempleteModifyData(String id) {
         return gameDataMgr.getMonsterValueTempleteModifyConfigMap().get(id);
+    }
+
+    public ArrayList<MonsterValueTempleteModifyConfig> getAllMonsterValueTempleteModifyData() {
+        return new ArrayList<>(gameDataMgr.getMonsterValueTempleteModifyConfigMap().values());
     }
 }

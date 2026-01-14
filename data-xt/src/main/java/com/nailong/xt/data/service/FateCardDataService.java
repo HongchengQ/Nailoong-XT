@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class FateCardDataService {
@@ -15,5 +17,9 @@ public class FateCardDataService {
     }
     public FateCardConfig getFateCardData(String id) {
         return gameDataMgr.getFateCardConfigMap().get(id);
+    }
+
+    public ArrayList<FateCardConfig> getAllFateCardData() {
+        return new ArrayList<>(gameDataMgr.getFateCardConfigMap().values());
     }
 }

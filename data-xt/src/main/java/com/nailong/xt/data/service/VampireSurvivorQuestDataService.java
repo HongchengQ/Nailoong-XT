@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VampireSurvivorQuestDataService {
@@ -15,5 +17,9 @@ public class VampireSurvivorQuestDataService {
     }
     public VampireSurvivorQuestConfig getVampireSurvivorQuestData(String id) {
         return gameDataMgr.getVampireSurvivorQuestConfigMap().get(id);
+    }
+
+    public ArrayList<VampireSurvivorQuestConfig> getAllVampireSurvivorQuestData() {
+        return new ArrayList<>(gameDataMgr.getVampireSurvivorQuestConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AffinityUpRewardDataService {
@@ -15,5 +17,9 @@ public class AffinityUpRewardDataService {
     }
     public AffinityUpRewardConfig getAffinityUpRewardData(String id) {
         return gameDataMgr.getAffinityUpRewardConfigMap().get(id);
+    }
+
+    public ArrayList<AffinityUpRewardConfig> getAllAffinityUpRewardData() {
+        return new ArrayList<>(gameDataMgr.getAffinityUpRewardConfigMap().values());
     }
 }

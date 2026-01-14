@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class EndSceneTypeDataService {
@@ -15,5 +17,9 @@ public class EndSceneTypeDataService {
     }
     public EndSceneTypeConfig getEndSceneTypeData(String id) {
         return gameDataMgr.getEndSceneTypeConfigMap().get(id);
+    }
+
+    public ArrayList<EndSceneTypeConfig> getAllEndSceneTypeData() {
+        return new ArrayList<>(gameDataMgr.getEndSceneTypeConfigMap().values());
     }
 }

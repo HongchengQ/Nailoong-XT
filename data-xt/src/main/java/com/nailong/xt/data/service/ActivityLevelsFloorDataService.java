@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ActivityLevelsFloorDataService {
@@ -15,5 +17,9 @@ public class ActivityLevelsFloorDataService {
     }
     public ActivityLevelsFloorConfig getActivityLevelsFloorData(String id) {
         return gameDataMgr.getActivityLevelsFloorConfigMap().get(id);
+    }
+
+    public ArrayList<ActivityLevelsFloorConfig> getAllActivityLevelsFloorData() {
+        return new ArrayList<>(gameDataMgr.getActivityLevelsFloorConfigMap().values());
     }
 }

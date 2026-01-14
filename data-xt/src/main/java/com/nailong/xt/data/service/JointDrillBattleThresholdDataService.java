@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JointDrillBattleThresholdDataService {
@@ -15,5 +17,9 @@ public class JointDrillBattleThresholdDataService {
     }
     public JointDrillBattleThresholdConfig getJointDrillBattleThresholdData(String id) {
         return gameDataMgr.getJointDrillBattleThresholdConfigMap().get(id);
+    }
+
+    public ArrayList<JointDrillBattleThresholdConfig> getAllJointDrillBattleThresholdData() {
+        return new ArrayList<>(gameDataMgr.getJointDrillBattleThresholdConfigMap().values());
     }
 }

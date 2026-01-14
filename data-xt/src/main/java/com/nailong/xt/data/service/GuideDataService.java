@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GuideDataService {
@@ -15,5 +17,9 @@ public class GuideDataService {
     }
     public GuideConfig getGuideData(String id) {
         return gameDataMgr.getGuideConfigMap().get(id);
+    }
+
+    public ArrayList<GuideConfig> getAllGuideData() {
+        return new ArrayList<>(gameDataMgr.getGuideConfigMap().values());
     }
 }

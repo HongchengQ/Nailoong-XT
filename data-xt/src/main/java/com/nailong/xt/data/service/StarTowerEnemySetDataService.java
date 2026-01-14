@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerEnemySetDataService {
@@ -15,5 +17,9 @@ public class StarTowerEnemySetDataService {
     }
     public StarTowerEnemySetConfig getStarTowerEnemySetData(String id) {
         return gameDataMgr.getStarTowerEnemySetConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerEnemySetConfig> getAllStarTowerEnemySetData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerEnemySetConfigMap().values());
     }
 }

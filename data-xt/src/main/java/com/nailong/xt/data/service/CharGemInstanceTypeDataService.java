@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharGemInstanceTypeDataService {
@@ -15,5 +17,9 @@ public class CharGemInstanceTypeDataService {
     }
     public CharGemInstanceTypeConfig getCharGemInstanceTypeData(String id) {
         return gameDataMgr.getCharGemInstanceTypeConfigMap().get(id);
+    }
+
+    public ArrayList<CharGemInstanceTypeConfig> getAllCharGemInstanceTypeData() {
+        return new ArrayList<>(gameDataMgr.getCharGemInstanceTypeConfigMap().values());
     }
 }

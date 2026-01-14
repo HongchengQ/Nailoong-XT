@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class HitDamageDataService {
@@ -15,5 +17,9 @@ public class HitDamageDataService {
     }
     public HitDamageConfig getHitDamageData(String id) {
         return gameDataMgr.getHitDamageConfigMap().get(id);
+    }
+
+    public ArrayList<HitDamageConfig> getAllHitDamageData() {
+        return new ArrayList<>(gameDataMgr.getHitDamageConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DictionaryEntryDataService {
@@ -15,5 +17,9 @@ public class DictionaryEntryDataService {
     }
     public DictionaryEntryConfig getDictionaryEntryData(String id) {
         return gameDataMgr.getDictionaryEntryConfigMap().get(id);
+    }
+
+    public ArrayList<DictionaryEntryConfig> getAllDictionaryEntryData() {
+        return new ArrayList<>(gameDataMgr.getDictionaryEntryConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TourGuideQuestGroupDataService {
@@ -15,5 +17,9 @@ public class TourGuideQuestGroupDataService {
     }
     public TourGuideQuestGroupConfig getTourGuideQuestGroupData(String id) {
         return gameDataMgr.getTourGuideQuestGroupConfigMap().get(id);
+    }
+
+    public ArrayList<TourGuideQuestGroupConfig> getAllTourGuideQuestGroupData() {
+        return new ArrayList<>(gameDataMgr.getTourGuideQuestGroupConfigMap().values());
     }
 }

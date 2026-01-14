@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class InteractiveActionDataService {
@@ -15,5 +17,9 @@ public class InteractiveActionDataService {
     }
     public InteractiveActionConfig getInteractiveActionData(String id) {
         return gameDataMgr.getInteractiveActionConfigMap().get(id);
+    }
+
+    public ArrayList<InteractiveActionConfig> getAllInteractiveActionData() {
+        return new ArrayList<>(gameDataMgr.getInteractiveActionConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StoryPersonalityDataService {
@@ -15,5 +17,9 @@ public class StoryPersonalityDataService {
     }
     public StoryPersonalityConfig getStoryPersonalityData(String id) {
         return gameDataMgr.getStoryPersonalityConfigMap().get(id);
+    }
+
+    public ArrayList<StoryPersonalityConfig> getAllStoryPersonalityData() {
+        return new ArrayList<>(gameDataMgr.getStoryPersonalityConfigMap().values());
     }
 }

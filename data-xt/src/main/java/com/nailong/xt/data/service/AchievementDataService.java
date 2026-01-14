@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AchievementDataService {
@@ -15,5 +17,9 @@ public class AchievementDataService {
     }
     public AchievementConfig getAchievementData(String id) {
         return gameDataMgr.getAchievementConfigMap().get(id);
+    }
+
+    public ArrayList<AchievementConfig> getAllAchievementData() {
+        return new ArrayList<>(gameDataMgr.getAchievementConfigMap().values());
     }
 }

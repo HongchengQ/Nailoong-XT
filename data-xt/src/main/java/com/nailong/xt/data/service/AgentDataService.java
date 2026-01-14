@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AgentDataService {
@@ -15,5 +17,9 @@ public class AgentDataService {
     }
     public AgentConfig getAgentData(String id) {
         return gameDataMgr.getAgentConfigMap().get(id);
+    }
+
+    public ArrayList<AgentConfig> getAllAgentData() {
+        return new ArrayList<>(gameDataMgr.getAgentConfigMap().values());
     }
 }

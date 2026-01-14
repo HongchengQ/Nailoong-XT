@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CookieControlDataService {
@@ -15,5 +17,9 @@ public class CookieControlDataService {
     }
     public CookieControlConfig getCookieControlData(String id) {
         return gameDataMgr.getCookieControlConfigMap().get(id);
+    }
+
+    public ArrayList<CookieControlConfig> getAllCookieControlData() {
+        return new ArrayList<>(gameDataMgr.getCookieControlConfigMap().values());
     }
 }

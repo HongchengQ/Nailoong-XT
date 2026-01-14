@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BreakOutCharacterDataService {
@@ -15,5 +17,9 @@ public class BreakOutCharacterDataService {
     }
     public BreakOutCharacterConfig getBreakOutCharacterData(String id) {
         return gameDataMgr.getBreakOutCharacterConfigMap().get(id);
+    }
+
+    public ArrayList<BreakOutCharacterConfig> getAllBreakOutCharacterData() {
+        return new ArrayList<>(gameDataMgr.getBreakOutCharacterConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerNpcDataService {
@@ -15,5 +17,9 @@ public class StarTowerNpcDataService {
     }
     public StarTowerNpcConfig getStarTowerNpcData(String id) {
         return gameDataMgr.getStarTowerNpcConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerNpcConfig> getAllStarTowerNpcData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerNpcConfigMap().values());
     }
 }

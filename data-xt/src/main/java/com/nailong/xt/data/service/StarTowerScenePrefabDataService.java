@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerScenePrefabDataService {
@@ -15,5 +17,9 @@ public class StarTowerScenePrefabDataService {
     }
     public StarTowerScenePrefabConfig getStarTowerScenePrefabData(String id) {
         return gameDataMgr.getStarTowerScenePrefabConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerScenePrefabConfig> getAllStarTowerScenePrefabData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerScenePrefabConfigMap().values());
     }
 }

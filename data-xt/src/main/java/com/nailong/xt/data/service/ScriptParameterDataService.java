@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ScriptParameterDataService {
@@ -15,5 +17,9 @@ public class ScriptParameterDataService {
     }
     public ScriptParameterConfig getScriptParameterData(String id) {
         return gameDataMgr.getScriptParameterConfigMap().get(id);
+    }
+
+    public ArrayList<ScriptParameterConfig> getAllScriptParameterData() {
+        return new ArrayList<>(gameDataMgr.getScriptParameterConfigMap().values());
     }
 }

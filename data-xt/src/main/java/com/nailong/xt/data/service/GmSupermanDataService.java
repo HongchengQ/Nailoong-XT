@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GmSupermanDataService {
@@ -15,5 +17,9 @@ public class GmSupermanDataService {
     }
     public GmSupermanConfig getGmSupermanData(String id) {
         return gameDataMgr.getGmSupermanConfigMap().get(id);
+    }
+
+    public ArrayList<GmSupermanConfig> getAllGmSupermanData() {
+        return new ArrayList<>(gameDataMgr.getGmSupermanConfigMap().values());
     }
 }

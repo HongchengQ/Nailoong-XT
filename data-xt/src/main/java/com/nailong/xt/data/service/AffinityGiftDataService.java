@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AffinityGiftDataService {
@@ -15,5 +17,9 @@ public class AffinityGiftDataService {
     }
     public AffinityGiftConfig getAffinityGiftData(String id) {
         return gameDataMgr.getAffinityGiftConfigMap().get(id);
+    }
+
+    public ArrayList<AffinityGiftConfig> getAllAffinityGiftData() {
+        return new ArrayList<>(gameDataMgr.getAffinityGiftConfigMap().values());
     }
 }

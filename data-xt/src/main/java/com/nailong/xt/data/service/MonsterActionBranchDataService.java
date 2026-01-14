@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MonsterActionBranchDataService {
@@ -15,5 +17,9 @@ public class MonsterActionBranchDataService {
     }
     public MonsterActionBranchConfig getMonsterActionBranchData(String id) {
         return gameDataMgr.getMonsterActionBranchConfigMap().get(id);
+    }
+
+    public ArrayList<MonsterActionBranchConfig> getAllMonsterActionBranchData() {
+        return new ArrayList<>(gameDataMgr.getMonsterActionBranchConfigMap().values());
     }
 }

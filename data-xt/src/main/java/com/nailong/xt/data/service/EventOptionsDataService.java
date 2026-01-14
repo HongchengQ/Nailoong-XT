@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class EventOptionsDataService {
@@ -15,5 +17,9 @@ public class EventOptionsDataService {
     }
     public EventOptionsConfig getEventOptionsData(String id) {
         return gameDataMgr.getEventOptionsConfigMap().get(id);
+    }
+
+    public ArrayList<EventOptionsConfig> getAllEventOptionsData() {
+        return new ArrayList<>(gameDataMgr.getEventOptionsConfigMap().values());
     }
 }

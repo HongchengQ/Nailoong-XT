@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TestTeamDataDataService {
@@ -15,5 +17,9 @@ public class TestTeamDataDataService {
     }
     public TestTeamDataConfig getTestTeamDataData(String id) {
         return gameDataMgr.getTestTeamDataConfigMap().get(id);
+    }
+
+    public ArrayList<TestTeamDataConfig> getAllTestTeamDataData() {
+        return new ArrayList<>(gameDataMgr.getTestTeamDataConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PeriodicQuestDataService {
@@ -15,5 +17,9 @@ public class PeriodicQuestDataService {
     }
     public PeriodicQuestConfig getPeriodicQuestData(String id) {
         return gameDataMgr.getPeriodicQuestConfigMap().get(id);
+    }
+
+    public ArrayList<PeriodicQuestConfig> getAllPeriodicQuestData() {
+        return new ArrayList<>(gameDataMgr.getPeriodicQuestConfigMap().values());
     }
 }

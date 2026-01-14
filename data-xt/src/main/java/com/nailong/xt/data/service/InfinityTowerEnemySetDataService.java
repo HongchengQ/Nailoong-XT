@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class InfinityTowerEnemySetDataService {
@@ -15,5 +17,9 @@ public class InfinityTowerEnemySetDataService {
     }
     public InfinityTowerEnemySetConfig getInfinityTowerEnemySetData(String id) {
         return gameDataMgr.getInfinityTowerEnemySetConfigMap().get(id);
+    }
+
+    public ArrayList<InfinityTowerEnemySetConfig> getAllInfinityTowerEnemySetData() {
+        return new ArrayList<>(gameDataMgr.getInfinityTowerEnemySetConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class InfinityTowerDifficultyDataService {
@@ -15,5 +17,9 @@ public class InfinityTowerDifficultyDataService {
     }
     public InfinityTowerDifficultyConfig getInfinityTowerDifficultyData(String id) {
         return gameDataMgr.getInfinityTowerDifficultyConfigMap().get(id);
+    }
+
+    public ArrayList<InfinityTowerDifficultyConfig> getAllInfinityTowerDifficultyData() {
+        return new ArrayList<>(gameDataMgr.getInfinityTowerDifficultyConfigMap().values());
     }
 }

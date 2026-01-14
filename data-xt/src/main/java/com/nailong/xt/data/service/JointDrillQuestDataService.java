@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JointDrillQuestDataService {
@@ -15,5 +17,9 @@ public class JointDrillQuestDataService {
     }
     public JointDrillQuestConfig getJointDrillQuestData(String id) {
         return gameDataMgr.getJointDrillQuestConfigMap().get(id);
+    }
+
+    public ArrayList<JointDrillQuestConfig> getAllJointDrillQuestData() {
+        return new ArrayList<>(gameDataMgr.getJointDrillQuestConfigMap().values());
     }
 }

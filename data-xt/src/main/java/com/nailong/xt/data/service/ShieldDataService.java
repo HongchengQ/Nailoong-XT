@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ShieldDataService {
@@ -15,5 +17,9 @@ public class ShieldDataService {
     }
     public ShieldConfig getShieldData(String id) {
         return gameDataMgr.getShieldConfigMap().get(id);
+    }
+
+    public ArrayList<ShieldConfig> getAllShieldData() {
+        return new ArrayList<>(gameDataMgr.getShieldConfigMap().values());
     }
 }

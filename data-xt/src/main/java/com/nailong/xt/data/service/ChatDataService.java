@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ChatDataService {
@@ -15,5 +17,9 @@ public class ChatDataService {
     }
     public ChatConfig getChatData(String id) {
         return gameDataMgr.getChatConfigMap().get(id);
+    }
+
+    public ArrayList<ChatConfig> getAllChatData() {
+        return new ArrayList<>(gameDataMgr.getChatConfigMap().values());
     }
 }

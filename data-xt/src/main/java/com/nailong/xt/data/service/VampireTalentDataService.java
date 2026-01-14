@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VampireTalentDataService {
@@ -15,5 +17,9 @@ public class VampireTalentDataService {
     }
     public VampireTalentConfig getVampireTalentData(String id) {
         return gameDataMgr.getVampireTalentConfigMap().get(id);
+    }
+
+    public ArrayList<VampireTalentConfig> getAllVampireTalentData() {
+        return new ArrayList<>(gameDataMgr.getVampireTalentConfigMap().values());
     }
 }

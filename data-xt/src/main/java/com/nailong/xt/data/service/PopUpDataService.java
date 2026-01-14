@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PopUpDataService {
@@ -15,5 +17,9 @@ public class PopUpDataService {
     }
     public PopUpConfig getPopUpData(String id) {
         return gameDataMgr.getPopUpConfigMap().get(id);
+    }
+
+    public ArrayList<PopUpConfig> getAllPopUpData() {
+        return new ArrayList<>(gameDataMgr.getPopUpConfigMap().values());
     }
 }

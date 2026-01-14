@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ActivityStoryEvidenceDataService {
@@ -15,5 +17,9 @@ public class ActivityStoryEvidenceDataService {
     }
     public ActivityStoryEvidenceConfig getActivityStoryEvidenceData(String id) {
         return gameDataMgr.getActivityStoryEvidenceConfigMap().get(id);
+    }
+
+    public ArrayList<ActivityStoryEvidenceConfig> getAllActivityStoryEvidenceData() {
+        return new ArrayList<>(gameDataMgr.getActivityStoryEvidenceConfigMap().values());
     }
 }

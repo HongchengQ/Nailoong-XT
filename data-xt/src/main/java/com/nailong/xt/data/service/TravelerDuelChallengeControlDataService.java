@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TravelerDuelChallengeControlDataService {
@@ -15,5 +17,9 @@ public class TravelerDuelChallengeControlDataService {
     }
     public TravelerDuelChallengeControlConfig getTravelerDuelChallengeControlData(String id) {
         return gameDataMgr.getTravelerDuelChallengeControlConfigMap().get(id);
+    }
+
+    public ArrayList<TravelerDuelChallengeControlConfig> getAllTravelerDuelChallengeControlData() {
+        return new ArrayList<>(gameDataMgr.getTravelerDuelChallengeControlConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ResidentGoodsDataService {
@@ -15,5 +17,9 @@ public class ResidentGoodsDataService {
     }
     public ResidentGoodsConfig getResidentGoodsData(String id) {
         return gameDataMgr.getResidentGoodsConfigMap().get(id);
+    }
+
+    public ArrayList<ResidentGoodsConfig> getAllResidentGoodsData() {
+        return new ArrayList<>(gameDataMgr.getResidentGoodsConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ScoreBossBattleThresholdDataService {
@@ -15,5 +17,9 @@ public class ScoreBossBattleThresholdDataService {
     }
     public ScoreBossBattleThresholdConfig getScoreBossBattleThresholdData(String id) {
         return gameDataMgr.getScoreBossBattleThresholdConfigMap().get(id);
+    }
+
+    public ArrayList<ScoreBossBattleThresholdConfig> getAllScoreBossBattleThresholdData() {
+        return new ArrayList<>(gameDataMgr.getScoreBossBattleThresholdConfigMap().values());
     }
 }

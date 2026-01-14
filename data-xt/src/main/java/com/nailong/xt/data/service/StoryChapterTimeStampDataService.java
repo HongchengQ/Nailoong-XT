@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StoryChapterTimeStampDataService {
@@ -15,5 +17,9 @@ public class StoryChapterTimeStampDataService {
     }
     public StoryChapterTimeStampConfig getStoryChapterTimeStampData(String id) {
         return gameDataMgr.getStoryChapterTimeStampConfigMap().get(id);
+    }
+
+    public ArrayList<StoryChapterTimeStampConfig> getAllStoryChapterTimeStampData() {
+        return new ArrayList<>(gameDataMgr.getStoryChapterTimeStampConfigMap().values());
     }
 }

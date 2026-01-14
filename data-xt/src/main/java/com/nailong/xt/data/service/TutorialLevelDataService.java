@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TutorialLevelDataService {
@@ -15,5 +17,9 @@ public class TutorialLevelDataService {
     }
     public TutorialLevelConfig getTutorialLevelData(String id) {
         return gameDataMgr.getTutorialLevelConfigMap().get(id);
+    }
+
+    public ArrayList<TutorialLevelConfig> getAllTutorialLevelData() {
+        return new ArrayList<>(gameDataMgr.getTutorialLevelConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AttributeSetLimitDataService {
@@ -15,5 +17,9 @@ public class AttributeSetLimitDataService {
     }
     public AttributeSetLimitConfig getAttributeSetLimitData(String id) {
         return gameDataMgr.getAttributeSetLimitConfigMap().get(id);
+    }
+
+    public ArrayList<AttributeSetLimitConfig> getAllAttributeSetLimitData() {
+        return new ArrayList<>(gameDataMgr.getAttributeSetLimitConfigMap().values());
     }
 }

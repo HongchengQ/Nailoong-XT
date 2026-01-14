@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BreakOutFloorDataService {
@@ -15,5 +17,9 @@ public class BreakOutFloorDataService {
     }
     public BreakOutFloorConfig getBreakOutFloorData(String id) {
         return gameDataMgr.getBreakOutFloorConfigMap().get(id);
+    }
+
+    public ArrayList<BreakOutFloorConfig> getAllBreakOutFloorData() {
+        return new ArrayList<>(gameDataMgr.getBreakOutFloorConfigMap().values());
     }
 }

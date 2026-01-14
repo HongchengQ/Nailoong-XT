@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CookieFloorDataService {
@@ -15,5 +17,9 @@ public class CookieFloorDataService {
     }
     public CookieFloorConfig getCookieFloorData(String id) {
         return gameDataMgr.getCookieFloorConfigMap().get(id);
+    }
+
+    public ArrayList<CookieFloorConfig> getAllCookieFloorData() {
+        return new ArrayList<>(gameDataMgr.getCookieFloorConfigMap().values());
     }
 }

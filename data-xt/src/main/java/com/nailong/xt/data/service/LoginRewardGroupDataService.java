@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class LoginRewardGroupDataService {
@@ -15,5 +17,9 @@ public class LoginRewardGroupDataService {
     }
     public LoginRewardGroupConfig getLoginRewardGroupData(String id) {
         return gameDataMgr.getLoginRewardGroupConfigMap().get(id);
+    }
+
+    public ArrayList<LoginRewardGroupConfig> getAllLoginRewardGroupData() {
+        return new ArrayList<>(gameDataMgr.getLoginRewardGroupConfigMap().values());
     }
 }

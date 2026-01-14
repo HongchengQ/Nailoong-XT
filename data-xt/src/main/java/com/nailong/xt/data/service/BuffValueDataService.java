@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BuffValueDataService {
@@ -15,5 +17,9 @@ public class BuffValueDataService {
     }
     public BuffValueConfig getBuffValueData(String id) {
         return gameDataMgr.getBuffValueConfigMap().get(id);
+    }
+
+    public ArrayList<BuffValueConfig> getAllBuffValueData() {
+        return new ArrayList<>(gameDataMgr.getBuffValueConfigMap().values());
     }
 }

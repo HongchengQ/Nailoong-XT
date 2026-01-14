@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class InfinityTowerLevelDataService {
@@ -15,5 +17,9 @@ public class InfinityTowerLevelDataService {
     }
     public InfinityTowerLevelConfig getInfinityTowerLevelData(String id) {
         return gameDataMgr.getInfinityTowerLevelConfigMap().get(id);
+    }
+
+    public ArrayList<InfinityTowerLevelConfig> getAllInfinityTowerLevelData() {
+        return new ArrayList<>(gameDataMgr.getInfinityTowerLevelConfigMap().values());
     }
 }

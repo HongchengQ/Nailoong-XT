@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ForceDataService {
@@ -15,5 +17,9 @@ public class ForceDataService {
     }
     public ForceConfig getForceData(String id) {
         return gameDataMgr.getForceConfigMap().get(id);
+    }
+
+    public ArrayList<ForceConfig> getAllForceData() {
+        return new ArrayList<>(gameDataMgr.getForceConfigMap().values());
     }
 }

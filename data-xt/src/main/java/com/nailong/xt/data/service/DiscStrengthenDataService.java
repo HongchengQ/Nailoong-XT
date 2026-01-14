@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DiscStrengthenDataService {
@@ -15,5 +17,9 @@ public class DiscStrengthenDataService {
     }
     public DiscStrengthenConfig getDiscStrengthenData(String id) {
         return gameDataMgr.getDiscStrengthenConfigMap().get(id);
+    }
+
+    public ArrayList<DiscStrengthenConfig> getAllDiscStrengthenData() {
+        return new ArrayList<>(gameDataMgr.getDiscStrengthenConfigMap().values());
     }
 }

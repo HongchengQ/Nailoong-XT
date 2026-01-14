@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DatingBranchDataService {
@@ -15,5 +17,9 @@ public class DatingBranchDataService {
     }
     public DatingBranchConfig getDatingBranchData(String id) {
         return gameDataMgr.getDatingBranchConfigMap().get(id);
+    }
+
+    public ArrayList<DatingBranchConfig> getAllDatingBranchData() {
+        return new ArrayList<>(gameDataMgr.getDatingBranchConfigMap().values());
     }
 }

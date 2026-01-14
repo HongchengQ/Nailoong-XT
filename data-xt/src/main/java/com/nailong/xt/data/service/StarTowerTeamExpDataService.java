@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerTeamExpDataService {
@@ -15,5 +17,9 @@ public class StarTowerTeamExpDataService {
     }
     public StarTowerTeamExpConfig getStarTowerTeamExpData(String id) {
         return gameDataMgr.getStarTowerTeamExpConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerTeamExpConfig> getAllStarTowerTeamExpData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerTeamExpConfigMap().values());
     }
 }

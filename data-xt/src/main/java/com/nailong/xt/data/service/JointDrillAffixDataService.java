@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JointDrillAffixDataService {
@@ -15,5 +17,9 @@ public class JointDrillAffixDataService {
     }
     public JointDrillAffixConfig getJointDrillAffixData(String id) {
         return gameDataMgr.getJointDrillAffixConfigMap().get(id);
+    }
+
+    public ArrayList<JointDrillAffixConfig> getAllJointDrillAffixData() {
+        return new ArrayList<>(gameDataMgr.getJointDrillAffixConfigMap().values());
     }
 }

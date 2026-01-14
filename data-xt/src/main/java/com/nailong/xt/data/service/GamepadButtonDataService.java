@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GamepadButtonDataService {
@@ -15,5 +17,9 @@ public class GamepadButtonDataService {
     }
     public GamepadButtonConfig getGamepadButtonData(String id) {
         return gameDataMgr.getGamepadButtonConfigMap().get(id);
+    }
+
+    public ArrayList<GamepadButtonConfig> getAllGamepadButtonData() {
+        return new ArrayList<>(gameDataMgr.getGamepadButtonConfigMap().values());
     }
 }

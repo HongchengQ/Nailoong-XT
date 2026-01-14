@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class UiTextDataService {
@@ -15,5 +17,9 @@ public class UiTextDataService {
     }
     public UiTextConfig getUiTextData(String id) {
         return gameDataMgr.getUiTextConfigMap().get(id);
+    }
+
+    public ArrayList<UiTextConfig> getAllUiTextData() {
+        return new ArrayList<>(gameDataMgr.getUiTextConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MiningTreasureDataService {
@@ -15,5 +17,9 @@ public class MiningTreasureDataService {
     }
     public MiningTreasureConfig getMiningTreasureData(String id) {
         return gameDataMgr.getMiningTreasureConfigMap().get(id);
+    }
+
+    public ArrayList<MiningTreasureConfig> getAllMiningTreasureData() {
+        return new ArrayList<>(gameDataMgr.getMiningTreasureConfigMap().values());
     }
 }

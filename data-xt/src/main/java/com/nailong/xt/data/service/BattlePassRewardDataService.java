@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BattlePassRewardDataService {
@@ -15,5 +17,9 @@ public class BattlePassRewardDataService {
     }
     public BattlePassRewardConfig getBattlePassRewardData(String id) {
         return gameDataMgr.getBattlePassRewardConfigMap().get(id);
+    }
+
+    public ArrayList<BattlePassRewardConfig> getAllBattlePassRewardData() {
+        return new ArrayList<>(gameDataMgr.getBattlePassRewardConfigMap().values());
     }
 }

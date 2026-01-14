@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AgentTabDataService {
@@ -15,5 +17,9 @@ public class AgentTabDataService {
     }
     public AgentTabConfig getAgentTabData(String id) {
         return gameDataMgr.getAgentTabConfigMap().get(id);
+    }
+
+    public ArrayList<AgentTabConfig> getAllAgentTabData() {
+        return new ArrayList<>(gameDataMgr.getAgentTabConfigMap().values());
     }
 }

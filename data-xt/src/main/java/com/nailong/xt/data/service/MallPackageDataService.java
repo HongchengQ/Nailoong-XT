@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MallPackageDataService {
@@ -15,5 +17,9 @@ public class MallPackageDataService {
     }
     public MallPackageConfig getMallPackageData(String id) {
         return gameDataMgr.getMallPackageConfigMap().get(id);
+    }
+
+    public ArrayList<MallPackageConfig> getAllMallPackageData() {
+        return new ArrayList<>(gameDataMgr.getMallPackageConfigMap().values());
     }
 }

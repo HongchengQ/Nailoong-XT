@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DiscDataService {
@@ -15,5 +17,9 @@ public class DiscDataService {
     }
     public DiscConfig getDiscData(String id) {
         return gameDataMgr.getDiscConfigMap().get(id);
+    }
+
+    public ArrayList<DiscConfig> getAllDiscData() {
+        return new ArrayList<>(gameDataMgr.getDiscConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TravelerDuelBossLevelDataService {
@@ -15,5 +17,9 @@ public class TravelerDuelBossLevelDataService {
     }
     public TravelerDuelBossLevelConfig getTravelerDuelBossLevelData(String id) {
         return gameDataMgr.getTravelerDuelBossLevelConfigMap().get(id);
+    }
+
+    public ArrayList<TravelerDuelBossLevelConfig> getAllTravelerDuelBossLevelData() {
+        return new ArrayList<>(gameDataMgr.getTravelerDuelBossLevelConfigMap().values());
     }
 }

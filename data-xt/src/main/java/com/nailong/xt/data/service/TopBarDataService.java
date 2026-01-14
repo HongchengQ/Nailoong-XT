@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TopBarDataService {
@@ -15,5 +17,9 @@ public class TopBarDataService {
     }
     public TopBarConfig getTopBarData(String id) {
         return gameDataMgr.getTopBarConfigMap().get(id);
+    }
+
+    public ArrayList<TopBarConfig> getAllTopBarData() {
+        return new ArrayList<>(gameDataMgr.getTopBarConfigMap().values());
     }
 }

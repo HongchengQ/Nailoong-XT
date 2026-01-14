@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JointDrillRankDataService {
@@ -15,5 +17,9 @@ public class JointDrillRankDataService {
     }
     public JointDrillRankConfig getJointDrillRankData(String id) {
         return gameDataMgr.getJointDrillRankConfigMap().get(id);
+    }
+
+    public ArrayList<JointDrillRankConfig> getAllJointDrillRankData() {
+        return new ArrayList<>(gameDataMgr.getJointDrillRankConfigMap().values());
     }
 }

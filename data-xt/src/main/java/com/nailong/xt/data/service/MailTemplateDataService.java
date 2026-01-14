@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MailTemplateDataService {
@@ -15,5 +17,9 @@ public class MailTemplateDataService {
     }
     public MailTemplateConfig getMailTemplateData(String id) {
         return gameDataMgr.getMailTemplateConfigMap().get(id);
+    }
+
+    public ArrayList<MailTemplateConfig> getAllMailTemplateData() {
+        return new ArrayList<>(gameDataMgr.getMailTemplateConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class OpenFuncDataService {
@@ -15,5 +17,9 @@ public class OpenFuncDataService {
     }
     public OpenFuncConfig getOpenFuncData(String id) {
         return gameDataMgr.getOpenFuncConfigMap().get(id);
+    }
+
+    public ArrayList<OpenFuncConfig> getAllOpenFuncData() {
+        return new ArrayList<>(gameDataMgr.getOpenFuncConfigMap().values());
     }
 }

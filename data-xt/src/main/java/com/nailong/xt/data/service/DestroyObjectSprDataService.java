@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DestroyObjectSprDataService {
@@ -15,5 +17,9 @@ public class DestroyObjectSprDataService {
     }
     public DestroyObjectSprConfig getDestroyObjectSprData(String id) {
         return gameDataMgr.getDestroyObjectSprConfigMap().get(id);
+    }
+
+    public ArrayList<DestroyObjectSprConfig> getAllDestroyObjectSprData() {
+        return new ArrayList<>(gameDataMgr.getDestroyObjectSprConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MiningControlDataService {
@@ -15,5 +17,9 @@ public class MiningControlDataService {
     }
     public MiningControlConfig getMiningControlData(String id) {
         return gameDataMgr.getMiningControlConfigMap().get(id);
+    }
+
+    public ArrayList<MiningControlConfig> getAllMiningControlData() {
+        return new ArrayList<>(gameDataMgr.getMiningControlConfigMap().values());
     }
 }

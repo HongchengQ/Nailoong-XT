@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerMonsterBornGroupDataService {
@@ -15,5 +17,9 @@ public class StarTowerMonsterBornGroupDataService {
     }
     public StarTowerMonsterBornGroupConfig getStarTowerMonsterBornGroupData(String id) {
         return gameDataMgr.getStarTowerMonsterBornGroupConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerMonsterBornGroupConfig> getAllStarTowerMonsterBornGroupData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerMonsterBornGroupConfigMap().values());
     }
 }

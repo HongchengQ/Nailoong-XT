@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerComboDataService {
@@ -15,5 +17,9 @@ public class StarTowerComboDataService {
     }
     public StarTowerComboConfig getStarTowerComboData(String id) {
         return gameDataMgr.getStarTowerComboConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerComboConfig> getAllStarTowerComboData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerComboConfigMap().values());
     }
 }

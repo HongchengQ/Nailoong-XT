@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BdConvertRewardGroupDataService {
@@ -15,5 +17,9 @@ public class BdConvertRewardGroupDataService {
     }
     public BdConvertRewardGroupConfig getBdConvertRewardGroupData(String id) {
         return gameDataMgr.getBdConvertRewardGroupConfigMap().get(id);
+    }
+
+    public ArrayList<BdConvertRewardGroupConfig> getAllBdConvertRewardGroupData() {
+        return new ArrayList<>(gameDataMgr.getBdConvertRewardGroupConfigMap().values());
     }
 }

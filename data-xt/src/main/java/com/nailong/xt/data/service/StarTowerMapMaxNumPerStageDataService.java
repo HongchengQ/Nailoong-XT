@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerMapMaxNumPerStageDataService {
@@ -15,5 +17,9 @@ public class StarTowerMapMaxNumPerStageDataService {
     }
     public StarTowerMapMaxNumPerStageConfig getStarTowerMapMaxNumPerStageData(String id) {
         return gameDataMgr.getStarTowerMapMaxNumPerStageConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerMapMaxNumPerStageConfig> getAllStarTowerMapMaxNumPerStageData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerMapMaxNumPerStageConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class EffectDataService {
@@ -15,5 +17,9 @@ public class EffectDataService {
     }
     public EffectConfig getEffectData(String id) {
         return gameDataMgr.getEffectConfigMap().get(id);
+    }
+
+    public ArrayList<EffectConfig> getAllEffectData() {
+        return new ArrayList<>(gameDataMgr.getEffectConfigMap().values());
     }
 }

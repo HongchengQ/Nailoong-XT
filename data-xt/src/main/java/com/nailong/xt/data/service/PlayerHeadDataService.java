@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PlayerHeadDataService {
@@ -15,5 +17,9 @@ public class PlayerHeadDataService {
     }
     public PlayerHeadConfig getPlayerHeadData(String id) {
         return gameDataMgr.getPlayerHeadConfigMap().get(id);
+    }
+
+    public ArrayList<PlayerHeadConfig> getAllPlayerHeadData() {
+        return new ArrayList<>(gameDataMgr.getPlayerHeadConfigMap().values());
     }
 }

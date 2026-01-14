@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class BreakOutEnemySprDataService {
@@ -15,5 +17,9 @@ public class BreakOutEnemySprDataService {
     }
     public BreakOutEnemySprConfig getBreakOutEnemySprData(String id) {
         return gameDataMgr.getBreakOutEnemySprConfigMap().get(id);
+    }
+
+    public ArrayList<BreakOutEnemySprConfig> getAllBreakOutEnemySprData() {
+        return new ArrayList<>(gameDataMgr.getBreakOutEnemySprConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GachaTypeDataService {
@@ -15,5 +17,9 @@ public class GachaTypeDataService {
     }
     public GachaTypeConfig getGachaTypeData(String id) {
         return gameDataMgr.getGachaTypeConfigMap().get(id);
+    }
+
+    public ArrayList<GachaTypeConfig> getAllGachaTypeData() {
+        return new ArrayList<>(gameDataMgr.getGachaTypeConfigMap().values());
     }
 }

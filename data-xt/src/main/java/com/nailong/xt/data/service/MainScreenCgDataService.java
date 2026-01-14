@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MainScreenCgDataService {
@@ -15,5 +17,9 @@ public class MainScreenCgDataService {
     }
     public MainScreenCgConfig getMainScreenCgData(String id) {
         return gameDataMgr.getMainScreenCgConfigMap().get(id);
+    }
+
+    public ArrayList<MainScreenCgConfig> getAllMainScreenCgData() {
+        return new ArrayList<>(gameDataMgr.getMainScreenCgConfigMap().values());
     }
 }

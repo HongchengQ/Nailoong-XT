@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class SignInDataService {
@@ -15,5 +17,9 @@ public class SignInDataService {
     }
     public SignInConfig getSignInData(String id) {
         return gameDataMgr.getSignInConfigMap().get(id);
+    }
+
+    public ArrayList<SignInConfig> getAllSignInData() {
+        return new ArrayList<>(gameDataMgr.getSignInConfigMap().values());
     }
 }

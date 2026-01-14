@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharacterVoiceControlDataService {
@@ -15,5 +17,9 @@ public class CharacterVoiceControlDataService {
     }
     public CharacterVoiceControlConfig getCharacterVoiceControlData(String id) {
         return gameDataMgr.getCharacterVoiceControlConfigMap().get(id);
+    }
+
+    public ArrayList<CharacterVoiceControlConfig> getAllCharacterVoiceControlData() {
+        return new ArrayList<>(gameDataMgr.getCharacterVoiceControlConfigMap().values());
     }
 }

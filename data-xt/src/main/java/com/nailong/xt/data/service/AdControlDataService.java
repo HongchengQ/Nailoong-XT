@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class AdControlDataService {
@@ -15,5 +17,9 @@ public class AdControlDataService {
     }
     public AdControlConfig getAdControlData(String id) {
         return gameDataMgr.getAdControlConfigMap().get(id);
+    }
+
+    public ArrayList<AdControlConfig> getAllAdControlData() {
+        return new ArrayList<>(gameDataMgr.getAdControlConfigMap().values());
     }
 }

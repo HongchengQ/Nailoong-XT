@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerBookFateCardQuestDataService {
@@ -15,5 +17,9 @@ public class StarTowerBookFateCardQuestDataService {
     }
     public StarTowerBookFateCardQuestConfig getStarTowerBookFateCardQuestData(String id) {
         return gameDataMgr.getStarTowerBookFateCardQuestConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerBookFateCardQuestConfig> getAllStarTowerBookFateCardQuestData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerBookFateCardQuestConfigMap().values());
     }
 }

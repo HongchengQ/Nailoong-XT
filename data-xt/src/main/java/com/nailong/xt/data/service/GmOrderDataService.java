@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GmOrderDataService {
@@ -15,5 +17,9 @@ public class GmOrderDataService {
     }
     public GmOrderConfig getGmOrderData(String id) {
         return gameDataMgr.getGmOrderConfigMap().get(id);
+    }
+
+    public ArrayList<GmOrderConfig> getAllGmOrderData() {
+        return new ArrayList<>(gameDataMgr.getGmOrderConfigMap().values());
     }
 }

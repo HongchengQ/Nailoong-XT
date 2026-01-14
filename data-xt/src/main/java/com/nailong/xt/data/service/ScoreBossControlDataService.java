@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ScoreBossControlDataService {
@@ -15,5 +17,9 @@ public class ScoreBossControlDataService {
     }
     public ScoreBossControlConfig getScoreBossControlData(String id) {
         return gameDataMgr.getScoreBossControlConfigMap().get(id);
+    }
+
+    public ArrayList<ScoreBossControlConfig> getAllScoreBossControlData() {
+        return new ArrayList<>(gameDataMgr.getScoreBossControlConfigMap().values());
     }
 }

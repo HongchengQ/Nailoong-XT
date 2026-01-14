@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ChestDataService {
@@ -15,5 +17,9 @@ public class ChestDataService {
     }
     public ChestConfig getChestData(String id) {
         return gameDataMgr.getChestConfigMap().get(id);
+    }
+
+    public ArrayList<ChestConfig> getAllChestData() {
+        return new ArrayList<>(gameDataMgr.getChestConfigMap().values());
     }
 }

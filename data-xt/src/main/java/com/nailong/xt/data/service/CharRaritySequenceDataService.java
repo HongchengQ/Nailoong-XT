@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharRaritySequenceDataService {
@@ -15,5 +17,9 @@ public class CharRaritySequenceDataService {
     }
     public CharRaritySequenceConfig getCharRaritySequenceData(String id) {
         return gameDataMgr.getCharRaritySequenceConfigMap().get(id);
+    }
+
+    public ArrayList<CharRaritySequenceConfig> getAllCharRaritySequenceData() {
+        return new ArrayList<>(gameDataMgr.getCharRaritySequenceConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class GachaATypeProbDataService {
@@ -15,5 +17,9 @@ public class GachaATypeProbDataService {
     }
     public GachaATypeProbConfig getGachaATypeProbData(String id) {
         return gameDataMgr.getGachaATypeProbConfigMap().get(id);
+    }
+
+    public ArrayList<GachaATypeProbConfig> getAllGachaATypeProbData() {
+        return new ArrayList<>(gameDataMgr.getGachaATypeProbConfigMap().values());
     }
 }

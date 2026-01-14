@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class WeekBossAffixDataService {
@@ -15,5 +17,9 @@ public class WeekBossAffixDataService {
     }
     public WeekBossAffixConfig getWeekBossAffixData(String id) {
         return gameDataMgr.getWeekBossAffixConfigMap().get(id);
+    }
+
+    public ArrayList<WeekBossAffixConfig> getAllWeekBossAffixData() {
+        return new ArrayList<>(gameDataMgr.getWeekBossAffixConfigMap().values());
     }
 }

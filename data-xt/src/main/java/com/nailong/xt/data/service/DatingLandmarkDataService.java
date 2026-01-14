@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DatingLandmarkDataService {
@@ -15,5 +17,9 @@ public class DatingLandmarkDataService {
     }
     public DatingLandmarkConfig getDatingLandmarkData(String id) {
         return gameDataMgr.getDatingLandmarkConfigMap().get(id);
+    }
+
+    public ArrayList<DatingLandmarkConfig> getAllDatingLandmarkData() {
+        return new ArrayList<>(gameDataMgr.getDatingLandmarkConfigMap().values());
     }
 }

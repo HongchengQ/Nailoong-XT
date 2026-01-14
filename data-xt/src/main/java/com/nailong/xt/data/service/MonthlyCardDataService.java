@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MonthlyCardDataService {
@@ -15,5 +17,9 @@ public class MonthlyCardDataService {
     }
     public MonthlyCardConfig getMonthlyCardData(String id) {
         return gameDataMgr.getMonthlyCardConfigMap().get(id);
+    }
+
+    public ArrayList<MonthlyCardConfig> getAllMonthlyCardData() {
+        return new ArrayList<>(gameDataMgr.getMonthlyCardConfigMap().values());
     }
 }

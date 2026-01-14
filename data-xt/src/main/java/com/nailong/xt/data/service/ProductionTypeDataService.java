@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class ProductionTypeDataService {
@@ -15,5 +17,9 @@ public class ProductionTypeDataService {
     }
     public ProductionTypeConfig getProductionTypeData(String id) {
         return gameDataMgr.getProductionTypeConfigMap().get(id);
+    }
+
+    public ArrayList<ProductionTypeConfig> getAllProductionTypeData() {
+        return new ArrayList<>(gameDataMgr.getProductionTypeConfigMap().values());
     }
 }

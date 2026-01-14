@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PreviewMonsterGroupDataService {
@@ -15,5 +17,9 @@ public class PreviewMonsterGroupDataService {
     }
     public PreviewMonsterGroupConfig getPreviewMonsterGroupData(String id) {
         return gameDataMgr.getPreviewMonsterGroupConfigMap().get(id);
+    }
+
+    public ArrayList<PreviewMonsterGroupConfig> getAllPreviewMonsterGroupData() {
+        return new ArrayList<>(gameDataMgr.getPreviewMonsterGroupConfigMap().values());
     }
 }

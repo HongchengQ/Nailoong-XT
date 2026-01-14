@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PopUpSequenceDataService {
@@ -15,5 +17,9 @@ public class PopUpSequenceDataService {
     }
     public PopUpSequenceConfig getPopUpSequenceData(String id) {
         return gameDataMgr.getPopUpSequenceConfigMap().get(id);
+    }
+
+    public ArrayList<PopUpSequenceConfig> getAllPopUpSequenceData() {
+        return new ArrayList<>(gameDataMgr.getPopUpSequenceConfigMap().values());
     }
 }

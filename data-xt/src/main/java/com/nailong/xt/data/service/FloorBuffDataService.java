@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class FloorBuffDataService {
@@ -15,5 +17,9 @@ public class FloorBuffDataService {
     }
     public FloorBuffConfig getFloorBuffData(String id) {
         return gameDataMgr.getFloorBuffConfigMap().get(id);
+    }
+
+    public ArrayList<FloorBuffConfig> getAllFloorBuffData() {
+        return new ArrayList<>(gameDataMgr.getFloorBuffConfigMap().values());
     }
 }

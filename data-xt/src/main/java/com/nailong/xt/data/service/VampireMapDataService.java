@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VampireMapDataService {
@@ -15,5 +17,9 @@ public class VampireMapDataService {
     }
     public VampireMapConfig getVampireMapData(String id) {
         return gameDataMgr.getVampireMapConfigMap().get(id);
+    }
+
+    public ArrayList<VampireMapConfig> getAllVampireMapData() {
+        return new ArrayList<>(gameDataMgr.getVampireMapConfigMap().values());
     }
 }

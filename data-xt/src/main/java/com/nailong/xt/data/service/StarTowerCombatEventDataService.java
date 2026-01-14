@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class StarTowerCombatEventDataService {
@@ -15,5 +17,9 @@ public class StarTowerCombatEventDataService {
     }
     public StarTowerCombatEventConfig getStarTowerCombatEventData(String id) {
         return gameDataMgr.getStarTowerCombatEventConfigMap().get(id);
+    }
+
+    public ArrayList<StarTowerCombatEventConfig> getAllStarTowerCombatEventData() {
+        return new ArrayList<>(gameDataMgr.getStarTowerCombatEventConfigMap().values());
     }
 }

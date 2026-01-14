@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class LevelQuestTargetDataService {
@@ -15,5 +17,9 @@ public class LevelQuestTargetDataService {
     }
     public LevelQuestTargetConfig getLevelQuestTargetData(String id) {
         return gameDataMgr.getLevelQuestTargetConfigMap().get(id);
+    }
+
+    public ArrayList<LevelQuestTargetConfig> getAllLevelQuestTargetData() {
+        return new ArrayList<>(gameDataMgr.getLevelQuestTargetConfigMap().values());
     }
 }

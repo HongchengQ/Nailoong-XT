@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class HandbookDataService {
@@ -15,5 +17,9 @@ public class HandbookDataService {
     }
     public HandbookConfig getHandbookData(String id) {
         return gameDataMgr.getHandbookConfigMap().get(id);
+    }
+
+    public ArrayList<HandbookConfig> getAllHandbookData() {
+        return new ArrayList<>(gameDataMgr.getHandbookConfigMap().values());
     }
 }

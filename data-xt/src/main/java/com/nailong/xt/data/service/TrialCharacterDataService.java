@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TrialCharacterDataService {
@@ -15,5 +17,9 @@ public class TrialCharacterDataService {
     }
     public TrialCharacterConfig getTrialCharacterData(String id) {
         return gameDataMgr.getTrialCharacterConfigMap().get(id);
+    }
+
+    public ArrayList<TrialCharacterConfig> getAllTrialCharacterData() {
+        return new ArrayList<>(gameDataMgr.getTrialCharacterConfigMap().values());
     }
 }

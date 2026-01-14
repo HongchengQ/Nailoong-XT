@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class JointDrillLevelDataService {
@@ -15,5 +17,9 @@ public class JointDrillLevelDataService {
     }
     public JointDrillLevelConfig getJointDrillLevelData(String id) {
         return gameDataMgr.getJointDrillLevelConfigMap().get(id);
+    }
+
+    public ArrayList<JointDrillLevelConfig> getAllJointDrillLevelData() {
+        return new ArrayList<>(gameDataMgr.getJointDrillLevelConfigMap().values());
     }
 }

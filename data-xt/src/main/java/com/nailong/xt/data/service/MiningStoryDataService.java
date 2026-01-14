@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MiningStoryDataService {
@@ -15,5 +17,9 @@ public class MiningStoryDataService {
     }
     public MiningStoryConfig getMiningStoryData(String id) {
         return gameDataMgr.getMiningStoryConfigMap().get(id);
+    }
+
+    public ArrayList<MiningStoryConfig> getAllMiningStoryData() {
+        return new ArrayList<>(gameDataMgr.getMiningStoryConfigMap().values());
     }
 }

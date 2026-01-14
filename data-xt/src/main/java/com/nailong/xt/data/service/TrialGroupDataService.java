@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TrialGroupDataService {
@@ -15,5 +17,9 @@ public class TrialGroupDataService {
     }
     public TrialGroupConfig getTrialGroupData(String id) {
         return gameDataMgr.getTrialGroupConfigMap().get(id);
+    }
+
+    public ArrayList<TrialGroupConfig> getAllTrialGroupData() {
+        return new ArrayList<>(gameDataMgr.getTrialGroupConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class VampireRankSeasonDataService {
@@ -15,5 +17,9 @@ public class VampireRankSeasonDataService {
     }
     public VampireRankSeasonConfig getVampireRankSeasonData(String id) {
         return gameDataMgr.getVampireRankSeasonConfigMap().get(id);
+    }
+
+    public ArrayList<VampireRankSeasonConfig> getAllVampireRankSeasonData() {
+        return new ArrayList<>(gameDataMgr.getVampireRankSeasonConfigMap().values());
     }
 }

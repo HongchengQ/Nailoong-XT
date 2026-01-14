@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharacterSkinDataService {
@@ -15,5 +17,9 @@ public class CharacterSkinDataService {
     }
     public CharacterSkinConfig getCharacterSkinData(String id) {
         return gameDataMgr.getCharacterSkinConfigMap().get(id);
+    }
+
+    public ArrayList<CharacterSkinConfig> getAllCharacterSkinData() {
+        return new ArrayList<>(gameDataMgr.getCharacterSkinConfigMap().values());
     }
 }

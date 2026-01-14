@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class MallGemDataService {
@@ -15,5 +17,9 @@ public class MallGemDataService {
     }
     public MallGemConfig getMallGemData(String id) {
         return gameDataMgr.getMallGemConfigMap().get(id);
+    }
+
+    public ArrayList<MallGemConfig> getAllMallGemData() {
+        return new ArrayList<>(gameDataMgr.getMallGemConfigMap().values());
     }
 }

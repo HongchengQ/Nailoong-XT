@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class RegionBossDataService {
@@ -15,5 +17,9 @@ public class RegionBossDataService {
     }
     public RegionBossConfig getRegionBossData(String id) {
         return gameDataMgr.getRegionBossConfigMap().get(id);
+    }
+
+    public ArrayList<RegionBossConfig> getAllRegionBossData() {
+        return new ArrayList<>(gameDataMgr.getRegionBossConfigMap().values());
     }
 }

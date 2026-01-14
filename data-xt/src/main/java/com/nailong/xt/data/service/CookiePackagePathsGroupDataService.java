@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CookiePackagePathsGroupDataService {
@@ -15,5 +17,9 @@ public class CookiePackagePathsGroupDataService {
     }
     public CookiePackagePathsGroupConfig getCookiePackagePathsGroupData(String id) {
         return gameDataMgr.getCookiePackagePathsGroupConfigMap().get(id);
+    }
+
+    public ArrayList<CookiePackagePathsGroupConfig> getAllCookiePackagePathsGroupData() {
+        return new ArrayList<>(gameDataMgr.getCookiePackagePathsGroupConfigMap().values());
     }
 }

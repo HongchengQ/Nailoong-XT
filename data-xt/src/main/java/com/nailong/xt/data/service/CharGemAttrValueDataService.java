@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class CharGemAttrValueDataService {
@@ -15,5 +17,9 @@ public class CharGemAttrValueDataService {
     }
     public CharGemAttrValueConfig getCharGemAttrValueData(String id) {
         return gameDataMgr.getCharGemAttrValueConfigMap().get(id);
+    }
+
+    public ArrayList<CharGemAttrValueConfig> getAllCharGemAttrValueData() {
+        return new ArrayList<>(gameDataMgr.getCharGemAttrValueConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class DiscTagDataService {
@@ -15,5 +17,9 @@ public class DiscTagDataService {
     }
     public DiscTagConfig getDiscTagData(String id) {
         return gameDataMgr.getDiscTagConfigMap().get(id);
+    }
+
+    public ArrayList<DiscTagConfig> getAllDiscTagData() {
+        return new ArrayList<>(gameDataMgr.getDiscTagConfigMap().values());
     }
 }

@@ -5,6 +5,8 @@ import com.nailong.xt.data.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class TrapDataService {
@@ -15,5 +17,9 @@ public class TrapDataService {
     }
     public TrapConfig getTrapData(String id) {
         return gameDataMgr.getTrapConfigMap().get(id);
+    }
+
+    public ArrayList<TrapConfig> getAllTrapData() {
+        return new ArrayList<>(gameDataMgr.getTrapConfigMap().values());
     }
 }
