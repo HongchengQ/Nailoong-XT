@@ -17,6 +17,7 @@ import java.util.*;
  * JSON自动生成Java Model类脚本
  * 使用：修改下方的 BASE_DIR 和 PACKAGE_NAME，然后运行 main 方法。
  */
+
 public class DataCodeGeneration {
 
     // ============ 配置区域 ============
@@ -44,6 +45,10 @@ public class DataCodeGeneration {
         Path loadOutputPath = Paths.get(JAVA_OUTPUT_DIR + "/load");
         if (!Files.exists(loadOutputPath)) {
             Files.createDirectories(loadOutputPath);
+        }
+        Path serviceOutputPath = Paths.get(JAVA_OUTPUT_DIR + "/service");
+        if (!Files.exists(serviceOutputPath)) {
+            Files.createDirectories(serviceOutputPath);
         }
 
         // 遍历所有json文件
@@ -80,6 +85,7 @@ public class DataCodeGeneration {
 
         // 生成Java文件
         generateModelJavaClass(className, fields);
+        generateServiceJavaClass(dataName);
         GENERATED_DATA_NAMES.add(dataName);
     }
 
@@ -289,6 +295,38 @@ public class DataCodeGeneration {
         return type.equals("Integer") || type.equals("Long") || type.equals("Double");
     }
 
+    private static void generateServiceJavaClass(String name) throws IOException {
+        File javaFile = new File(JAVA_OUTPUT_DIR + "/service", name + "DataService.java");
+        try (FileWriter writer = new FileWriter(javaFile)) {
+            writer.write("""
+                    package com.nailong.xt.data.service;
+                    
+                    import com.nailong.xt.data.GameDataMgr;
+                    import com.nailong.xt.data.model.*;
+                    import lombok.RequiredArgsConstructor;
+                    import org.springframework.stereotype.Service;
+                    
+                    @Service
+                    @RequiredArgsConstructor
+                    """);
+
+            String s = String.format("""
+                    public class %sDataService {
+                        private final GameDataMgr gameDataMgr;
+                    
+                        public %sConfig get%sData(int id) {
+                            return gameDataMgr.get%sConfigMap().get(String.valueOf(id));
+                        }
+                        public %sConfig get%sData(String id) {
+                            return gameDataMgr.get%sConfigMap().get(id);
+                        }
+                    }
+                    """, name, name, name, name, name, name, name);
+
+            writer.write(s);
+        }
+    }
+
     private static void generateAutoLoadJavaClass() throws IOException {
         File javaFile = new File(JAVA_OUTPUT_DIR + "/load", "JsonDataAutoLoad.java");
         try (FileWriter writer = new FileWriter(javaFile)) {
@@ -301,12 +339,12 @@ public class DataCodeGeneration {
                     import jakarta.annotation.PostConstruct;
                     import lombok.RequiredArgsConstructor;
                     import lombok.ToString;
+                    import lombok.extern.slf4j.Slf4j;
                     import org.springframework.stereotype.Component;
                     import tools.jackson.core.type.TypeReference;
                     import tools.jackson.databind.ObjectMapper;
                     
                     import java.io.File;
-                    import java.util.Map;
                     
                     /**
                      * 自动生成的类
@@ -314,48 +352,44 @@ public class DataCodeGeneration {
                     @Component
                     @ToString
                     @RequiredArgsConstructor
+                    @Slf4j
                     public class JsonDataAutoLoad {
                         private final ObjectMapper objectMapper;
                         private final GameDataMgr gameDataMgr;
                     
                     """);
 
-            // 常量
-            for (String name : GENERATED_DATA_NAMES) {
-                writer.write("    private static final String " + name + "DataName = " + "\"" + name + "\";\n");
-            }
+//            // 常量
+//            for (String name : GENERATED_DATA_NAMES) {
+//                writer.write("    private static final String " + name + "DataName = " + "\"" + name + "\";\n");
+//            }
 
             // 函数
-            for (String name : GENERATED_DATA_NAMES) {
-                String s = String.format("""
-                        
-                            public void load%sConfig() {
-                                File dataFile = DataUtils.getDataFile(%sDataName);
-                        
-                                // 解析为 Map<String, %s>
-                                Map<String, %sConfig> tempMap = objectMapper.readValue(
-                                        dataFile,
-                                        new TypeReference<>() {
-                                        }
-                                );
-                        
-                                gameDataMgr.set%sConfigMap(tempMap);
-                            }
-                        """, name, name, name, name, name);
-                writer.write(s);
-            }
+//            for (String name : GENERATED_DATA_NAMES) {
+//                String s = String.format("""
+//                            public void load%sConfig() {
+//                                File dataFile = DataUtils.getDataFile("%s");
+//                                gameDataMgr.set%sConfigMap(objectMapper.readValue(dataFile, new TypeReference<>() {}));
+//                            }
+//                        """, name, name, name);
+//                writer.write(s);
+//            }
 
             writer.write("""
                         @PostConstruct
                         public void autoLoadAllConfig() {
+                            long start = System.currentTimeMillis();
                     """);
             // init
             for (String name : GENERATED_DATA_NAMES) {
                 String s = String.format("""
-                                load%sConfig();
-                        """, name);
+                        
+                                File %sDataFile = DataUtils.getDataFile("%s");
+                                gameDataMgr.set%sConfigMap(objectMapper.readValue(%sDataFile, new TypeReference<>() {}));
+                        """, name, name, name, name);
                 writer.write(s);
             }
+            writer.write("\n        log.info(\"游戏数据加载完成，耗时{}ms\", System.currentTimeMillis() - start);\n");
             writer.write("    }\n");
 
             writer.write("}");
@@ -411,6 +445,9 @@ public class DataCodeGeneration {
                     import java.util.List;
                     import java.util.ArrayList;
                     import java.util.Objects;
+                    import lombok.Builder;
+                    import lombok.EqualsAndHashCode;
+                    import lombok.ToString;
                     
                     """);
 
@@ -419,6 +456,11 @@ public class DataCodeGeneration {
             writer.write(" * 自动生成的配置类。\n");
             writer.write(" * 对应文件: " + className.replace("Config", ".json") + "\n");
             writer.write(" */\n");
+            writer.write("""
+                    @ToString
+                    @Builder
+                    @EqualsAndHashCode
+                    """);
             writer.write("@JsonInclude(JsonInclude.Include.NON_NULL)\n");
             writer.write("public final class " + className + " {\n\n");
 
@@ -465,76 +507,76 @@ public class DataCodeGeneration {
             }
 
             // toString 方法
-            writer.write("    @Override\n");
-            writer.write("    public String toString() {\n");
-            writer.write("        return \"" + className + "{\" +\n");
-            for (int i = 0; i < fieldList.size(); i++) {
-                FieldInfo field = fieldList.get(i);
-                if (i == 0) {
-                    writer.write("            \"" + field.fieldName + "=\" + " + field.fieldName);
-                } else {
-                    writer.write("            \", " + field.fieldName + "=\" + " + field.fieldName);
-                }
-                if (i < fieldList.size() - 1) writer.write(" +\n");
-            }
-            writer.write(";\n");
-            writer.write("    }\n\n");
+//            writer.write("    @Override\n");
+//            writer.write("    public String toString() {\n");
+//            writer.write("        return \"" + className + "{\" +\n");
+//            for (int i = 0; i < fieldList.size(); i++) {
+//                FieldInfo field = fieldList.get(i);
+//                if (i == 0) {
+//                    writer.write("            \"" + field.fieldName + "=\" + " + field.fieldName);
+//                } else {
+//                    writer.write("            \", " + field.fieldName + "=\" + " + field.fieldName);
+//                }
+//                if (i < fieldList.size() - 1) writer.write(" +\n");
+//            }
+//            writer.write(";\n");
+//            writer.write("    }\n\n");
 
             // equals 方法
-            writer.write("    @Override\n");
-            writer.write("    public boolean equals(Object o) {\n");
-            writer.write("        if (this == o) return true;\n");
-            writer.write("        if (o == null || getClass() != o.getClass()) return false;\n");
-            writer.write("        " + className + " that = (" + className + ") o;\n");
-            for (FieldInfo field : fieldList) {
-                writer.write("        if (!Objects.equals(" + field.fieldName + ", that." + field.fieldName + ")) return false;\n");
-            }
-            writer.write("        return true;\n");
-            writer.write("    }\n\n");
+//            writer.write("    @Override\n");
+//            writer.write("    public boolean equals(Object o) {\n");
+//            writer.write("        if (this == o) return true;\n");
+//            writer.write("        if (o == null || getClass() != o.getClass()) return false;\n");
+//            writer.write("        " + className + " that = (" + className + ") o;\n");
+//            for (FieldInfo field : fieldList) {
+//                writer.write("        if (!Objects.equals(" + field.fieldName + ", that." + field.fieldName + ")) return false;\n");
+//            }
+//            writer.write("        return true;\n");
+//            writer.write("    }\n\n");
 
             // hashCode 方法
-            writer.write("    @Override\n");
-            writer.write("    public int hashCode() {\n");
-            writer.write("        return Objects.hash(");
-            for (int i = 0; i < fieldList.size(); i++) {
-                writer.write(fieldList.get(i).fieldName);
-                if (i < fieldList.size() - 1) writer.write(", ");
-            }
-            writer.write(");\n");
-            writer.write("    }\n");
+//            writer.write("    @Override\n");
+//            writer.write("    public int hashCode() {\n");
+//            writer.write("        return Objects.hash(");
+//            for (int i = 0; i < fieldList.size(); i++) {
+//                writer.write(fieldList.get(i).fieldName);
+//                if (i < fieldList.size() - 1) writer.write(", ");
+//            }
+//            writer.write(");\n");
+//            writer.write("    }\n");
 
             // Builder 方法
-            writer.write("\n");
-            writer.write("    public static Builder builder() {\n");
-            writer.write("        return new Builder();\n");
-            writer.write("    }\n\n");
-
-            writer.write("    public static final class Builder {\n");
-            for (FieldInfo field : fieldList) {
-                writer.write("        private " + field.javaType + " " + field.fieldName + ";\n");
-            }
-            writer.write("\n");
+//            writer.write("\n");
+//            writer.write("    public static Builder builder() {\n");
+//            writer.write("        return new Builder();\n");
+//            writer.write("    }\n\n");
+//
+//            writer.write("    public static final class Builder {\n");
+//            for (FieldInfo field : fieldList) {
+//                writer.write("        private " + field.javaType + " " + field.fieldName + ";\n");
+//            }
+//            writer.write("\n");
 
             // Setter 方法
-            for (FieldInfo field : fieldList) {
-                writer.write("        public Builder " + field.fieldName + "(" + field.javaType + " " + field.fieldName + ") {\n");
-                writer.write("            this." + field.fieldName + " = " + field.fieldName + ";\n");
-                writer.write("            return this;\n");
-                writer.write("        }\n\n");
-            }
+//            for (FieldInfo field : fieldList) {
+//                writer.write("        public Builder " + field.fieldName + "(" + field.javaType + " " + field.fieldName + ") {\n");
+//                writer.write("            this." + field.fieldName + " = " + field.fieldName + ";\n");
+//                writer.write("            return this;\n");
+//                writer.write("        }\n\n");
+//            }
 
             // build 方法
-            writer.write("        public " + className + " build() {\n");
-            writer.write("            return new " + className + "(\n");
-            for (int i = 0; i < fieldList.size(); i++) {
-                FieldInfo field = fieldList.get(i);
-                writer.write("                " + field.fieldName);
-                if (i < fieldList.size() - 1) writer.write(",\n");
-                else writer.write("\n");
-            }
-            writer.write("            );\n");
-            writer.write("        }\n");
-            writer.write("    }\n");
+//            writer.write("        public " + className + " build() {\n");
+//            writer.write("            return new " + className + "(\n");
+//            for (int i = 0; i < fieldList.size(); i++) {
+//                FieldInfo field = fieldList.get(i);
+//                writer.write("                " + field.fieldName);
+//                if (i < fieldList.size() - 1) writer.write(",\n");
+//                else writer.write("\n");
+//            }
+//            writer.write("            );\n");
+//            writer.write("        }\n");
+//            writer.write("    }\n");
 
             writer.write("}\n");
 

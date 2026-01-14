@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * 建议使用 service 而不是Mgr
+ */
 @Component
 @Getter
 @Setter
