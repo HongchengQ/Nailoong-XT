@@ -359,37 +359,23 @@ public class DataCodeGeneration {
                     
                     """);
 
-//            // 常量
-//            for (String name : GENERATED_DATA_NAMES) {
-//                writer.write("    private static final String " + name + "DataName = " + "\"" + name + "\";\n");
-//            }
-
-            // 函数
-//            for (String name : GENERATED_DATA_NAMES) {
-//                String s = String.format("""
-//                            public void load%sConfig() {
-//                                File dataFile = DataUtils.getDataFile("%s");
-//                                gameDataMgr.set%sConfigMap(objectMapper.readValue(dataFile, new TypeReference<>() {}));
-//                            }
-//                        """, name, name, name);
-//                writer.write(s);
-//            }
-
             writer.write("""
                         @PostConstruct
                         public void autoLoadAllConfig() {
-                            long start = System.currentTimeMillis();
+                            Thread.startVirtualThread(() -> {
+                                long start = System.currentTimeMillis();
                     """);
-            // init
+
             for (String name : GENERATED_DATA_NAMES) {
                 String s = String.format("""
                         
-                                File %sDataFile = DataUtils.getDataFile("%s");
-                                gameDataMgr.set%sConfigMap(objectMapper.readValue(%sDataFile, new TypeReference<>() {}));
+                                    File %sDataFile = DataUtils.getDataFile("%s");
+                                    gameDataMgr.set%sConfigMap(objectMapper.readValue(%sDataFile, new TypeReference<>() {}));
                         """, name, name, name, name);
                 writer.write(s);
             }
-            writer.write("\n        log.info(\"游戏数据加载完成，耗时{}ms\", System.currentTimeMillis() - start);\n");
+            writer.write("\n            log.info(\"游戏数据加载完成，耗时{}ms\", System.currentTimeMillis() - start);\n");
+            writer.write("\n        });\n");
             writer.write("    }\n");
 
             writer.write("}");
