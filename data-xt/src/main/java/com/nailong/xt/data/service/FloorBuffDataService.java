@@ -1,0 +1,19 @@
+package com.nailong.xt.data.service;
+
+import com.nailong.xt.data.GameDataMgr;
+import com.nailong.xt.data.model.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class FloorBuffDataService {
+    private final GameDataMgr gameDataMgr;
+
+    public FloorBuffConfig getFloorBuffData(int id) {
+        return gameDataMgr.getFloorBuffConfigMap().get(String.valueOf(id));
+    }
+    public FloorBuffConfig getFloorBuffData(String id) {
+        return gameDataMgr.getFloorBuffConfigMap().get(id);
+    }
+}
