@@ -12,83 +12,58 @@ import lombok.ToString;
 
 /**
  * 自动生成的配置类。
- * 对应文件: Achievement.json
+ * 对应文件: ActivityTask.json
  */
 @ToString
 @Builder
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class AchievementConfig {
+public final class ActivityTaskConfig {
 
     private final Integer id;
-    private final Integer achieveId;
     private final String title;
     private final String desc;
     private final Integer rarity;
-    private final Integer type;
+    private final Integer activityTaskGroupId;
+    private final String activityGroupName;
     private final Integer completeCond;
     private final Integer aimNumShow;
     private final Integer tid1;
     private final Integer qty1;
-    private final List<Integer> prerequisites;
     private final Integer tid2;
     private final Integer qty2;
-    private final Boolean hide;
-    private final Integer completeCondClient;
-    private final List<Integer> levelType;
-    private final List<Integer> clientCompleteParams1;
 
     @JsonCreator
-    public AchievementConfig(
+    public ActivityTaskConfig(
         @JsonProperty("Id") Integer id,
-        @JsonProperty("AchieveId") Integer achieveId,
         @JsonProperty("Title") String title,
         @JsonProperty("Desc") String desc,
         @JsonProperty("Rarity") Integer rarity,
-        @JsonProperty("Type") Integer type,
+        @JsonProperty("ActivityTaskGroupId") Integer activityTaskGroupId,
+        @JsonProperty("ActivityGroupName") String activityGroupName,
         @JsonProperty("CompleteCond") Integer completeCond,
         @JsonProperty("AimNumShow") Integer aimNumShow,
         @JsonProperty("Tid1") Integer tid1,
         @JsonProperty("Qty1") Integer qty1,
-        @JsonProperty("Prerequisites") List<Integer> prerequisites,
         @JsonProperty("Tid2") Integer tid2,
-        @JsonProperty("Qty2") Integer qty2,
-        @JsonProperty("Hide") Boolean hide,
-        @JsonProperty("CompleteCondClient") Integer completeCondClient,
-        @JsonProperty("LevelType") List<Integer> levelType,
-        @JsonProperty("ClientCompleteParams1") List<Integer> clientCompleteParams1
+        @JsonProperty("Qty2") Integer qty2
     ) {
         this.id = id;
-        this.achieveId = achieveId;
         this.title = title;
         this.desc = desc;
         this.rarity = rarity;
-        this.type = type;
+        this.activityTaskGroupId = activityTaskGroupId;
+        this.activityGroupName = activityGroupName;
         this.completeCond = completeCond;
         this.aimNumShow = aimNumShow;
         this.tid1 = tid1;
         this.qty1 = qty1;
-        this.prerequisites = prerequisites != null ? 
-            new ArrayList<>(prerequisites) : 
-            new ArrayList<>();
         this.tid2 = tid2;
         this.qty2 = qty2;
-        this.hide = hide;
-        this.completeCondClient = completeCondClient;
-        this.levelType = levelType != null ? 
-            new ArrayList<>(levelType) : 
-            new ArrayList<>();
-        this.clientCompleteParams1 = clientCompleteParams1 != null ? 
-            new ArrayList<>(clientCompleteParams1) : 
-            new ArrayList<>();
     }
 
     public Integer getId() {
         return this.id;
-    }
-
-    public Integer getAchieveId() {
-        return this.achieveId;
     }
 
     public String getTitle() {
@@ -103,8 +78,12 @@ public final class AchievementConfig {
         return this.rarity;
     }
 
-    public Integer getType() {
-        return this.type;
+    public Integer getActivityTaskGroupId() {
+        return this.activityTaskGroupId;
+    }
+
+    public String getActivityGroupName() {
+        return this.activityGroupName;
     }
 
     public Integer getCompleteCond() {
@@ -123,32 +102,12 @@ public final class AchievementConfig {
         return this.qty1;
     }
 
-    public List<Integer> getPrerequisites() {
-        return this.prerequisites;
-    }
-
     public Integer getTid2() {
         return this.tid2;
     }
 
     public Integer getQty2() {
         return this.qty2;
-    }
-
-    public Boolean getHide() {
-        return this.hide;
-    }
-
-    public Integer getCompleteCondClient() {
-        return this.completeCondClient;
-    }
-
-    public List<Integer> getLevelType() {
-        return this.levelType;
-    }
-
-    public List<Integer> getClientCompleteParams1() {
-        return this.clientCompleteParams1;
     }
 
 }
